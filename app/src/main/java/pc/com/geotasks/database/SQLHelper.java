@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.sql.Timestamp;
 
-import pc.com.geotasks.pc.com.geotasks.model.Task;
+import pc.com.geotasks.model.Task;
 
 /**
  * Created by totto on 07.04.2016.

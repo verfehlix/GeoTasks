@@ -1,4 +1,4 @@
-package pc.com.geotasks.pc.com.geotasks.model;
+package pc.com.geotasks.model;
 
 import java.sql.Timestamp;
 
@@ -22,15 +22,13 @@ public class Task {
 
     }
 
-    public Task(SQLHelper db, String name, String description, String longitude, String latitude, String radius, Timestamp dueDate){
+    public Task(String name, String description, String longitude, String latitude, String radius, Timestamp dueDate){
         this.name           = name;
         this.description    = description;
         this.longitude      = longitude;
         this.latitude       = latitude;
         this.radius         = radius;
         this.dueDate        = dueDate;
-
-        db.addTask(this);
     }
 
     public int getID() {
