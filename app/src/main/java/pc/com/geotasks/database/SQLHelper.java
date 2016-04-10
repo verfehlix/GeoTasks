@@ -1,21 +1,34 @@
 package pc.com.geotasks.database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.sql.Timestamp;
+
+import pc.com.geotasks.pc.com.geotasks.model.Task;
+
 /**
- * Created by Ich on 07.04.2016.
+ * Created by totto on 07.04.2016.
  */
 
 public class SQLHelper extends SQLiteOpenHelper {
-    private static final String TEXT_TYPE = " TEXT";
+    private static final String SHORT_TEXT_TYPE = " varchar(255)";
+    private static final String TEXT_TYPE = " text(255)";
+    private static final String DATE_TYPE = " TIMESTAMP(255)";
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TaskContainer.Task.TABLE_NAME + " (" +
-                    TaskContainer.Task._ID + " INTEGER PRIMARY KEY," +
-                    TaskContainer.Task.COLUMN_NAME_ID + TEXT_TYPE + COMMA_SEP +
-                    TaskContainer.Task.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
+                    TaskContainer.Task.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTO_INCREMENT," +
+                    TaskContainer.Task.COLUMN_NAME_NAME + SHORT_TEXT_TYPE + COMMA_SEP +
+                    TaskContainer.Task.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
+                    TaskContainer.Task.COLUMN_NAME_LONGITUDE + SHORT_TEXT_TYPE + COMMA_SEP +
+                    TaskContainer.Task.COLUMN_NAME_LATITUDE + SHORT_TEXT_TYPE + COMMA_SEP +
+                    TaskContainer.Task.COLUMN_NAME_RADIUS + SHORT_TEXT_TYPE + COMMA_SEP +
+                    TaskContainer.Task.COLUMN_NAME_DUE_DATE + DATE_TYPE + COMMA_SEP +
+                    TaskContainer.Task.COLUMN_NAME_TIMESTAMP + "TIMESTAMP DEFAULT NOW()," +
             " )";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskContainer.Task.TABLE_NAME;
@@ -27,11 +40,11 @@ public class SQLHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public static void initDatabase(){
+    //public static void initDatabase(){
         //If db exists return except db version changes
         //            db.execSQL(SQL_CREATE_ENTRIES);
 
-    }
+    //}
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -47,6 +60,55 @@ public class SQLHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    public void addTask(Task task){
+        // Gets the data repository in write mode
+        SQLiteDatabase db = this.getWritableDatabase();
 
-    //Accessing FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(getContext());
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(TaskContainer.Task.COLUMN_NAME_NAME          , task.getName());
+        values.put(TaskContainer.Task.COLUMN_NAME_DESCRIPTION   , task.getDescription());
+        values.put(TaskContainer.Task.COLUMN_NAME_LONGITUDE     , task.getLongitude());
+        values.put(TaskContainer.Task.COLUMN_NAME_LATITUDE      , task.getLatitude());
+        values.put(TaskContainer.Task.COLUMN_NAME_RADIUS        , task.getRadius());
+        values.put(TaskContainer.Task.COLUMN_NAME_DUE_DATE      , task.getDueDate().getTime());
+
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId;
+        newRowId = db.insert(
+                TaskContainer.Task.TABLE_NAME,
+                TaskContainer.Task.COLUMN_NAME_NAME,
+                values);
+
+        task.setID((int) newRowId);
+        this.setTimestampOfTask(task);
+    }
+
+    private void setTimestampOfTask(Task task){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {TaskContainer.Task.COLUMN_NAME_TIMESTAMP};
+
+        String   selection      = TaskContainer.Task.COLUMN_NAME_ID + " = ? ";
+        String[] selectionArgs  = {TaskContainer.Task.COLUMN_NAME_ID};
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder = TaskContainer.Task.COLUMN_NAME_ID + " DESC";
+
+        Cursor c = db.query(
+                TaskContainer.Task.TABLE_NAME,            // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+
+        c.moveToFirst();
+        task.setTimestamp(Timestamp.valueOf(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TIMESTAMP))));
+        int x = 0;
+    }
 }

@@ -5,13 +5,27 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import pc.com.geotasks.database.SQLHelper;
+import pc.com.geotasks.pc.com.geotasks.model.Task;
+
 
 public class MainActivity extends Activity {
+    SQLHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.db = new SQLHelper(this.getApplicationContext());
+        java.util.Date utilDate = new java.util.Date();
+        Task t = new Task(db, "test 1", "des 1", "N50", "E30", "20m", new Timestamp(utilDate.getTime()));
     }
 
 
