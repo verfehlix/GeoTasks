@@ -21,14 +21,14 @@ public class SQLHelper extends SQLiteOpenHelper {
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TaskContainer.Task.TABLE_NAME + " (" +
-                    TaskContainer.Task.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTO_INCREMENT," +
+                    TaskContainer.Task.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
                     TaskContainer.Task.COLUMN_NAME_NAME + SHORT_TEXT_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_LONGITUDE + SHORT_TEXT_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_LATITUDE + SHORT_TEXT_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_RADIUS + SHORT_TEXT_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_DUE_DATE + DATE_TYPE + COMMA_SEP +
-                    TaskContainer.Task.COLUMN_NAME_TIMESTAMP + "TIMESTAMP DEFAULT NOW()," +
+                    TaskContainer.Task.COLUMN_NAME_TIMESTAMP + " TIMESTAMP DEFAULT 'now'" +
             " )";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskContainer.Task.TABLE_NAME;
