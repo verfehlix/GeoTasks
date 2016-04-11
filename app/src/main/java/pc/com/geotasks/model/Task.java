@@ -1,6 +1,8 @@
 package pc.com.geotasks.model;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 
 import pc.com.geotasks.database.SQLHelper;
 import pc.com.geotasks.database.TaskContainer;
@@ -22,13 +24,18 @@ public class Task {
 
     }
 
-    public Task(String name, String description, String longitude, String latitude, String radius, Timestamp dueDate){
+    public Task(String name, String description, String longitude, String latitude, String radius, Date dueDate){
         this.name           = name;
         this.description    = description;
         this.longitude      = longitude;
         this.latitude       = latitude;
         this.radius         = radius;
-        this.dueDate        = dueDate;
+
+        Calendar calendar   = Calendar.getInstance();
+        Date now            = calendar.getTime();
+        this.timestamp      = new java.sql.Timestamp(now.getTime());
+
+        this.dueDate        = new java.sql.Timestamp(dueDate.getTime());
     }
 
     public int getID() {

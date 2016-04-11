@@ -19,6 +19,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     private static final String TEXT_TYPE = " text(255)";
     private static final String DATE_TYPE = " TIMESTAMP(255)";
     private static final String COMMA_SEP = ",";
+
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TaskContainer.Task.TABLE_NAME + " (" +
                     TaskContainer.Task.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
@@ -30,6 +31,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                     TaskContainer.Task.COLUMN_NAME_DUE_DATE + DATE_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_TIMESTAMP + " TIMESTAMP DEFAULT 'now'" +
             " )";
+
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskContainer.Task.TABLE_NAME;
 
@@ -71,7 +73,8 @@ public class SQLHelper extends SQLiteOpenHelper {
         values.put(TaskContainer.Task.COLUMN_NAME_LONGITUDE     , task.getLongitude());
         values.put(TaskContainer.Task.COLUMN_NAME_LATITUDE      , task.getLatitude());
         values.put(TaskContainer.Task.COLUMN_NAME_RADIUS        , task.getRadius());
-        values.put(TaskContainer.Task.COLUMN_NAME_DUE_DATE      , task.getDueDate().getTime());
+        values.put(TaskContainer.Task.COLUMN_NAME_DUE_DATE      , task.getDueDate().toString());
+        values.put(TaskContainer.Task.COLUMN_NAME_TIMESTAMP     , task.getTimestamp().toString());
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId;
@@ -81,7 +84,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 values);
 
         task.setID((int) newRowId);
-        this.setTimestampOfTask(task);
+        //this.setTimestampOfTask(task);
     }
 
     private void setTimestampOfTask(Task task){

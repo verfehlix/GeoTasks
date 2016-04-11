@@ -15,12 +15,16 @@ public class TaskContainer {
         public static final String TABLE_NAME               = "tasks";
 
         public static final String COLUMN_NAME_ID           = "id";
+
         public static final String COLUMN_NAME_NAME         = "name";
         public static final String COLUMN_NAME_DESCRIPTION  = "description";
+
         public static final String COLUMN_NAME_LONGITUDE    = "longitude";
         public static final String COLUMN_NAME_LATITUDE     = "latitude";
         public static final String COLUMN_NAME_RADIUS       = "radius";
+
         public static final String COLUMN_NAME_DUE_DATE     = "dueDate";
+
         public static final String COLUMN_NAME_TIMESTAMP    = "timestamp";
     }
 

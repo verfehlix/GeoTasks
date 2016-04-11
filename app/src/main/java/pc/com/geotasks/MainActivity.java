@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import pc.com.geotasks.database.SQLHelper;
 import pc.com.geotasks.model.Task;
@@ -20,9 +22,13 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         this.db = new SQLHelper(this.getApplicationContext());
-        java.util.Date utilDate = new java.util.Date();
 
-        Task t = new Task("test 1", "des 1", "N50", "E30", "20m", new Timestamp(utilDate.getTime()));
+        Task t = null;
+        try {
+            t = new Task("test 1", "des 1", "N50", "E30", "20m", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         db.addTask(t);
     }
 
