@@ -84,34 +84,5 @@ public class SQLHelper extends SQLiteOpenHelper {
                 values);
 
         task.setID((int) newRowId);
-        //this.setTimestampOfTask(task);
-    }
-
-    private void setTimestampOfTask(Task task){
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {TaskContainer.Task.COLUMN_NAME_TIMESTAMP};
-
-        String   selection      = TaskContainer.Task.COLUMN_NAME_ID + " = ? ";
-        String[] selectionArgs  = {TaskContainer.Task.COLUMN_NAME_ID};
-
-        // How you want the results sorted in the resulting Cursor
-        String sortOrder = TaskContainer.Task.COLUMN_NAME_ID + " DESC";
-
-        Cursor c = db.query(
-                TaskContainer.Task.TABLE_NAME,            // The table to query
-                projection,                               // The columns to return
-                selection,                                // The columns for the WHERE clause
-                selectionArgs,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                sortOrder                                 // The sort order
-        );
-
-        c.moveToFirst();
-        task.setTimestamp(Timestamp.valueOf(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TIMESTAMP))));
-        int x = 0;
     }
 }
