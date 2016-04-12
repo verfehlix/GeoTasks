@@ -1,8 +1,10 @@
 package pc.com.geotasks;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageButton;
 
 public class AddNewTaskActivity extends AppCompatActivity {
 
@@ -17,8 +19,6 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
         //hide the title
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-
 
     }
 }
