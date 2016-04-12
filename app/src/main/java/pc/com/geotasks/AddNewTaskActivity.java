@@ -36,6 +36,11 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        exitButtonPressed(findViewById(android.R.id.content));
+    }
+
     public void exitButtonPressed(View view){
         //check if any data was entered
         if(anyDataEntered()){
@@ -50,14 +55,14 @@ public class AddNewTaskActivity extends AppCompatActivity {
     private void exitPrompt() {
         AlertDialog exitDialog = new AlertDialog.Builder(AddNewTaskActivity.this).create();
         exitDialog.setMessage("Do you really want to exit and discard this task?");
-        exitDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Exit",
+        exitDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Exit",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                         dialog.dismiss();
                     }
                 });
-        exitDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Stay & Keep Editing",
+        exitDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Stay & Keep Editing",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

@@ -62,7 +62,8 @@
                 android:textColor="#FFFFFF"
                 android:hint="Enter Task Name..."
                 android:background="@color/colorPrimary"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:maxLength="250"/>
 
         </LinearLayout>
 
