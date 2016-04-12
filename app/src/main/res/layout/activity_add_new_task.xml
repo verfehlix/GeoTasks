@@ -6,6 +6,7 @@
     android:fitsSystemWindows="true"
     tools:context="pc.com.geotasks.AddNewTaskActivity">
 
+    <!--Toolbar-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -68,5 +69,74 @@
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
+
+    <!--Scrollable Content below-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="105dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--Task Description-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:id="@+id/pencil_icon"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_location"
+                    android:layout_marginLeft="15dp"
+                    android:maxHeight="25dp" />
+
+                <EditText
+                    android:id="@+id/editTextTaskDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:hint="Enter a description for the task..."
+                    android:background="@android:color/transparent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp" />
+            </LinearLayout>
+
+            <!--Seperator-->
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp" />
+
+            <!--Place-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:id="@+id/location_icon"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_location"
+                    android:layout_marginLeft="15dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:id="@+id/editText2"
+                    android:background="@android:color/transparent"
+                    android:hint="Enter a description for the task..."
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

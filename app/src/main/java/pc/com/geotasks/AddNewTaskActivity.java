@@ -15,6 +15,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
     Button exitButton;
     Button saveButton;
     EditText editTextTaskName;
+    EditText editTextTaskDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
         //get inputs
         editTextTaskName = (EditText) findViewById(R.id.editTextTaskName);
+        editTextTaskDescription = (EditText) findViewById(R.id.editTextTaskDescription);
 
     }
 
@@ -75,6 +77,10 @@ public class AddNewTaskActivity extends AppCompatActivity {
         boolean anyDataEnterd = false;
 
         if(textEditFilled(editTextTaskName)) {
+            anyDataEnterd = true;
+        }
+
+        if(textEditFilled(editTextTaskDescription)) {
             anyDataEnterd = true;
         }
 
