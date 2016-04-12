@@ -7,4 +7,6 @@
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="textColorPrimaryDark">#000000</color>
     <color name="textColorSecondary">#87000000</color>
+
+    <color name="highlight">#cccccc</color>
 </resources>
