@@ -27,13 +27,14 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/backButton"
+                    android:id="@+id/exitButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="?android:selectableItemBackgroundBorderless"
                     android:drawableStart="@drawable/ic_clear"
-                    style="?android:attr/borderlessButtonStyle" />
+                    style="?android:attr/borderlessButtonStyle"
+                    android:onClick="exitButtonPressed"/>
 
                 <Space
                     android:layout_width="0dp"
@@ -42,14 +43,14 @@
 
 
                 <Button
+                    android:id="@+id/saveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="?selectableItemBackgroundBorderless"
-                    android:id="@+id/saveTaskButton"
                     android:textSize="18sp"
                     android:textColor="#FFFFFF"
-                    android:text="Save" />
+                    android:text="Save"/>
 
             </LinearLayout>
 
