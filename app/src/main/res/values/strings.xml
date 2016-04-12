@@ -8,4 +8,8 @@
 
     <string name="no_tasks">No tasks</string>
     <string name="task_input">Tasks</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">delete</string>
+    <string name="delete_dialog_message">Do you really want to delete this task?</string>
+    <string name="delete_title">Delete</string>
 </resources>
