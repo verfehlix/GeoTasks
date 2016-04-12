@@ -9,10 +9,37 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="112dp"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        />
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:background="?selectableItemBackgroundBorderless"
+            android:id="@+id/back"
+            android:textSize="18sp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#FFFFFF"
+            android:text="Back" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:background="?selectableItemBackgroundBorderless"
+            android:id="@+id/saveTask"
+            android:textSize="18sp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#FFFFFF"
+            android:text="Save" />
+
+    </android.support.v7.widget.Toolbar>
+
 
 </RelativeLayout>
