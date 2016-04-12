@@ -30,7 +30,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                     TaskContainer.Task.COLUMN_NAME_RADIUS + SHORT_TEXT_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_DUE_DATE + DATE_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_TIMESTAMP + " TIMESTAMP DEFAULT 'now'" +
-            " )";
+                    " )";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskContainer.Task.TABLE_NAME;
@@ -43,8 +43,8 @@ public class SQLHelper extends SQLiteOpenHelper {
     }
 
     //public static void initDatabase(){
-        //If db exists return except db version changes
-        //            db.execSQL(SQL_CREATE_ENTRIES);
+    //If db exists return except db version changes
+    //            db.execSQL(SQL_CREATE_ENTRIES);
 
     //}
 
