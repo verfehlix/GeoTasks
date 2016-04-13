@@ -111,6 +111,7 @@
             <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp" />
 
             <!--Place-->
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -121,25 +122,68 @@
                     android:id="@+id/location_icon"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_weight="1"
                     android:src="@drawable/ic_location"
                     android:layout_marginLeft="15dp" />
 
-                <AutoCompleteTextView
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Add a location"
-                    android:background="@android:color/transparent"
-                    android:layout_marginLeft="15dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_weight="1"
+                    android:text="Use current location"
+                    android:id="@+id/textView2" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="6" />
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:id="@+id/switch1"
+                    android:checked="false"
                     android:layout_marginRight="15dp" />
 
             </LinearLayout>
 
-            <Button
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search location"
-                android:id="@+id/button"
-                android:onClick="findPlace" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="or"
+                android:id="@+id/textView3"
+                android:layout_gravity="center"
+                android:layout_margin="15dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/editTextLocationAutocomplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Search a location"
+                    android:background="@android:color/transparent"
+                    android:layout_marginLeft="53dp"
+                    android:layout_marginRight="15dp"
+                    android:clickable="true"
+                    android:onClick="findPlace" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewLngLtd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_marginLeft="53dp" />
+
+            <!--Seperator-->
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp" />
 
         </LinearLayout>
     </ScrollView>

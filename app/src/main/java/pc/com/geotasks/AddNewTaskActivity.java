@@ -8,10 +8,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -20,9 +23,12 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.GeoDataApi;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+
+import org.w3c.dom.Text;
 
 public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
@@ -31,9 +37,12 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     Button saveButton;
     EditText editTextTaskName;
     EditText editTextTaskDescription;
+    EditText editTextLocationAutocomplete;
+    TextView textViewLngLtd;
 
     GoogleApiClient googleApiClient;
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
+    public static final String TAG = TaskListFragment.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,22 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         //get inputs
         editTextTaskName = (EditText) findViewById(R.id.editTextTaskName);
         editTextTaskDescription = (EditText) findViewById(R.id.editTextTaskDescription);
+        editTextLocationAutocomplete = (EditText) findViewById(R.id.editTextLocationAutocomplete);
+
+        //get text views
+        textViewLngLtd = (TextView) findViewById(R.id.textViewLngLtd);
+
+        //add onchange listener to autocomplete edit text
+        editTextLocationAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    findPlace(findViewById(android.R.id.content));
+                }
+            }
+        });
+
+
 
         //init google maps api component
         googleApiClient = new GoogleApiClient
@@ -137,15 +162,19 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
     public void findPlace(View view) {
         try {
-            Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).build(this);
+
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).build(this);
             startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
+
+
+
+
         } catch (GooglePlayServicesRepairableException e) {
             GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),0 /* requestCode */).show();
         } catch (GooglePlayServicesNotAvailableException e) {
             String message = "Google Play Services is not available: " + GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
 
-            Log.e("findPlace", message);
+            Log.e(TAG, message);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
@@ -157,12 +186,19 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         if (requestCode == REQUEST_CODE_AUTOCOMPLETE) {
             if (resultCode == RESULT_OK) {
+
                 Place place = PlaceAutocomplete.getPlace(this, data);
-                Log.i("findPlace", "Place: " + place.getName());
+                Log.i(TAG, "Place: " + place.getName());
+
+                String placeText = place.getName() + ", " + place.getAddress();
+
+                editTextLocationAutocomplete.setText(placeText);
+                textViewLngLtd.setText(place.getLatLng().longitude + ", " + place.getLatLng().latitude);
+
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 // TODO: Handle the error.
-                Log.i("findPlace", status.getStatusMessage());
+                Log.i(TAG, status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
