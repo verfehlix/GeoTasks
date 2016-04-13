@@ -1,6 +1,8 @@
 package pc.com.geotasks;
 
 import android.content.DialogInterface;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,13 +11,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class AddNewTaskActivity extends AppCompatActivity {
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Places;
+
+public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     Toolbar toolbar;
     Button exitButton;
     Button saveButton;
     EditText editTextTaskName;
     EditText editTextTaskDescription;
+
+    GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +44,30 @@ public class AddNewTaskActivity extends AppCompatActivity {
         editTextTaskName = (EditText) findViewById(R.id.editTextTaskName);
         editTextTaskDescription = (EditText) findViewById(R.id.editTextTaskDescription);
 
+        //init google maps api component
+        googleApiClient = new GoogleApiClient
+            .Builder( this )
+            .enableAutoManage( this, 0, this )
+            .addApi( Places.GEO_DATA_API )
+            .addApi( Places.PLACE_DETECTION_API )
+            .addConnectionCallbacks( this )
+            .addOnConnectionFailedListener( this )
+            .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if( googleApiClient != null )
+            googleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        if( googleApiClient != null && googleApiClient.isConnected() ) {
+            googleApiClient.disconnect();
+        }
+        super.onStop();
     }
 
     @Override
@@ -89,5 +121,20 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
     private boolean textEditFilled(EditText editText){
         return editText.getText().toString().trim().length() > 0 ? true : false;
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 }

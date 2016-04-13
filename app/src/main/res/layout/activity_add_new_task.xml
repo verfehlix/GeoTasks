@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
                     android:ems="10"
-                    android:hint="Enter a description for the task..."
+                    android:hint="Enter a description for the task"
                     android:background="@android:color/transparent"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp" />
@@ -124,14 +124,11 @@
                     android:src="@drawable/ic_location"
                     android:layout_marginLeft="15dp" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:ems="10"
-                    android:id="@+id/editText2"
+                    android:hint="Add a location"
                     android:background="@android:color/transparent"
-                    android:hint="Enter a description for the task..."
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp" />
             </LinearLayout>
