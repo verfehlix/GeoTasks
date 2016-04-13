@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">GeoTasks</string>
-    <string name="google_app_id">geotasks-1280</string>
+    <string name="google_app_id">eloquent-surge-128016</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -13,4 +13,5 @@
     <string name="delete">delete</string>
     <string name="delete_dialog_message">Do you really want to delete this task?</string>
     <string name="delete_title">Delete</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
