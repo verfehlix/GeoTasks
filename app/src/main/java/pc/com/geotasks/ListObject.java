@@ -3,13 +3,13 @@ package pc.com.geotasks;
 /**
  * Created by Stefan on 12.04.2016.
  */
-public class Task {
+public class ListObject {
     private String name;
     private String description;
     private String location;
     private String dateAdded;
 
-    public Task(String name, String location){
+    public ListObject(String name, String location){
         this.name = name;
         this.location = location;
     }
