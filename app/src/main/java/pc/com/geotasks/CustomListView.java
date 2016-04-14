@@ -25,10 +25,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CustomListView extends ArrayAdapter<Task>{
+public class CustomListView extends ArrayAdapter<ListObject>{
 
     private final Activity context;
-    private final ArrayList<Task> files;
+    private final ArrayList<ListObject> files;
     private View rowView;
     private static final int MAX_CLICK_DURATION = 200;
     private long startClickTime;
@@ -40,7 +40,7 @@ public class CustomListView extends ArrayAdapter<Task>{
      * @param context context activity
      * @param files ArrayList<String> with the items that are added to the taskList
      */
-    public CustomListView(Activity context, ArrayList<Task> files) {
+    public CustomListView(Activity context, ArrayList<ListObject> files) {
         super(context, R.layout.task_list_item, files);
         this.context = context;
         this.files = files;

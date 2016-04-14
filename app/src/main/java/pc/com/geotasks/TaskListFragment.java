@@ -42,7 +42,7 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
 
     private OnFragmentInteractionListener mListener;
 
-    public static ArrayList<Task> taskList = new ArrayList<Task>();
+    public static ArrayList<ListObject> taskList = new ArrayList<ListObject>();
     /**
      * The fragment's ListView/GridView.
      */
@@ -81,10 +81,19 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        Task task1 = new Task("Einkaufen", "Rewe City, N 1, Mannheim");
-        Task task2 = new Task("Team Meeting", "University Mannheim");
-        Task task3 = new Task("App programmieren","Zuhause");
+        ListObject task1 = new ListObject("Einkaufen", "Rewe City, N 1, Mannheim");
+        ListObject task2 = new ListObject("Team Meeting", "University Mannheim");
+        ListObject task3 = new ListObject("App programmieren","Zuhause");
 
+        taskList.add(task1);
+        taskList.add(task2);
+        taskList.add(task3);
+        taskList.add(task1);
+        taskList.add(task2);
+        taskList.add(task3);
+        taskList.add(task1);
+        taskList.add(task2);
+        taskList.add(task3);
         taskList.add(task1);
         taskList.add(task2);
         taskList.add(task3);
@@ -169,7 +178,7 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
         public void onFragmentInteraction(String id);
     }
 
-    public ArrayList<Task> getTaskList(){
+    public ArrayList<ListObject> getTaskList(){
         return taskList;
     }
 
