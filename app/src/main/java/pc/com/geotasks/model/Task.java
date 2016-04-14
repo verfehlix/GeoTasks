@@ -14,9 +14,11 @@ public class Task {
     private int         ID;
     private String      name;
     private String      description;
-    private String      longitude;
-    private String      latitude;
-    private String      radius;
+    private String      locationName;
+    private String      locationAddress;
+    private double      longitude;
+    private double      latitude;
+    private int         radius;
     private Timestamp   dueDate;
     private Timestamp   timestamp;
 
@@ -24,12 +26,14 @@ public class Task {
 
     }
 
-    public Task(String name, String description, String longitude, String latitude, String radius, Date dueDate){
-        this.name           = name;
-        this.description    = description;
-        this.longitude      = longitude;
-        this.latitude       = latitude;
-        this.radius         = radius;
+    public Task(String name, String description, String locationName, String locationAddress, double longitude, double latitude, int radius, Date dueDate){
+        this.name               = name;
+        this.description        = description;
+        this.locationName       = locationName;
+        this.locationAddress    = locationAddress;
+        this.longitude          = longitude;
+        this.latitude           = latitude;
+        this.radius             = radius;
 
         Calendar calendar   = Calendar.getInstance();
         Date now            = calendar.getTime();
@@ -62,27 +66,39 @@ public class Task {
         this.description = description;
     }
 
-    public String getLongitude() {
+    public String getLocationName() { return locationName; }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    public String getLocationAddress() {
+        return locationName;
+    }
+
+    public void setLocationAddress(String locationAddress) { this.locationAddress = locationAddress;}
+
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getRadius() {
+    public int getRadius() {
         return radius;
     }
 
-    public void setRadius(String radius) {
+    public void setRadius(int radius) {
         this.radius = radius;
     }
 
@@ -98,7 +114,7 @@ public class Task {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = new java.sql.Timestamp(dueDate.getTime());
     }
 }
