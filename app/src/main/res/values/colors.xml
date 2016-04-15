@@ -9,4 +9,5 @@
     <color name="textColorSecondary">#87000000</color>
 
     <color name="highlight">#cccccc</color>
+    <color name="circle">#448AFF</color>
 </resources>

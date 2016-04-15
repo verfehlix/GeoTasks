@@ -92,6 +92,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_maps) {
+//            MapsActivity fragment = new MapsActivity();
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            ft.replace(R.id.mainFrame, fragment);
+//            ft.commit();
             Intent mapsIntent = new Intent(this, MapsActivity.class);
             startActivity(mapsIntent);
         } else if (id == R.id.nav_gallery) {

@@ -102,6 +102,7 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
         taskList.add(task3);
 
         // TODO: Change Adapter to display your content
+        //taskList = MainActivity.db.getTasks("");
         mAdapter = new CustomListView(getActivity(), taskList);
 
         //set title of ActionBar
