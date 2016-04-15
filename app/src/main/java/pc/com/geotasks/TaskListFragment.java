@@ -4,15 +4,22 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import pc.com.geotasks.model.Task;
 
 /**
  * Created by Stefan
@@ -42,7 +49,7 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
 
     private OnFragmentInteractionListener mListener;
 
-    public static ArrayList<ListObject> taskList = new ArrayList<ListObject>();
+    public static ArrayList<Task> taskList = new ArrayList<Task>();
     /**
      * The fragment's ListView/GridView.
      */
@@ -80,20 +87,16 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Date tmpDate = new Date();
+        tmpDate.setTime(Calendar.getInstance().getTimeInMillis());
+        Task task1 = new Task("Einkaufen","", "Rewe City", "N1, Mannheim", 0, 0, 0, tmpDate);
+        Task task2 = new Task("Team Meeting","", "University of Mannheim", "Mannheim", 0, 0, 0, tmpDate);
+        Task task3 = new Task("App","", "Zuhause", "L14,18 Mannheim", 0, 0, 0, tmpDate);
 
-        ListObject task1 = new ListObject("Einkaufen", "Rewe City, N 1, Mannheim");
-        ListObject task2 = new ListObject("Team Meeting", "University Mannheim");
-        ListObject task3 = new ListObject("App programmieren","Zuhause");
+//        ListObject task1 = new ListObject("Einkaufen", "Rewe City, N 1, Mannheim");
+//        ListObject task2 = new ListObject("Team Meeting", "University Mannheim");
+//        ListObject task3 = new ListObject("App programmieren","Zuhause");
 
-        taskList.add(task1);
-        taskList.add(task2);
-        taskList.add(task3);
-        taskList.add(task1);
-        taskList.add(task2);
-        taskList.add(task3);
-        taskList.add(task1);
-        taskList.add(task2);
-        taskList.add(task3);
         taskList.add(task1);
         taskList.add(task2);
         taskList.add(task3);
@@ -121,6 +124,33 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+
+        final EditText searchBar = (EditText)view.findViewById(R.id.search);
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String searchText = searchBar.getText().toString();
+                taskList.clear();
+                taskList = MainActivity.db.getTasks(searchText);
+//                for debug
+//                Date tmpDate = new Date();
+//                tmpDate.setTime(Calendar.getInstance().getTimeInMillis());
+//                Task task1 = new Task("Einkauf","", "Rewe City", "N1, Mannheim", 0, 0, 0, tmpDate);
+//
+//                taskList.add(task1);
+                ((CustomListView)mAdapter).update();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         return view;
     }
@@ -178,7 +208,7 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
         public void onFragmentInteraction(String id);
     }
 
-    public ArrayList<ListObject> getTaskList(){
+    public ArrayList<Task> getTaskList(){
         return taskList;
     }
 

@@ -22,7 +22,7 @@ import pc.com.geotasks.model.Task;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    SQLHelper db;
+    public static SQLHelper db;
     private TaskListFragment fragment;
 
     @Override
@@ -91,8 +91,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_maps) {
+            Intent mapsIntent = new Intent(this, MapsActivity.class);
+            startActivity(mapsIntent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

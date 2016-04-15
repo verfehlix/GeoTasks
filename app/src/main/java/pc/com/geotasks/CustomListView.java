@@ -25,10 +25,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CustomListView extends ArrayAdapter<ListObject>{
+import pc.com.geotasks.model.Task;
+
+public class CustomListView extends ArrayAdapter<Task>{
 
     private final Activity context;
-    private final ArrayList<ListObject> files;
+    private final ArrayList<Task> files;
     private View rowView;
     private static final int MAX_CLICK_DURATION = 200;
     private long startClickTime;
@@ -40,7 +42,7 @@ public class CustomListView extends ArrayAdapter<ListObject>{
      * @param context context activity
      * @param files ArrayList<String> with the items that are added to the taskList
      */
-    public CustomListView(Activity context, ArrayList<ListObject> files) {
+    public CustomListView(Activity context, ArrayList<Task> files) {
         super(context, R.layout.task_list_item, files);
         this.context = context;
         this.files = files;
@@ -57,7 +59,7 @@ public class CustomListView extends ArrayAdapter<ListObject>{
 
         //set title text to the String in the ArrayList at position "position"
         txtTitle.setText(files.get(position).getName());
-        txtSubTitle.setText(files.get(position).getLocation());
+        txtSubTitle.setText(files.get(position).getLocationName() + files.get(position).getLocationAddress());
 
         taskListItem.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -190,5 +192,12 @@ public class CustomListView extends ArrayAdapter<ListObject>{
         Vibrator vibr = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         vibr.vibrate(millis);
+    }
+
+    /**
+     * updates the list
+     */
+    public void update(){
+        notifyDataSetChanged();
     }
 }
