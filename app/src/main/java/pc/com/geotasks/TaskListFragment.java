@@ -38,15 +38,6 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
 
     public static final String TAG = TaskListFragment.class.getSimpleName();
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public static ArrayList<Task> taskList = new ArrayList<Task>();
@@ -62,15 +53,6 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
     private ListAdapter mAdapter;
     private static View view;
 
-    // TODO: Rename and change types of parameters
-    public static TaskListFragment newInstance(String param1, String param2) {
-        TaskListFragment fragment = new TaskListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -83,10 +65,6 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         Date tmpDate = new Date();
         tmpDate.setTime(Calendar.getInstance().getTimeInMillis());
         Task task1 = new Task("Einkaufen","", "Rewe City", "N1, Mannheim", 0, 0, 0, tmpDate);

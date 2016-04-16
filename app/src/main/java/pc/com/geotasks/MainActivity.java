@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static SQLHelper db;
     private TaskListFragment fragment;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         //add floating action button in the bottom left
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,15 +92,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_maps) {
-//            MapsActivity fragment = new MapsActivity();
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            ft.replace(R.id.mainFrame, fragment);
-//            ft.commit();
-            Intent mapsIntent = new Intent(this, MapsActivity.class);
-            startActivity(mapsIntent);
-        } else if (id == R.id.nav_gallery) {
-
+        if (id == R.id.nav_tasks) {
+            fragment = new TaskListFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.mainFrame, fragment);
+            ft.commit();
+        } else if (id == R.id.nav_maps) {
+            MapsFragment fragment = new MapsFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.mainFrame, fragment);
+            ft.commit();
+//            Intent mapsIntent = new Intent(this, MapsActivity.class);
+//            startActivity(mapsIntent);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -110,8 +114,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
+        //sets visibility of FloatingActionButton
+        if(id == R.id.nav_tasks){
+            setFloatingActionButtonVisible(true);
+        }else{
+            setFloatingActionButtonVisible(false);
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * @author Stefan
+     * sets the FloatingActionButton to isVisible
+     * @param isVisible
+     */
+    public void setFloatingActionButtonVisible(boolean isVisible){
+        if(isVisible) {
+            fab.setVisibility(View.VISIBLE);
+        }else{
+            fab.setVisibility(View.GONE);
+        }
     }
 }
