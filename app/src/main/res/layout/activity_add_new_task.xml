@@ -110,8 +110,34 @@
             <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp" />
 
-            <!--Place-->
+            <!-- Tag / Category -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp">
 
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_location"
+                    android:layout_marginRight="15dp" />
+
+                <EditText
+                    android:id="@+id/categoryEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Add a tag to categorize the task"
+                    android:background="@android:color/transparent"/>
+
+            </LinearLayout>
+
+            <!-- Seperator -->
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp" />
+
+            <!--Place-->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"

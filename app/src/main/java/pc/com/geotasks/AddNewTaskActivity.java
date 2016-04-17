@@ -55,6 +55,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     EditText datePickerEditText;
     EditText meterEditText;
     EditText timePickerEditText;
+    EditText categoryEditText;
     TextView textViewLngLtd;
     TextView orTextView;
     Switch useCurrentLocationSwitch;
@@ -93,6 +94,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         datePickerEditText = (EditText) findViewById(R.id.datePickerEditText);
         timePickerEditText= (EditText) findViewById(R.id.timePickerEditText);
         meterEditText = (EditText) findViewById(R.id.meterEditText);
+        categoryEditText = (EditText) findViewById(R.id.categoryEditText);
 
         //get text views
         textViewLngLtd = (TextView) findViewById(R.id.textViewLngLtd);
@@ -301,7 +303,10 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute){
-                timePickerEditText.setText(hourOfDay + ":" + minute);
+                String hourString = (""+hourOfDay).length() == 1 ? "0" + hourOfDay : hourOfDay+"";
+                String minuteString = (""+minute).length() == 1 ? "0" + minute : minute+"";
+
+                timePickerEditText.setText(hourString + ":" + minuteString);
             }
 
         };
@@ -341,6 +346,22 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             anyDataEnterd = true;
         }
 
+        if(textEditFilled(editTextLocationAutocomplete)) {
+            anyDataEnterd = true;
+        }
+
+        if(textEditFilled(datePickerEditText)) {
+            anyDataEnterd = true;
+        }
+
+        if(textEditFilled(timePickerEditText)) {
+            anyDataEnterd = true;
+        }
+
+        if (textEditFilled(categoryEditText)) {
+            anyDataEnterd = true;
+        }
+
         return anyDataEnterd;
     }
 
@@ -348,16 +369,11 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         return editText.getText().toString().trim().length() > 0 ? true : false;
     }
 
-
-
     public void findPlace(View view) {
         try {
 
             Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).build(this);
             startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
-
-
-
 
         } catch (GooglePlayServicesRepairableException e) {
             GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),0 /* requestCode */).show();
