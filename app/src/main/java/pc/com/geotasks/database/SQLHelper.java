@@ -119,23 +119,37 @@ public class SQLHelper extends SQLiteOpenHelper {
                 TaskContainer.Task.COLUMN_NAME_TIMESTAMP,
         };
 
-        String selection = TaskContainer.Task.COLUMN_NAME_NAME + " LIKE ? OR "
-                + TaskContainer.Task.COLUMN_NAME_LOCATION_NAME + " LIKE ? OR "
-                + TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS + " LIKE ? ";
-        String[] selectionArgs = new String[]{"'%"+filter+"%'", "'%"+filter+"%'", "'%"+filter+"%'"};
+        Cursor c;
 
         // How you want the results sorted in the resulting Cursor
         String sortOrder = TaskContainer.Task.COLUMN_NAME_TIMESTAMP + " DESC";
 
-        Cursor c = db.query(
-                TaskContainer.Task.TABLE_NAME,            // The table to query
-                projection,                               // The columns to return
-                selection,                                // The columns for the WHERE clause
-                selectionArgs,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                sortOrder                                 // The sort order
-        );
+        if(filter != null & filter.length()!=0){
+            String selection = TaskContainer.Task.COLUMN_NAME_NAME + " LIKE ? OR "
+                    + TaskContainer.Task.COLUMN_NAME_LOCATION_NAME + " LIKE ? OR "
+                    + TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS + " LIKE ? ";
+            String[] selectionArgs = new String[]{"'%"+filter+"%'", "'%"+filter+"%'", "'%"+filter+"%'"};
+
+            c = db.query(
+                    TaskContainer.Task.TABLE_NAME,            // The table to query
+                    projection,                               // The columns to return
+                    selection,                                // The columns for the WHERE clause
+                    selectionArgs,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    sortOrder                                 // The sort order
+            );
+        } else {
+            c = db.query(
+                    TaskContainer.Task.TABLE_NAME,            // The table to query
+                    projection,                               // The columns to return
+                    null,                                     // The columns for the WHERE clause
+                    null,                                     // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    sortOrder                                 // The sort order
+            );
+        }
 
         c.moveToFirst();
         while(!c.isAfterLast()){
