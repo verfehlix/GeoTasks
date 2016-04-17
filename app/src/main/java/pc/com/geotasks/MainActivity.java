@@ -49,12 +49,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //add floating action button in the bottom left
+        //add floating action button in the bottom right
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, AddNewTaskActivity.class));
+                //startActivity(new Intent(MainActivity.this, AddNewTaskActivity.class));
+                db.getTasks("");
             }
         });
 

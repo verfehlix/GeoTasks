@@ -151,31 +151,31 @@ public class SQLHelper extends SQLiteOpenHelper {
             );
         }
 
-        c.moveToFirst();
-        while(!c.isAfterLast()){
-            try {
-                int       ID               = c.getInt(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_ID));
-                String    name             = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_NAME));
-                String    description      = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_DESCRIPTION));
-                String    tag              = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TAG));
-                String    locationName     = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATION_NAME));
-                String    locationAddress  = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS));
-                double    longitude        = c.getDouble(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LONGITUDE));
-                double    latitude         = c.getDouble(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LATITUDE));
-                int       radius           = c.getInt(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_RADIUS));
-                Date      dueDate          = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_DUE_DATE)));
-                Date      timestamp        = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TIMESTAMP)));
+        if(c != null){
+            while(c.moveToNext()){
+                try {
+                    int       ID               = c.getInt(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_ID));
+                    String    name             = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_NAME));
+                    String    description      = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_DESCRIPTION));
+                    String    tag              = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TAG));
+                    String    locationName     = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATION_NAME));
+                    String    locationAddress  = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS));
+                    double    longitude        = c.getDouble(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LONGITUDE));
+                    double    latitude         = c.getDouble(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LATITUDE));
+                    int       radius           = c.getInt(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_RADIUS));
+                    Date      dueDate          = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_DUE_DATE)));
+                    Date      timestamp        = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TIMESTAMP)));
 
-                Task task = new Task(name, description, tag, locationName, locationAddress, longitude, latitude, radius, dueDate);
-                task.setID(ID);
-                task.setTimestamp(timestamp);
-                tasks.add(task);
+                    Task task = new Task(name, description, tag, locationName, locationAddress, longitude, latitude, radius, dueDate);
+                    task.setID(ID);
+                    task.setTimestamp(timestamp);
+                    tasks.add(task);
 
-            } catch (ParseException e) {
-                e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                //Timestamp timestamp        = c.getInt(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TIMESTAMP));
             }
-            //Timestamp timestamp        = c.getInt(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TIMESTAMP));
-
         }
 
         return tasks;
