@@ -67,17 +67,18 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
 
         Date tmpDate = new Date();
         tmpDate.setTime(Calendar.getInstance().getTimeInMillis());
-        Task task1 = new Task("Einkaufen","", "Rewe City", "N1, Mannheim", 0, 0, 0, tmpDate);
-        Task task2 = new Task("Team Meeting","", "University of Mannheim", "Mannheim", 0, 0, 0, tmpDate);
-        Task task3 = new Task("App","", "Zuhause", "L14,18 Mannheim", 0, 0, 0, tmpDate);
+//        Task task1 = new Task("Einkaufen","", "Rewe City", "N1, Mannheim", 0, 0, 0, tmpDate);
+//        Task task2 = new Task("Team Meeting","", "University of Mannheim", "Mannheim", 0, 0, 0, tmpDate);
+//        Task task3 = new Task("App","", "Zuhause", "L14,18 Mannheim", 0, 0, 0, tmpDate);
 
-//        ListObject task1 = new ListObject("Einkaufen", "Rewe City, N 1, Mannheim");
-//        ListObject task2 = new ListObject("Team Meeting", "University Mannheim");
-//        ListObject task3 = new ListObject("App programmieren","Zuhause");
+//        taskList.add(task1);
+//        taskList.add(task2);
+//        taskList.add(task3);
 
-        taskList.add(task1);
-        taskList.add(task2);
-        taskList.add(task3);
+//        ArrayList<Task> tasks = MainActivity.db.getTasks("");
+//        for(int i=0; i<tasks.size(); i++){
+//            taskList.add(tasks.get(i));
+//        }
 
         // TODO: Change Adapter to display your content
         //taskList = MainActivity.db.getTasks("");
