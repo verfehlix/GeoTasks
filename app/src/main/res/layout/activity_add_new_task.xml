@@ -231,10 +231,51 @@
 
             </LinearLayout>
 
-            <!--Seperator-->
+            <!-- Seperator -->
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp" />
 
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp" />
+            <!-- Date and Time Picker -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp">
 
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp" >
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:src="@drawable/ic_location"
+                        android:layout_marginRight="15dp" />
+
+                    <EditText
+                        android:id="@+id/datePickerEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Select a date"
+                        android:layout_gravity="left"
+                        android:layout_weight="5"
+                        android:layout_marginRight="15dp"
+                        android:background="@android:color/transparent"/>
+
+                    <EditText
+                        android:id="@+id/timePickerEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Select the time"
+                        android:layout_weight="5"
+                        android:background="@android:color/transparent"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
 
         </LinearLayout>

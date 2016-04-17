@@ -1,7 +1,10 @@
 package pc.com.geotasks;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -15,16 +18,21 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.GeoDataApi;
@@ -34,6 +42,8 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
+
 public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     Toolbar toolbar;
@@ -42,11 +52,20 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     EditText editTextTaskName;
     EditText editTextTaskDescription;
     EditText editTextLocationAutocomplete;
+    EditText datePickerEditText;
     EditText meterEditText;
+    EditText timePickerEditText;
     TextView textViewLngLtd;
     TextView orTextView;
     Switch useCurrentLocationSwitch;
     SeekBar radiusSeekBar;
+
+    Calendar cal = Calendar.getInstance();
+    int day = cal.get(Calendar.DAY_OF_MONTH);
+    int month = cal.get(Calendar.MONTH);
+    int year = cal.get(Calendar.YEAR);
+    int hour = cal.get(Calendar.HOUR);
+    int minute = cal.get(Calendar.MINUTE);
 
     GoogleApiClient googleApiClient;
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
@@ -71,6 +90,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         editTextTaskName = (EditText) findViewById(R.id.editTextTaskName);
         editTextTaskDescription = (EditText) findViewById(R.id.editTextTaskDescription);
         editTextLocationAutocomplete = (EditText) findViewById(R.id.editTextLocationAutocomplete);
+        datePickerEditText = (EditText) findViewById(R.id.datePickerEditText);
+        timePickerEditText= (EditText) findViewById(R.id.timePickerEditText);
+        meterEditText = (EditText) findViewById(R.id.meterEditText);
 
         //get text views
         textViewLngLtd = (TextView) findViewById(R.id.textViewLngLtd);
@@ -87,7 +109,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         editTextLocationAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     findPlace(findViewById(android.R.id.content));
                 }
             }
@@ -97,7 +119,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         useCurrentLocationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     editTextLocationAutocomplete.setVisibility(View.INVISIBLE);
                     orTextView.setVisibility(View.INVISIBLE);
                 } else {
@@ -111,7 +133,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                meterEditText.setText(""+progress);
+                meterEditText.setText("" + progress);
             }
 
             @Override
@@ -133,14 +155,14 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length() == 0){
+                if (s.length() == 0) {
                     return;
                 }
 
                 int inputValue = Integer.parseInt(s.toString());
 
-                if(inputValue > 5000){
-                    meterEditText.setText(""+5000);
+                if (inputValue > 5000) {
+                    meterEditText.setText("" + 5000);
                     radiusSeekBar.setProgress(5000);
                 } else {
                     radiusSeekBar.setProgress(inputValue);
@@ -155,31 +177,91 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             }
         });
 
+        //add date / time picker click listeners
+        datePickerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    datePicker();
+                }
+            }
+        });
+        datePickerEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePicker();
+            }
+        });
+
+        //add date / time picker click listeners
+        timePickerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    timePicker();
+                }
+            }
+        });
+        timePickerEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker();
+            }
+        });
+
 
         //init google maps api component
+        // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
         googleApiClient = new GoogleApiClient
-            .Builder(this)
-            .addApi(Places.GEO_DATA_API)
-            .addApi(Places.PLACE_DETECTION_API)
-            .addConnectionCallbacks(this)
-            .addOnConnectionFailedListener(this)
-            .build();
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(AppIndex.API).build();
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if( googleApiClient != null )
+        if (googleApiClient != null)
             googleApiClient.connect();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "AddNewTask Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://pc.com.geotasks/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(googleApiClient, viewAction);
     }
 
     @Override
     protected void onStop() {
-        if( googleApiClient != null && googleApiClient.isConnected() ) {
+        if (googleApiClient != null && googleApiClient.isConnected()) {
             googleApiClient.disconnect();
         }
         super.onStop();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "AddNewTask Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://pc.com.geotasks/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(googleApiClient, viewAction);
     }
 
     @Override
@@ -196,6 +278,37 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             //no data was entered, just exit this activity
             finish();
         }
+    }
+
+    private void datePicker() {
+        DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                datePickerEditText.setText(dayOfMonth + "." + monthOfYear + "." + year);
+
+            }
+        };
+
+        DatePickerDialog dpDialog = new DatePickerDialog(this, onDateSetListener, year, month, day);
+
+        dpDialog.show();
+    }
+
+    private void timePicker() {
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute){
+                timePickerEditText.setText(hourOfDay + ":" + minute);
+            }
+
+        };
+
+        TimePickerDialog tpDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
+
+        tpDialog.show();
     }
 
     private void exitPrompt() {

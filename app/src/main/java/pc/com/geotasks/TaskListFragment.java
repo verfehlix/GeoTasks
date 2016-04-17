@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,6 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import pc.com.geotasks.model.Task;
 
@@ -65,18 +64,27 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Date tmpDate = new Date();
-        tmpDate.setTime(Calendar.getInstance().getTimeInMillis());
-//        Task task1 = new Task("Einkaufen","", "Rewe City", "N1, Mannheim", 0, 0, 0, tmpDate);
-//        Task task2 = new Task("Team Meeting","", "University of Mannheim", "Mannheim", 0, 0, 0, tmpDate);
-//        Task task3 = new Task("App","", "Zuhause", "L14,18 Mannheim", 0, 0, 0, tmpDate);
+//        Date tmpDate = new Date();
+//        tmpDate.setTime(Calendar.getInstance().getTimeInMillis());
+//        Task task1 = new Task("Einkaufen","", "", "Rewe City", "N1, Mannheim", 0, 0, 0, tmpDate);
+//        Task task2 = new Task("Team Meeting","", "", "University of Mannheim", "Mannheim", 0, 0, 0, tmpDate);
+//        Task task3 = new Task("App","", "", "Zuhause", "L14,18 Mannheim", 0, 0, 0, tmpDate);
+
+//        ListObject task1 = new ListObject("Einkaufen", "Rewe City, N 1, Mannheim");
+//        ListObject task2 = new ListObject("Team Meeting", "University Mannheim");
+//        ListObject task3 = new ListObject("App programmieren","Zuhause");
 
 //        taskList.add(task1);
 //        taskList.add(task2);
 //        taskList.add(task3);
 
-//        ArrayList<Task> tasks = MainActivity.db.getTasks("");
+        taskList = MainActivity.db.getTasks("");
+        Log.d(TAG, "Size Task List: " + taskList.size());
+
+//        Log.d(TAG, "Size: " + tasks.size());
+//
 //        for(int i=0; i<tasks.size(); i++){
+//            Log.d(TAG, "Task added");
 //            taskList.add(tasks.get(i));
 //        }
 
@@ -117,12 +125,7 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
                 String searchText = searchBar.getText().toString();
                 taskList.clear();
                 taskList = MainActivity.db.getTasks(searchText);
-//                for debug
-//                Date tmpDate = new Date();
-//                tmpDate.setTime(Calendar.getInstance().getTimeInMillis());
-//                Task task1 = new Task("Einkauf","", "Rewe City", "N1, Mannheim", 0, 0, 0, tmpDate);
-//
-//                taskList.add(task1);
+
                 ((CustomListView)mAdapter).update();
             }
 
