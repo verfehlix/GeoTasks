@@ -78,14 +78,15 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
 //        taskList.add(task2);
 //        taskList.add(task3);
 
-        ArrayList<Task> tasks = MainActivity.db.getTasks("");
+        taskList = MainActivity.db.getTasks("");
+        Log.d(TAG, "Size Task List: " + taskList.size());
 
-        Log.d(TAG, "Size: " + tasks.size());
-
-        for(int i=0; i<tasks.size(); i++){
-            Log.d(TAG, "Task added");
-            taskList.add(tasks.get(i));
-        }
+//        Log.d(TAG, "Size: " + tasks.size());
+//
+//        for(int i=0; i<tasks.size(); i++){
+//            Log.d(TAG, "Task added");
+//            taskList.add(tasks.get(i));
+//        }
 
         // TODO: Change Adapter to display your content
         //taskList = MainActivity.db.getTasks("");
