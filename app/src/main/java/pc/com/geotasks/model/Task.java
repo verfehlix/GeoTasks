@@ -14,6 +14,7 @@ public class Task {
     private int         ID;
     private String      name;
     private String      description;
+    private String      tag;
     private String      locationName;
     private String      locationAddress;
     private double      longitude;
@@ -26,9 +27,10 @@ public class Task {
 
     }
 
-    public Task(String name, String description, String locationName, String locationAddress, double longitude, double latitude, int radius, Date dueDate){
+    public Task(String name, String description, String tag, String locationName, String locationAddress, double longitude, double latitude, int radius, Date dueDate){
         this.name               = name;
         this.description        = description;
+        this.tag                = tag;
         this.locationName       = locationName;
         this.locationAddress    = locationAddress;
         this.longitude          = longitude;
@@ -64,6 +66,14 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.name = tag;
     }
 
     public String getLocationName() { return locationName; }

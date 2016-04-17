@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 
 import java.util.Date;
 import java.text.ParseException;
@@ -30,6 +31,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                     TaskContainer.Task.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
                     TaskContainer.Task.COLUMN_NAME_NAME + SHORT_TEXT_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
+                    TaskContainer.Task.COLUMN_NAME_TAG + SHORT_TEXT_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_LOCATION_NAME + SHORT_TEXT_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS + SHORT_TEXT_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_LONGITUDE + DOUBLE_TYPE + COMMA_SEP +
@@ -42,7 +44,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskContainer.Task.TABLE_NAME;
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "GeoTasks.db";
 
     public SQLHelper(Context context) {
@@ -77,6 +79,7 @@ public class SQLHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(TaskContainer.Task.COLUMN_NAME_NAME              , task.getName());
         values.put(TaskContainer.Task.COLUMN_NAME_DESCRIPTION       , task.getDescription());
+        values.put(TaskContainer.Task.COLUMN_NAME_TAG               , task.getTag());
         values.put(TaskContainer.Task.COLUMN_NAME_LOCATION_NAME     , task.getLocationName());
         values.put(TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS  , task.getLocationAddress());
         values.put(TaskContainer.Task.COLUMN_NAME_LONGITUDE         , task.getLongitude());
@@ -106,6 +109,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 TaskContainer.Task.COLUMN_NAME_ID,
                 TaskContainer.Task.COLUMN_NAME_NAME,
                 TaskContainer.Task.COLUMN_NAME_DESCRIPTION,
+                TaskContainer.Task.COLUMN_NAME_TAG,
                 TaskContainer.Task.COLUMN_NAME_LOCATION_NAME,
                 TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS,
                 TaskContainer.Task.COLUMN_NAME_LONGITUDE,
@@ -139,6 +143,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 int       ID               = c.getInt(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_ID));
                 String    name             = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_NAME));
                 String    description      = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_DESCRIPTION));
+                String    tag              = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TAG));
                 String    locationName     = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATION_NAME));
                 String    locationAddress  = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS));
                 double    longitude        = c.getDouble(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LONGITUDE));
@@ -147,7 +152,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 Date      dueDate          = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_DUE_DATE)));
                 Date      timestamp        = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TIMESTAMP)));
 
-                Task task = new Task(name, description, locationName, locationAddress, longitude, latitude, radius, dueDate);
+                Task task = new Task(name, description, tag, locationName, locationAddress, longitude, latitude, radius, dueDate);
                 task.setID(ID);
                 task.setTimestamp(timestamp);
                 tasks.add(task);
@@ -161,6 +166,29 @@ public class SQLHelper extends SQLiteOpenHelper {
 
         return tasks;
     }
-    //Filtern nach taskname like '%%%'
-    //OR adresse like
+
+    /**
+     * Returns list of tasks that have the given location in their range.
+     *
+     * @param location - current location
+     * @return list of all task that have the current location in their range. empty list if no match
+     * @author totto
+     */
+    public ArrayList<Task> getAllTasksInRange(Location location){
+        ArrayList<Task> tasks = this.getTasks("");
+
+        if(tasks.size() > 0){
+            for(int i = 0; i < tasks.size(); i++){
+                float[] distance = new float[2];
+
+                location.distanceBetween(location.getLatitude(), location.getLongitude()
+                        , tasks.get(i).getLatitude(), tasks.get(i).getLongitude(), distance);
+
+                if(distance[0] > tasks.get(i).getRadius())
+                    tasks.remove(i);
+            }
+        }
+
+        return tasks;
+    }
 }
