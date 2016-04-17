@@ -122,7 +122,7 @@ public class SQLHelper extends SQLiteOpenHelper {
         String selection = TaskContainer.Task.COLUMN_NAME_NAME + " LIKE '%?%' OR "
                 + TaskContainer.Task.COLUMN_NAME_LOCATION_NAME + " LIKE '%?%' OR "
                 + TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS + " LIKE '%?%' ";
-        String[] selectionArgs = new String[]{filter, filter};
+        String[] selectionArgs = new String[]{filter, filter, filter};
 
         // How you want the results sorted in the resulting Cursor
         String sortOrder = TaskContainer.Task.COLUMN_NAME_TIMESTAMP + " DESC";
