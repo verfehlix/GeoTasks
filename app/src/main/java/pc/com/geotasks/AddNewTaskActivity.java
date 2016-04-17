@@ -11,9 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +42,11 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     EditText editTextTaskName;
     EditText editTextTaskDescription;
     EditText editTextLocationAutocomplete;
+    EditText meterEditText;
     TextView textViewLngLtd;
+    TextView orTextView;
+    Switch useCurrentLocationSwitch;
+    SeekBar radiusSeekBar;
 
     GoogleApiClient googleApiClient;
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
@@ -66,6 +74,14 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         //get text views
         textViewLngLtd = (TextView) findViewById(R.id.textViewLngLtd);
+        orTextView = (TextView) findViewById(R.id.orTextView);
+        meterEditText = (EditText) findViewById(R.id.meterEditText);
+
+        //get switch
+        useCurrentLocationSwitch = (Switch) findViewById(R.id.useCurrentLocationSwitch);
+
+        //get radius seekbar
+        radiusSeekBar = (SeekBar) findViewById(R.id.radiusSeekBar);
 
         //add onchange listener to autocomplete edit text
         editTextLocationAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -77,6 +93,67 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             }
         });
 
+        //add onchange listener to switch for use current location
+        useCurrentLocationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    editTextLocationAutocomplete.setVisibility(View.INVISIBLE);
+                    orTextView.setVisibility(View.INVISIBLE);
+                } else {
+                    editTextLocationAutocomplete.setVisibility(View.VISIBLE);
+                    orTextView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        //add change listener to radius slider
+        radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                meterEditText.setText(""+progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        //add change listener to meter input
+        meterEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() == 0){
+                    return;
+                }
+
+                int inputValue = Integer.parseInt(s.toString());
+
+                if(inputValue > 5000){
+                    meterEditText.setText(""+5000);
+                    radiusSeekBar.setProgress(5000);
+                } else {
+                    radiusSeekBar.setProgress(inputValue);
+                }
+
+                meterEditText.setSelection(meterEditText.getText().length());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         //init google maps api component

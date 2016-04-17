@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.db = new SQLHelper(this.getApplicationContext());
         Task t = null;
         try {
-            t = new Task("test 1", "des 1", "ln 1", "la 1", 50, 30, 20, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+            t = new Task("test 1", "des 1", "dummyTag", "ln 1", "la 1", 50, 30, 20, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -203,6 +203,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //use last known location
         String locationProvider = LocationManager.GPS_PROVIDER;
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+
+        //DEBUG
+        if(lastKnownLocation == null){
+            return;
+        }
 
         Toast toast = Toast.makeText(MainActivity.this, "lat: " + lastKnownLocation.getLatitude() + "\nlong: " + lastKnownLocation.getLongitude(), Toast.LENGTH_LONG);
         toast.show();

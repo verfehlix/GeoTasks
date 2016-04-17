@@ -85,15 +85,16 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
 
                 <ImageView
                     android:id="@+id/pencil_icon"
                     android:layout_height="fill_parent"
                     android:layout_width="wrap_content"
                     android:src="@drawable/ic_location"
-                    android:layout_marginLeft="15dp"
-                    android:maxHeight="25dp" />
+                    android:layout_marginRight="15dp" />
 
                 <EditText
                     android:id="@+id/editTextTaskDescription"
@@ -102,88 +103,139 @@
                     android:inputType="textMultiLine"
                     android:ems="10"
                     android:hint="Enter a description for the task"
-                    android:background="@android:color/transparent"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp" />
+                    android:background="@android:color/transparent" />
             </LinearLayout>
 
             <!--Seperator-->
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp" />
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp" />
 
             <!--Place-->
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp">
+                android:layout_marginLeft="15dp">
 
-                <ImageView
-                    android:id="@+id/location_icon"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_location"
-                    android:layout_marginLeft="15dp" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp">
 
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_height="fill_parent"
+                        android:layout_width="wrap_content"
+                        android:src="@drawable/ic_location"
+                        android:layout_marginRight="15dp" />
+
+                    <!-- Use current location -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_weight="1"
+                        android:text="Use current location"
+                        android:id="@+id/textView2" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="6" />
+
+                    <Switch
+                        android:id="@+id/useCurrentLocationSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:checked="false" />
+
+                </LinearLayout>
+
+                <!-- OR text -->
                 <TextView
+                    android:id="@+id/orTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:layout_weight="1"
-                    android:text="Use current location"
-                    android:id="@+id/textView2" />
+                    android:text="or"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center" />
 
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="6" />
-
-                <Switch
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:id="@+id/switch1"
-                    android:checked="false"
-                    android:layout_marginRight="15dp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="or"
-                android:id="@+id/textView3"
-                android:layout_gravity="center"
-                android:layout_margin="15dp" />
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
+                <!-- Location Search -->
                 <EditText
                     android:id="@+id/editTextLocationAutocomplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Search a location"
                     android:background="@android:color/transparent"
-                    android:layout_marginLeft="53dp"
-                    android:layout_marginRight="15dp"
                     android:clickable="true"
-                    android:onClick="findPlace" />
+                    android:onClick="findPlace"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="15dp" />
+
+                <TextView
+                    android:id="@+id/textViewLngLtd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="15dp" />
+
+                <!-- Radius -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Radius"
+                        android:id="@+id/textView4"
+                        android:layout_marginLeft="40dp" />
+
+                    <SeekBar
+                        android:id="@+id/radiusSeekBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:max="5000"
+                        android:layout_weight="1"
+                        android:progress="10" />
+
+                    <EditText
+                        android:id="@+id/meterEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="10"
+                        android:layout_weight="0.1"
+                        android:maxLines="1"
+                        android:maxLength="4"
+                        android:inputType="number"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="m"
+                        android:id="@+id/textView6" />
+                </LinearLayout>
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textViewLngLtd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginLeft="53dp" />
-
             <!--Seperator-->
+
             <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp" />
+
+
 
         </LinearLayout>
     </ScrollView>
