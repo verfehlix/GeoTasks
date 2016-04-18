@@ -193,11 +193,4 @@ public class CustomListView extends ArrayAdapter<Task>{
         // Vibrate for 500 milliseconds
         vibr.vibrate(millis);
     }
-
-    /**
-     * updates the list
-     */
-    public void update(){
-        notifyDataSetChanged();
-    }
 }

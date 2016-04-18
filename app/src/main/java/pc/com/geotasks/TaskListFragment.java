@@ -125,10 +125,16 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String searchText = searchBar.getText().toString();
+                Log.d(TAG, searchText);
                 taskList.clear();
-                taskList = MainActivity.db.getTasks(searchText);
+                ArrayList<Task> list = MainActivity.db.getTasks(searchText);
 
-                ((CustomListView)mAdapter).update();
+                for(int i=0; i<list.size(); i++){
+                    taskList.add(list.get(i));
+                }
+                Log.d(TAG, "list size search result: " + taskList.size());
+
+                ((CustomListView)mAdapter).notifyDataSetChanged();
             }
 
             @Override
