@@ -27,6 +27,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import pc.com.geotasks.model.Task;
+
 /**
  * created by Stefan 16.04.2016
  */
@@ -69,55 +71,55 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         int color = android.graphics.Color.argb(50, 33, 150, 243);
         int colorBorder = android.graphics.Color.argb(100, 33, 150, 243);
 
-//        ArrayList<Task> tasks = MainActivity.db.getTasks("");
-//
-//        for(int i=0; i<tasks.size(); i++){
-//            double lat = tasks.get(i).getLatitude();
-//            double lng = tasks.get(i).getLongitude();
-//            String title = tasks.get(i).getName();
-//            String desc = tasks.get(i).getDescription();
-//            String addr = tasks.get(i).getLocationAddress();
-//            String loc = tasks.get(i).getLocationName();
-//            int radius = tasks.get(i).getRadius();
-//
-//            LatLng tmp = new LatLng(lat, lng);
-//            Marker tmpMarker = mMap.addMarker(new MarkerOptions().position(tmp).title(title).snippet(desc + "\n" + loc + ", " + addr));
-//            marker.add(tmpMarker);
-//
-//            // Instantiates a new CircleOptions object and defines the center and radius
-//            CircleOptions circleOptions = new CircleOptions()
-//                    .center(new LatLng(lat, lng))
-//                    .radius(radius)// In meters
-//                    .strokeColor(colorBorder)
-//                    .fillColor(color)
-//                    .strokeWidth(5f);
-//
-//            // Get back the mutable Circle
-//            Circle circle = mMap.addCircle(circleOptions);
-//        }
+        ArrayList<Task> tasks = MainActivity.db.getTasks("");
 
-        // Add a marker in Sydney and move the camera
-        LatLng ma1 = new LatLng(49, 8);
-        LatLng ma2 = new LatLng(49.487528, 8.469828);
-        LatLng ma3 = new LatLng(49.487619, 8.466223);
-        Marker markSyd = mMap.addMarker(new MarkerOptions().position(ma1).title("Marker in Sydney"));
-        Marker markSyd1 = mMap.addMarker(new MarkerOptions().position(ma2).title("Marker in Sydney"));
-        Marker markSyd2 = mMap.addMarker(new MarkerOptions().position(ma3).title("Marker in Sydney"));
+        for(int i=0; i<tasks.size(); i++){
+            double lat = tasks.get(i).getLatitude();
+            double lng = tasks.get(i).getLongitude();
+            String title = tasks.get(i).getName();
+            String desc = tasks.get(i).getDescription();
+            String addr = tasks.get(i).getLocationAddress();
+            String loc = tasks.get(i).getLocationName();
+            int radius = tasks.get(i).getRadius();
 
-        markers.add(markSyd);
-        markers.add(markSyd1);
-        markers.add(markSyd2);
+            LatLng tmp = new LatLng(lat, lng);
+            Marker tmpMarker = mMap.addMarker(new MarkerOptions().position(tmp).title(title).snippet(desc + "\n" + loc + ", " + addr));
+            markers.add(tmpMarker);
 
-        // Instantiates a new CircleOptions object and defines the center and radius
-        CircleOptions circleOptions = new CircleOptions()
-                .center(ma1)
-                .radius(5000) //in meters
-                .strokeColor(colorBorder)
-                .fillColor(color)
-                .strokeWidth(5f);
+            // Instantiates a new CircleOptions object and defines the center and radius
+            CircleOptions circleOptions = new CircleOptions()
+                    .center(tmp)
+                    .radius(radius)// In meters
+                    .strokeColor(colorBorder)
+                    .fillColor(color)
+                    .strokeWidth(5f);
 
-        // Get back the mutable Circle
-        Circle circle = mMap.addCircle(circleOptions);
+            // Get back the mutable Circle
+            Circle circle = mMap.addCircle(circleOptions);
+        }
+
+//        // Add a marker in Sydney and move the camera
+//        LatLng ma1 = new LatLng(49, 8);
+//        LatLng ma2 = new LatLng(49.487528, 8.469828);
+//        LatLng ma3 = new LatLng(49.487619, 8.466223);
+//        Marker markSyd = mMap.addMarker(new MarkerOptions().position(ma1).title("Marker in Sydney"));
+//        Marker markSyd1 = mMap.addMarker(new MarkerOptions().position(ma2).title("Marker in Sydney"));
+//        Marker markSyd2 = mMap.addMarker(new MarkerOptions().position(ma3).title("Marker in Sydney"));
+//
+//        markers.add(markSyd);
+//        markers.add(markSyd1);
+//        markers.add(markSyd2);
+//
+//        // Instantiates a new CircleOptions object and defines the center and radius
+//        CircleOptions circleOptions = new CircleOptions()
+//                .center(ma1)
+//                .radius(5000) //in meters
+//                .strokeColor(colorBorder)
+//                .fillColor(color)
+//                .strokeWidth(5f);
+//
+//        // Get back the mutable Circle
+//        Circle circle = mMap.addCircle(circleOptions);
 
         //calc bounds of all markers
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
