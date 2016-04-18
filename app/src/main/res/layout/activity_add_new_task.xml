@@ -51,7 +51,8 @@
                     android:background="?selectableItemBackgroundBorderless"
                     android:textSize="18sp"
                     android:textColor="#FFFFFF"
-                    android:text="Save"/>
+                    android:text="Save"
+                    android:onClick="saveButtonPressed"/>
 
             </LinearLayout>
 

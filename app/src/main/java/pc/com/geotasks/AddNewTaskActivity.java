@@ -42,9 +42,17 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
+import pc.com.geotasks.database.SQLHelper;
+import pc.com.geotasks.model.Task;
 
 public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+
+    SQLHelper db;
 
     Toolbar toolbar;
     Button exitButton;
@@ -76,6 +84,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_task);
+
+        //setup connection to database
+        this.db = new SQLHelper(this.getApplicationContext());
 
         //setup toolbar
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -282,13 +293,33 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         }
     }
 
+    public void saveButtonPressed(View view) throws ParseException {
+        String taskName = editTextTaskName.getText().toString();
+        String taskDescription = editTextTaskDescription.getText().toString();
+        String locationName = "";
+        String locationAddress = "";
+        String tag = categoryEditText.getText().toString();
+        double longitude = 0;
+        double latitude = 0;
+        int radius = radiusSeekBar.getProgress();
+        String dateString = datePickerEditText.getText().toString() + " " + timePickerEditText.getText().toString() + ":00";
+        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
+
+        Task t = new Task(taskName, taskDescription, locationName, locationAddress, tag, longitude, latitude, radius, dueDate);
+        db.addTask(t);
+
+        finish();
+    }
+
     private void datePicker() {
         DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                String monthString = (""+monthOfYear).length() == 1 ? "0" + monthOfYear : monthOfYear+"";
+                String dayString = (""+dayOfMonth).length() == 1 ? "0" + dayOfMonth : dayOfMonth+"";
 
-                datePickerEditText.setText(dayOfMonth + "." + monthOfYear + "." + year);
+                datePickerEditText.setText(year + "-" + monthString + "-" + dayString);
 
             }
         };
