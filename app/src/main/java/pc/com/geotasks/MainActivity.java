@@ -22,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static SQLHelper db;
     private Fragment fragment;
     private FloatingActionButton fab;
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.db = new SQLHelper(this.getApplicationContext());
         Task t = null;
         try {
-            t = new Task("test 1", "des 1", "ln 1", "la 1", "blub", 50, 30, 20, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
-            t = new Task("tast 1", "des 1", "ln 1", "la 1", "blub", 50, 30, 20, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+            t = new Task("Uni", "des 1", "ln 1", "la 1", "blub", 8.458106, 49.487521, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+//            t = new Task("tast 1", "des 1", "ln 1", "la 1", "blub", 50, 30, 20, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -166,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param title title
      */
     public void sendNotification(String title, String notification, int taskID) {
-        if(!isNotificationVisible(taskID)) {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.ic_perm_group_location)
@@ -195,18 +196,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // mId allows you to update the notification later on.
             mNotificationManager.notify(taskID, mBuilder.build());
         }
-    }
-
-    /**
-     * checks if a notification is visible
-     * @param id
-     * @return
-     */
-    private boolean isNotificationVisible(int id) {
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent test = PendingIntent.getActivity(this, id, notificationIntent, PendingIntent.FLAG_NO_CREATE);
-        return test != null;
-    }
 
     /**
      * creates the GPS tracking service
@@ -226,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Define a listener that responds to location updates
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
+                Log.d(TAG, "Location changed");
                 handleLocation(location);
             }
 
@@ -269,7 +259,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ArrayList<Task> tasksInRange = MainActivity.db.getAllTasksInRange(location);
 
+
+        Log.d("MainActivity", "Tasks in Range: " + tasksInRange.size());
         for(int i=0; i<tasksInRange.size(); i++){
+            Log.d("MainActivity", "Task in Range: " + tasksInRange.get(i).getName());
             sendNotification(tasksInRange.get(i).getName() +" reminder", "You are next to the location of the task \"" + tasksInRange.get(i).getName() + "\"", tasksInRange.get(i).getID());
         }
     }
