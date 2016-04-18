@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import pc.com.geotasks.database.SQLHelper;
 import pc.com.geotasks.model.Task;
@@ -207,15 +208,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
 
         if(lastKnownLocation != null) {
-            Toast toast = Toast.makeText(MainActivity.this, "lat: " + lastKnownLocation.getLatitude() + "\nlong: " + lastKnownLocation.getLongitude(), Toast.LENGTH_LONG);
-            toast.show();
+            handleLocation(lastKnownLocation);
         }
 
         // Define a listener that responds to location updates
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
-                Toast toast = Toast.makeText(MainActivity.this, "lat: " + location.getLatitude() + "\nlong" + location.getLongitude(), Toast.LENGTH_LONG);
-                toast.show();
+                handleLocation(location);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -246,5 +245,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // second parameters the minimum time interval between notifications
         // and the third is the minimum change in distance (meters) between notifications
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, locationListener);
+    }
+
+    /**
+     * handles the current location and sends a notification if next to the location of the task
+     * @param location
+     */
+    public void handleLocation(Location location){
+        Toast toast = Toast.makeText(MainActivity.this, "lat: " + location.getLatitude() + "\nlong" + location.getLongitude(), Toast.LENGTH_LONG);
+        toast.show();
+
+        ArrayList<Task> tasksInRange = MainActivity.db.getAllTasksInRange(location);
+
+        for(int i=0; i<tasksInRange.size(); i++){
+            sendNotification(tasksInRange.get(i).getName() +" reminder", "You are next to the location of the task \"" + tasksInRange.get(i).getName() + "\"");
+        }
     }
 }
