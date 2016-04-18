@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static SQLHelper db;
     private Fragment fragment;
     private FloatingActionButton fab;
-    private int mId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ft.replace(R.id.mainFrame, fragment);
         ft.commit();
 
-        sendNotification("VIRUS", "Ihr Gerät wurde durch einem Virus infiziert. Bitte leiten Sie umgehend alle Schritte zur sofortigen Zerstörung ein.");
+        sendNotification("VIRUS", "Ihr Gerät wurde durch einem Virus infiziert. Bitte leiten Sie umgehend alle Schritte zur sofortigen Zerstörung ein.", 0);
         setUpGPSService();
     }
 
@@ -166,34 +165,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param notification notificaton text
      * @param title title
      */
-    public void sendNotification(String title, String notification) {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_perm_group_location)
-                        .setContentTitle(title)
-                        .setContentText(notification);
-        // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(this, MainActivity.class);
+    public void sendNotification(String title, String notification, int taskID) {
+        if(!isNotificationVisible(taskID)) {
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.ic_perm_group_location)
+                            .setContentTitle(title)
+                            .setContentText(notification);
+            // Creates an explicit intent for an Activity in your app
+            Intent resultIntent = new Intent(this, MainActivity.class);
 
-        // The stack builder object will contain an artificial back stack for the
-        // started Activity.
-        // This ensures that navigating backward from the Activity leads out of
-        // your application to the Home screen.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(MainActivity.class);
-        // Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-        mNotificationManager.notify(mId, mBuilder.build());
+            // The stack builder object will contain an artificial back stack for the
+            // started Activity.
+            // This ensures that navigating backward from the Activity leads out of
+            // your application to the Home screen.
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            // Adds the back stack for the Intent (but not the Intent itself)
+            stackBuilder.addParentStack(MainActivity.class);
+            // Adds the Intent that starts the Activity to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            mBuilder.setContentIntent(resultPendingIntent);
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            // mId allows you to update the notification later on.
+            mNotificationManager.notify(taskID, mBuilder.build());
+        }
+    }
+
+    /**
+     * checks if a notification is visible
+     * @param id
+     * @return
+     */
+    private boolean isNotificationVisible(int id) {
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent test = PendingIntent.getActivity(this, id, notificationIntent, PendingIntent.FLAG_NO_CREATE);
+        return test != null;
     }
 
     /**
@@ -258,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ArrayList<Task> tasksInRange = MainActivity.db.getAllTasksInRange(location);
 
         for(int i=0; i<tasksInRange.size(); i++){
-            sendNotification(tasksInRange.get(i).getName() +" reminder", "You are next to the location of the task \"" + tasksInRange.get(i).getName() + "\"");
+            sendNotification(tasksInRange.get(i).getName() +" reminder", "You are next to the location of the task \"" + tasksInRange.get(i).getName() + "\"", tasksInRange.get(i).getID());
         }
     }
 }
