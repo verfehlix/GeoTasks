@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Task t = null;
         try {
             t = new Task("test 1", "des 1", "ln 1", "la 1", "blub", 50, 30, 20, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+            t = new Task("tast 1", "des 1", "ln 1", "la 1", "blub", 50, 30, 20, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
