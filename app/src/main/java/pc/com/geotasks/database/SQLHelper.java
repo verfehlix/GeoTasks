@@ -98,6 +98,18 @@ public class SQLHelper extends SQLiteOpenHelper {
         task.setID((int) newRowId);
     }
 
+    public void deleteTask(Task task){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selection = TaskContainer.Task.COLUMN_NAME_ID + " = ? ";
+        String[] selectionArgs = new String[]{String.valueOf(task.getID())};
+
+        db.delete(
+                TaskContainer.Task.TABLE_NAME,
+                selection,
+                selectionArgs);
+    }
+
     public ArrayList<Task> getTasks(String filter){
         ArrayList<Task> tasks = new ArrayList<>();
 
