@@ -13,13 +13,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class CustomListView extends ArrayAdapter<Task>{
     private static final int MAX_CLICK_DURATION = 200;
     private long startClickTime;
     private int highlight = Color.TRANSPARENT;
-
+    public static final String TAG = CustomListView.class.getSimpleName();
 
     /**
      * Constructor.
@@ -109,57 +109,14 @@ public class CustomListView extends ArrayAdapter<Task>{
             }
         });
 
-        //set the date
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//        Date date =  new Date();
-//        txtSubTitle.setText("  Added: " + dateFormat.format(date));
-//        txtSubTitle.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
-
-        //create delete icon and adds onClickListener to it
-        ImageView deleteIcon = (ImageView) rowView.findViewById(R.id.task_icon_to_describtion);
-
-        deleteIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                builder1.setMessage("Are you sure you want to Delete?");
-                builder1.setCancelable(true);
-
-                builder1.setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                remove(files.get(position));
-                                //delete from database
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-
-               /* if(files.size() == 0){
-                    context.findViewById(android.R.id.empty).setVisibility(View.VISIBLE);
-                }*/
-            }
-        });
-
         return rowView;
     }
 
     /**
      * creates a dialog that asks if the user really wants to delete the task
-     * @param index in the list, the user clicked at
+     * @param position in the list, the user clicked at
      */
-    public void createDeleteDialog(final int index){
+    public void createDeleteDialog(final int position){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         //set text
         builder.setMessage(R.string.delete_dialog_message)
@@ -167,9 +124,12 @@ public class CustomListView extends ArrayAdapter<Task>{
         // Add the buttons
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+
                 // User clicked OK button
-                files.remove(index);
-                notifyDataSetChanged();
+                Log.d(TAG, files.get(position).getName() + ": id:"+ files.get(position).getID());
+                //delete from database
+                MainActivity.db.deleteTask(files.get(position));
+                update();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -192,5 +152,16 @@ public class CustomListView extends ArrayAdapter<Task>{
         Vibrator vibr = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         vibr.vibrate(millis);
+    }
+
+    public void update(){
+        TaskListFragment.taskList.clear();
+        ArrayList<Task> list = MainActivity.db.getTasks(TaskListFragment.searchText);
+
+        for(int i=0; i<list.size(); i++){
+            TaskListFragment.taskList.add(list.get(i));
+        }
+        Log.d(TAG, "list size search result: " + TaskListFragment.taskList.size());
+        notifyDataSetChanged();
     }
 }

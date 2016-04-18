@@ -41,6 +41,8 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
 
     private OnFragmentInteractionListener mListener;
 
+    public static String searchText = "";
+
     public static ArrayList<Task> taskList = new ArrayList<Task>();
     /**
      * The fragment's ListView/GridView.
@@ -90,6 +92,8 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
 //            taskList.add(tasks.get(i));
 //        }
 
+
+
         // TODO: Change Adapter to display your content
         //taskList = MainActivity.db.getTasks("");
         mAdapter = new CustomListView(getActivity(), taskList);
@@ -124,17 +128,11 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String searchText = searchBar.getText().toString();
+                searchText = searchBar.getText().toString();
                 Log.d(TAG, searchText);
-                taskList.clear();
-                ArrayList<Task> list = MainActivity.db.getTasks(searchText);
 
-                for(int i=0; i<list.size(); i++){
-                    taskList.add(list.get(i));
-                }
-                Log.d(TAG, "list size search result: " + taskList.size());
+                ((CustomListView)mAdapter).update();
 
-                ((CustomListView)mAdapter).notifyDataSetChanged();
             }
 
             @Override
