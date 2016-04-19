@@ -7,10 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import pc.com.geotasks.model.Task;
 
@@ -19,6 +19,7 @@ import pc.com.geotasks.model.Task;
  */
 
 public class SQLHelper extends SQLiteOpenHelper {
+
     private static final String SHORT_TEXT_TYPE = " varchar(255)";
     private static final String TEXT_TYPE = " text(255)";
     private static final String DATE_TYPE = " TIMESTAMP(255)";

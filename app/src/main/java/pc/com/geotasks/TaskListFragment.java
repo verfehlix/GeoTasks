@@ -53,7 +53,7 @@ public class TaskListFragment extends Fragment implements AbsListView.OnItemClic
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    public static ListAdapter mAdapter;
     private static View view;
 
 
