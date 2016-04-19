@@ -4,9 +4,6 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
-import pc.com.geotasks.database.SQLHelper;
-import pc.com.geotasks.database.TaskContainer;
-
 /**
  * Created by totto on 08.04.2016.
  */
@@ -27,7 +24,7 @@ public class Task {
 
     }
 
-    public Task(String name, String description, String tag, String locationName, String locationAddress, double longitude, double latitude, int radius, Date dueDate){
+    public Task(String name, String description, String tag, String locationName, String locationAddress, double latitude, double longitude, int radius, Date dueDate){
         this.name               = name;
         this.description        = description;
         this.tag                = tag;

@@ -3,6 +3,7 @@ package pc.com.geotasks;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -98,44 +99,31 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             Circle circle = mMap.addCircle(circleOptions);
         }
 
-//        // Add a marker in Sydney and move the camera
-//        LatLng ma1 = new LatLng(49, 8);
-//        LatLng ma2 = new LatLng(49.487528, 8.469828);
-//        LatLng ma3 = new LatLng(49.487619, 8.466223);
-//        Marker markSyd = mMap.addMarker(new MarkerOptions().position(ma1).title("Marker in Sydney"));
-//        Marker markSyd1 = mMap.addMarker(new MarkerOptions().position(ma2).title("Marker in Sydney"));
-//        Marker markSyd2 = mMap.addMarker(new MarkerOptions().position(ma3).title("Marker in Sydney"));
-//
-//        markers.add(markSyd);
-//        markers.add(markSyd1);
-//        markers.add(markSyd2);
-//
-//        // Instantiates a new CircleOptions object and defines the center and radius
-//        CircleOptions circleOptions = new CircleOptions()
-//                .center(ma1)
-//                .radius(5000) //in meters
-//                .strokeColor(colorBorder)
-//                .fillColor(color)
-//                .strokeWidth(5f);
-//
-//        // Get back the mutable Circle
-//        Circle circle = mMap.addCircle(circleOptions);
+        if(tasks.size()>0) {
+            //calc bounds of all markers
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (Marker marker : markers) {
+                builder.include(marker.getPosition());
+            }
+            LatLngBounds bounds = builder.build();
 
-        //calc bounds of all markers
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (Marker marker : markers) {
-            builder.include(marker.getPosition());
+            if (tasks.size() != 1) {
+                //obtain a movement description objec
+                int padding = convertDpToPixel(100); // offset from edges of the map in pixels
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                mMap.moveCamera(cu);
+
+
+            } else {
+                LatLng latLng = new LatLng(tasks.get(0).getLatitude(), tasks.get(0).getLongitude());
+                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(latLng, 13);
+                mMap.moveCamera(cu);
+            }
         }
-        LatLngBounds bounds = builder.build();
 
-        //obtain a movement description objec
-        int padding = convertDpToPixel(100); // offset from edges of the map in pixels
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 
-        mMap.moveCamera(cu);
 //        mMap.animateCamera(cu);
 
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
 
         //show users location
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -149,6 +137,33 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         mMap.setMyLocationEnabled(true);
+    }
+
+    /**
+     * returns the max distance of all tasks
+     * @param tasks
+     */
+    public float getMaxDistance(ArrayList<Task> tasks){
+        float maxDistance = 0f;
+        for(int i=0; i<tasks.size(); i++){
+            for(int j=0; j<tasks.size(); j++){
+                if(i != j){
+                    Location loc1 = new Location("");
+                    loc1.setLatitude(tasks.get(i).getLatitude());
+                    loc1.setLongitude(tasks.get(i).getLongitude());
+
+                    Location loc2 = new Location("");
+                    loc2.setLatitude(tasks.get(j).getLatitude());
+                    loc2.setLongitude(tasks.get(j).getLongitude());
+
+                    float tmpDistance = loc1.distanceTo(loc2);
+                    if(tmpDistance > maxDistance){
+                        maxDistance = tmpDistance;
+                    }
+                }
+            }
+        }
+        return maxDistance;
     }
 
     /**

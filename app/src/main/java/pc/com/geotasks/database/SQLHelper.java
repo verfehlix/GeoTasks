@@ -166,7 +166,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                     Date      dueDate          = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_DUE_DATE)));
                     Date      timestamp        = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TIMESTAMP)));
 
-                    Task task = new Task(name, description, tag, locationName, locationAddress, longitude, latitude, radius, dueDate);
+                    Task task = new Task(name, description, tag, locationName, locationAddress, latitude, longitude, radius, dueDate);
                     task.setID(ID);
                     task.setTimestamp(timestamp);
                     tasks.add(task);
@@ -190,19 +190,28 @@ public class SQLHelper extends SQLiteOpenHelper {
      */
     public ArrayList<Task> getAllTasksInRange(Location location){
         ArrayList<Task> tasks = this.getTasks("");
+        ArrayList<Task> inRadius = new ArrayList<>();
 
         if(tasks.size() > 0){
             for(int i = 0; i < tasks.size(); i++){
                 float[] distance = new float[2];
 
-                location.distanceBetween(location.getLatitude(), location.getLongitude()
-                        , tasks.get(i).getLatitude(), tasks.get(i).getLongitude(), distance);
+//                location.distanceBetween(location.getLatitude(), location.getLongitude()
+//                        , tasks.get(i).getLatitude(), tasks.get(i).getLongitude(), distance);
+//
+//                if(distance[0] > tasks.get(i).getRadius())
+//                    tasks.remove(i);
 
-                if(distance[0] > tasks.get(i).getRadius())
-                    tasks.remove(i);
+                Location tmpLocation = new Location("");
+                tmpLocation.setLatitude(tasks.get(i).getLatitude());
+                tmpLocation.setLongitude(tasks.get(i).getLongitude());
+
+                if(location.distanceTo(tmpLocation)<= tasks.get(i).getRadius()){
+                    inRadius.add(tasks.get(i));
+                }
             }
         }
 
-        return tasks;
+        return inRadius;
     }
 }

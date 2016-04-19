@@ -73,14 +73,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //establish db and add new test task
         this.db = new SQLHelper(this.getApplicationContext());
-        Task t = null;
+        Task t1 = null;
+        Task t2 = null;
         try {
-            t = new Task("Uni", "des 1", "ln 1", "la 1", "blub", 8.458106, 49.487521, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
-//            t = new Task("tast 1", "des 1", "ln 1", "la 1", "blub", 50, 30, 20, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+            t1 = new Task("Uni", "des 1", "ln 1", "la 1", "blub", 49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+            t2 = new Task("Irgendwas", "des 1", "ln 1", "la 1", "blub", 49.482393, 8.470220, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        db.addTask(t);
+        db.addTask(t1);
+        db.addTask(t2);
 
         fragment = new TaskListFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void sendNotification(String title, String notification, int taskID) {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.drawable.ic_perm_group_location)
+                            .setSmallIcon(R.drawable.ic_perm_group_location_white)
                             .setContentTitle(title)
                             .setContentText(notification);
             // Creates an explicit intent for an Activity in your app
@@ -242,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
+        Log.d(TAG, "Permission true");
         // Register the listener with the Location Manager to receive location updates
         //
         // second parameters the minimum time interval between notifications
