@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, AddNewTaskActivity.class));
-                //db.getTasks("");
+                Intent intent = new Intent(MainActivity.this, AddNewTaskActivity.class);
+                intent.putExtra("mode",1);
+                startActivity(intent);
             }
         });
 
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Task t1 = null;
         Task t2 = null;
         try {
-            t1 = new Task("Uni", "des 1", "ln 1", "la 1", "blub", 49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
-            t2 = new Task("Irgendwas", "des 1", "ln 1", "la 1", "blub", 49.482393, 8.470220, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+            t1 = new Task("Uni", "des 1", "blub", "ln 1", "la 1",  49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+            t2 = new Task("Irgendwas", "des 1", "blub", "ln 1", "la 1",  49.482393, 8.470220, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
         } catch (ParseException e) {
             e.printStackTrace();
         }

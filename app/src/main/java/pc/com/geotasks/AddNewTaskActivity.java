@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -86,10 +87,45 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
     public static final String TAG = TaskListFragment.class.getSimpleName();
 
+    public static final int MODE_NEW = 1;
+    public static final int MODE_VIEW = 2;
+
+    private int currentMode;
+
+
+    private String taskId;
+    private String taskName;
+    private String taskTimestamp;
+    private String taskDescription;
+    private String taskTag;
+    private String taskLocationName;
+    private String taskLocationAddress;
+    private double taskLatitude;
+    private double taskLongitude;
+    private int taskRadius;
+    private Date taskDueDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_task);
+
+        Bundle extras = getIntent().getExtras();
+        this.currentMode = extras.getInt("mode");
+
+        if(this.currentMode == MODE_VIEW){
+            this.taskId = extras.getString("taskId");
+            this.taskName = extras.getString("taskName");
+            this.taskTimestamp = extras.getString("taskTimestamp");
+            this.taskDescription = extras.getString("taskDescription");
+            this.taskTag = extras.getString("taskTag");
+            this.taskLocationName = extras.getString("taskLocationName");
+            this.taskLocationAddress = extras.getString("taskLocationAddress");
+            this.taskLatitude = extras.getDouble("taskLatitude");
+            this.taskLongitude = extras.getDouble("taskLongitude");
+            this.taskDueDate = new Date (); this.taskDueDate.setTime(extras.getLong("taskDueDate"));
+            this.taskRadius = extras.getInt("taskRadius");
+        }
 
         //setup connection to database
         this.db = new SQLHelper(this.getApplicationContext());
@@ -130,6 +166,120 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         //get radius seekbar
         radiusSeekBar = (SeekBar) findViewById(R.id.radiusSeekBar);
 
+        if(currentMode == MODE_NEW){
+            enableControls();
+        }
+        if(currentMode == MODE_VIEW){
+            disableControls();
+            setEditButton();
+            fillTextEditsWithTaskData();
+        }
+
+        //init google maps api component
+        // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        googleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(AppIndex.API).build();
+
+    }
+
+    private void fillTextEditsWithTaskData() {
+
+        editTextTaskName.setText(taskName);
+        editTextTaskDescription.setText(taskDescription);
+        categoryEditText.setText(taskTag);
+        editTextLocationAutocomplete.setText(taskLocationName + ", " + taskLocationAddress);
+        textViewLngLtd.setText(taskLatitude + ", " + taskLongitude);
+        radiusSeekBar.setProgress(taskRadius);
+        meterEditText.setText(taskRadius+"");
+        datePickerEditText.setText(taskDueDate.toString());
+
+    }
+
+    private void setEditButton() {
+        //change save button to edit button
+        saveButton.setText("Edit");
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AddNewTaskActivity.this, "Editing started!", Toast.LENGTH_SHORT).show();
+                enableControls();
+                setEditSaveButton();
+            }
+        });
+    }
+
+    private void setEditSaveButton() {
+        saveButton.setText("Save");
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AddNewTaskActivity.this, "Editing finished!", Toast.LENGTH_SHORT).show();
+                disableControls();
+                setEditButton();
+            }
+        });
+    }
+
+    private void disableControls() {
+        editTextTaskName.setTag(editTextTaskName.getKeyListener());
+        editTextTaskName.setKeyListener(null);
+
+        editTextTaskDescription.setTag(editTextTaskDescription.getKeyListener());
+        editTextTaskDescription.setKeyListener(null);
+
+        categoryEditText.setTag(categoryEditText.getKeyListener());
+        categoryEditText.setKeyListener(null);
+
+
+        useCurrentLocationSwitch.setEnabled(false);
+
+        editTextLocationAutocomplete.setTag(editTextLocationAutocomplete.getKeyListener());
+        editTextLocationAutocomplete.setKeyListener(null);
+        editTextLocationAutocomplete.setOnClickListener(null);
+        editTextLocationAutocomplete.setOnFocusChangeListener(null);
+
+        radiusSeekBar.setEnabled(false);
+
+        datePickerEditText.setTag(datePickerEditText.getKeyListener());
+        datePickerEditText.setKeyListener(null);
+        datePickerEditText.setOnClickListener(null);
+        datePickerEditText.setOnFocusChangeListener(null);
+
+
+        meterEditText.setTag(meterEditText.getKeyListener());
+        meterEditText.setKeyListener(null);
+
+        timePickerEditText.setTag(timePickerEditText.getKeyListener());
+        timePickerEditText.setKeyListener(null);
+        timePickerEditText.setOnClickListener(null);
+        timePickerEditText.setOnFocusChangeListener(null);
+    }
+
+    private void enableControls() {
+        editTextTaskName.setKeyListener((KeyListener) editTextTaskName.getTag());
+
+        editTextTaskDescription.setKeyListener((KeyListener) editTextTaskDescription.getTag());
+
+        categoryEditText.setKeyListener((KeyListener) categoryEditText.getTag());
+
+        editTextLocationAutocomplete.setKeyListener((KeyListener) editTextLocationAutocomplete.getTag());
+
+        datePickerEditText.setKeyListener((KeyListener) datePickerEditText.getTag());
+
+        meterEditText.setKeyListener((KeyListener) meterEditText.getTag());
+
+        timePickerEditText.setKeyListener((KeyListener) timePickerEditText.getTag());
+
+        useCurrentLocationSwitch.setEnabled(true);
+
+        radiusSeekBar.setEnabled(true);
+
         //add onchange listener to autocomplete edit text
         editTextLocationAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -137,6 +287,12 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 if (hasFocus) {
                     findPlace(findViewById(android.R.id.content));
                 }
+            }
+        });
+        editTextLocationAutocomplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findPlace(findViewById(android.R.id.content));
             }
         });
 
@@ -153,7 +309,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                         double longtitude = lastKnownLocation.getLongitude();
                         double latitiude = lastKnownLocation.getLatitude();
 
-                        textViewLngLtd.setText(longtitude + ", " + latitiude);
+                        textViewLngLtd.setText(latitiude + ", " + longtitude);
                     } else {
                         Toast.makeText(AddNewTaskActivity.this, "Currnent location could not be recieved!", Toast.LENGTH_SHORT).show();
                     }
@@ -245,19 +401,6 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 timePicker();
             }
         });
-
-
-        //init google maps api component
-        // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        googleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(AppIndex.API).build();
-
     }
 
     @Override
@@ -299,6 +442,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 Uri.parse("android-app://pc.com.geotasks/http/host/path")
         );
         AppIndex.AppIndexApi.end(googleApiClient, viewAction);
+
     }
 
     @Override

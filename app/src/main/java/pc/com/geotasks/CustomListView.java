@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -64,7 +65,7 @@ public class CustomListView extends ArrayAdapter<Task>{
         if(files.get(position).getLocationName().length() != 0 || files.get(position).getLocationAddress().length() != 0){
             txtSubTitle.setText(files.get(position).getLocationName() + " - " + files.get(position).getLocationAddress());
         } else {
-            txtSubTitle.setText(files.get(position).getLongitude() + " - " + files.get(position).getLatitude());
+            txtSubTitle.setText(files.get(position).getLatitude() + " - " + files.get(position).getLongitude());
         }
 
 
@@ -113,6 +114,27 @@ public class CustomListView extends ArrayAdapter<Task>{
                 vibrate(10);
                 createDeleteDialog(position);
                 return false;
+            }
+        });
+
+        taskListItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AddNewTaskActivity.class);
+                intent.putExtra("mode",2);
+
+                intent.putExtra("taskId",files.get(position).getID());
+                intent.putExtra("taskName",files.get(position).getName());
+                intent.putExtra("taskTimestamp",files.get(position).getTimestamp());
+                intent.putExtra("taskDescription",files.get(position).getDescription());
+                intent.putExtra("taskTag",files.get(position).getTag());
+                intent.putExtra("taskLocationName",files.get(position).getLocationName());
+                intent.putExtra("taskLocationAddress",files.get(position).getLocationAddress());
+                intent.putExtra("taskLatitude",files.get(position).getLatitude());
+                intent.putExtra("taskLongitude",files.get(position).getLongitude());
+                intent.putExtra("taskRadius",files.get(position).getRadius());
+                intent.putExtra("taskDueDate",files.get(position).getDueDate().getTime());
+                context.startActivity(intent);
             }
         });
 

@@ -200,7 +200,6 @@
                     android:hint="Search a location"
                     android:background="@android:color/transparent"
                     android:clickable="true"
-                    android:onClick="findPlace"
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="15dp" />
 
@@ -235,14 +234,15 @@
                         android:layout_gravity="bottom"
                         android:max="5000"
                         android:layout_weight="1"
-                        android:progress="10" />
+                        android:progress="150" />
 
                     <EditText
                         android:id="@+id/meterEditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="10"
+                        android:background="@android:color/transparent"
+                        android:hint="150"
                         android:layout_weight="0.1"
                         android:maxLines="1"
                         android:maxLength="4"
