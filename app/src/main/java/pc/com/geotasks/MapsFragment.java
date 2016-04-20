@@ -1,6 +1,7 @@
 package pc.com.geotasks;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import pc.com.geotasks.database.SQLHelper;
 import pc.com.geotasks.model.Task;
 
 /**
@@ -36,6 +38,8 @@ import pc.com.geotasks.model.Task;
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    SQLHelper db;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -48,6 +52,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         //set title of actionbar
         AppCompatActivity aca = (AppCompatActivity) getActivity();
         aca.getSupportActionBar().setTitle(R.string.task_map);
+
+        //setup connection to database
+        this.db = new SQLHelper(this.getContext());
     }
 
     @Override
@@ -77,6 +84,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         for(int i=0; i<tasks.size(); i++){
             double lat = tasks.get(i).getLatitude();
             double lng = tasks.get(i).getLongitude();
+            int taskId = tasks.get(i).getID();
             String title = tasks.get(i).getName();
             String desc = tasks.get(i).getDescription();
             String addr = tasks.get(i).getLocationAddress();
@@ -84,7 +92,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             int radius = tasks.get(i).getRadius();
 
             LatLng tmp = new LatLng(lat, lng);
-            MarkerOptions mOptions = new MarkerOptions().position(tmp).title(title).snippet(desc + "\n" + loc + ", " + addr);
+            MarkerOptions mOptions = new MarkerOptions().position(tmp).title(taskId + " - " + title).snippet(desc + "\n" + loc + ", " + addr);
             Marker tmpMarker = mMap.addMarker(mOptions);
             markers.add(tmpMarker);
 
@@ -126,10 +134,30 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 String title = marker.getTitle();
+                int taskId = Integer.parseInt(title.split("-")[0].trim());
                 double lat = marker.getPosition().latitude;
                 double lng = marker.getPosition().longitude;
                 String desc = marker.getSnippet();
-                //TODO do something with the marker
+
+                Task task = db.getTaskById(taskId);
+
+                Intent intent = new Intent(getContext(), AddNewTaskActivity.class);
+                intent.putExtra("mode",2);
+
+                intent.putExtra("taskId",taskId);
+                intent.putExtra("taskName",task.getName());
+                intent.putExtra("taskTimestamp",task.getTimestamp());
+                intent.putExtra("taskDescription",task.getDescription());
+                intent.putExtra("taskTag",task.getTag());
+                intent.putExtra("taskLocationName",task.getLocationName());
+                intent.putExtra("taskLocationAddress",task.getLocationAddress());
+                intent.putExtra("taskLatitude",task.getLatitude());
+                intent.putExtra("taskLongitude",task.getLongitude());
+                intent.putExtra("taskRadius",task.getRadius());
+                intent.putExtra("taskDueDate",task.getDueDate().getTime());
+                getContext().startActivity(intent);
+
+
             }
         });
 //        mMap.animateCamera(cu);

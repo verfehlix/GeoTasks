@@ -245,4 +245,66 @@ public class SQLHelper extends SQLiteOpenHelper {
                 selectionArgs
         );
     }
+
+    public Task getTaskById(int taskId){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                TaskContainer.Task.COLUMN_NAME_ID,
+                TaskContainer.Task.COLUMN_NAME_NAME,
+                TaskContainer.Task.COLUMN_NAME_DESCRIPTION,
+                TaskContainer.Task.COLUMN_NAME_TAG,
+                TaskContainer.Task.COLUMN_NAME_LOCATION_NAME,
+                TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS,
+                TaskContainer.Task.COLUMN_NAME_LONGITUDE,
+                TaskContainer.Task.COLUMN_NAME_LATITUDE,
+                TaskContainer.Task.COLUMN_NAME_RADIUS,
+                TaskContainer.Task.COLUMN_NAME_DUE_DATE,
+                TaskContainer.Task.COLUMN_NAME_TIMESTAMP,
+        };
+
+        Cursor c;
+
+        String selection = TaskContainer.Task.COLUMN_NAME_ID + " = ?";
+        String[] selectionArgs = new String[]{taskId+""};
+
+        c = db.query(
+                TaskContainer.Task.TABLE_NAME,            // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                        // The sort order
+        );
+
+        if(c != null){
+            while(c.moveToNext()){
+                try {
+                    int       ID               = c.getInt(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_ID));
+                    String    name             = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_NAME));
+                    String    description      = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_DESCRIPTION));
+                    String    tag              = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TAG));
+                    String    locationName     = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATION_NAME));
+                    String    locationAddress  = c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS));
+                    double    longitude        = c.getDouble(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LONGITUDE));
+                    double    latitude         = c.getDouble(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LATITUDE));
+                    int       radius           = c.getInt(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_RADIUS));
+                    Date      dueDate          = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_DUE_DATE)));
+                    Date      timestamp        = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TIMESTAMP)));
+
+                    Task task = new Task(name, description, tag, locationName, locationAddress, latitude, longitude, radius, dueDate);
+                    return task;
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return null;
+    }
 }
