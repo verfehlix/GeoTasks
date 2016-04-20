@@ -83,7 +83,7 @@ public class Task {
     }
 
     public String getLocationAddress() {
-        return locationName;
+        return locationAddress;
     }
 
     public void setLocationAddress(String locationAddress) { this.locationAddress = locationAddress;}

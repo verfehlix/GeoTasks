@@ -1,12 +1,19 @@
 package pc.com.geotasks;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,6 +51,7 @@ import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -76,6 +84,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     int hour = cal.get(Calendar.HOUR);
     int minute = cal.get(Calendar.MINUTE);
 
+    Place currentPlace;
+    Location lastKnownLocation;
+
     GoogleApiClient googleApiClient;
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
     public static final String TAG = TaskListFragment.class.getSimpleName();
@@ -87,6 +98,12 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         //setup connection to database
         this.db = new SQLHelper(this.getApplicationContext());
+
+        //init location Manager
+        setUpGPSService();
+
+        //clear place
+        this.currentPlace = null;
 
         //setup toolbar
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -103,7 +120,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         editTextTaskDescription = (EditText) findViewById(R.id.editTextTaskDescription);
         editTextLocationAutocomplete = (EditText) findViewById(R.id.editTextLocationAutocomplete);
         datePickerEditText = (EditText) findViewById(R.id.datePickerEditText);
-        timePickerEditText= (EditText) findViewById(R.id.timePickerEditText);
+        timePickerEditText = (EditText) findViewById(R.id.timePickerEditText);
         meterEditText = (EditText) findViewById(R.id.meterEditText);
         categoryEditText = (EditText) findViewById(R.id.categoryEditText);
 
@@ -133,8 +150,20 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    editTextLocationAutocomplete.setVisibility(View.INVISIBLE);
-                    orTextView.setVisibility(View.INVISIBLE);
+                    editTextLocationAutocomplete.setVisibility(View.GONE);
+                    orTextView.setVisibility(View.GONE);
+
+                    //also set place for writing to the db to current position (use last known location)
+                    if(lastKnownLocation != null){
+                        double longtitude = lastKnownLocation.getLongitude();
+                        double latitiude = lastKnownLocation.getLatitude();
+
+                        textViewLngLtd.setText(longtitude + ", " + latitiude);
+                    } else {
+                        Toast.makeText(AddNewTaskActivity.this, "Currnent location could not be recieved!", Toast.LENGTH_SHORT).show();
+                    }
+
+
                 } else {
                     editTextLocationAutocomplete.setVisibility(View.VISIBLE);
                     orTextView.setVisibility(View.VISIBLE);
@@ -296,16 +325,20 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     public void saveButtonPressed(View view) throws ParseException {
         String taskName = editTextTaskName.getText().toString();
         String taskDescription = editTextTaskDescription.getText().toString();
-        String locationName = "";
-        String locationAddress = "";
+        String locationName = this.currentPlace != null? this.currentPlace.getName().toString(): "";
+        String locationAddress = this.currentPlace != null? this.currentPlace.getAddress().toString(): "";
         String tag = categoryEditText.getText().toString();
-        double longitude = 0;
-        double latitude = 0;
+        double longitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLongitude() : this.currentPlace.getLatLng().longitude;
+        double latitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLatitude() : this.currentPlace.getLatLng().latitude;
         int radius = radiusSeekBar.getProgress();
         String dateString = datePickerEditText.getText().toString() + " " + timePickerEditText.getText().toString() + ":00";
-        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
+        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("1900-01-01 00:00:00");
 
-        Task t = new Task(taskName, taskDescription, locationName, locationAddress, tag, longitude, latitude, radius, dueDate);
+        if(dateString.length() != 0){
+            dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
+        }
+
+        Task t = new Task(taskName, taskDescription, tag, locationName, locationAddress, longitude, latitude, radius, dueDate);
         db.addTask(t);
 
         finish();
@@ -427,6 +460,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 Log.i(TAG, "Place: " + place.getName());
 
+                this.currentPlace = place;
+
                 String placeText = place.getName() + ", " + place.getAddress();
 
                 editTextLocationAutocomplete.setText(placeText);
@@ -456,5 +491,65 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    public void setUpGPSService() {
+        // Acquire a reference to the system Location Manager
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        //use last known location
+        String locationProvider = LocationManager.GPS_PROVIDER;
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+
+        if(lastKnownLocation != null) {
+            handleLocation(lastKnownLocation);
+        }
+
+        // Define a listener that responds to location updates
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                Log.d(TAG, "(addnewtaskactivity - Location changed");
+                handleLocation(location);
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+                Toast.makeText(getBaseContext(), "addnewtaskactivity - Gps turned on", Toast.LENGTH_LONG).show();
+            }
+
+            public void onProviderDisabled(String provider) {
+                Toast.makeText(getBaseContext(), "addnewtaskactivity - Gps turned off", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        // Register the listener with the Location Manager to receive location updates
+        //
+        // second parameters the minimum time interval between notifications
+        // and the third is the minimum change in distance (meters) between notifications
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, locationListener);
+    }
+
+    /**
+     * handles the current location and sends a notification if next to the location of the task
+     * @param location
+     */
+    public void handleLocation(Location location){
+        Toast toast = Toast.makeText(AddNewTaskActivity.this, "lat: " + location.getLatitude() + "\nlong" + location.getLongitude(), Toast.LENGTH_LONG);
+        toast.show();
+
+        lastKnownLocation = location;
     }
 }

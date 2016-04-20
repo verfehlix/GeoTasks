@@ -59,7 +59,14 @@ public class CustomListView extends ArrayAdapter<Task>{
 
         //set title text to the String in the ArrayList at position "position"
         txtTitle.setText(files.get(position).getName());
-        txtSubTitle.setText(files.get(position).getLocationName() + files.get(position).getLocationAddress());
+
+        //if we have locationName and locationAddress, set the subtext to that. if we dont, set it to lng + lat
+        if(files.get(position).getLocationName().length() != 0 || files.get(position).getLocationAddress().length() != 0){
+            txtSubTitle.setText(files.get(position).getLocationName() + " - " + files.get(position).getLocationAddress());
+        } else {
+            txtSubTitle.setText(files.get(position).getLongitude() + " - " + files.get(position).getLatitude());
+        }
+
 
         taskListItem.setOnTouchListener(new View.OnTouchListener() {
             @Override
