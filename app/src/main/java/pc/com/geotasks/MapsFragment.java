@@ -84,7 +84,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             int radius = tasks.get(i).getRadius();
 
             LatLng tmp = new LatLng(lat, lng);
-            MarkerOptions mOptions = new MarkerOptions().position(tmp).title(title).snippet(desc + "\n" + loc + ", " + addr);
+            MarkerOptions mOptions = new MarkerOptions().position(tmp).title(title).snippet(desc + ", Location: " + loc + ", " + addr);
             Marker tmpMarker = mMap.addMarker(mOptions);
             markers.add(tmpMarker);
 

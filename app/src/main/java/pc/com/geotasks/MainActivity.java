@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Task t1 = null;
         Task t2 = null;
         try {
-            t1 = new Task("Uni", "des 1", "blub", "ln 1", "la 1",  49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+            t1 = new Task("Universität Mannheim", "des 1", "blub", "ln 1", "la 1",  49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
 //            t2 = new Task("Irgendwas", "des 1", "blub", "ln 1", "la 1",  49.482393, 8.470220, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
             db.addTask(t1);
 //            db.addTask(t2);
