@@ -326,14 +326,21 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         double longitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLongitude() : this.currentPlace.getLatLng().longitude;
         double latitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLatitude() : this.currentPlace.getLatLng().latitude;
         int radius = radiusSeekBar.getProgress();
-        String dateString = datePickerEditText.getText().toString() + " " + timePickerEditText.getText().toString() + ":00";
-        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("1900-01-01 00:00:00");
 
-        if(dateString.length() != 0){
-            dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
+        //date logic
+        String inputDate = datePickerEditText.getText().toString();
+        String inputTime = timePickerEditText.getText().toString();
+        String dateString;
+        if(inputDate.length() != 0 && inputTime.length() != 0){
+            dateString = inputDate + " " + inputTime + ":00";
+        } else if (inputDate.length() != 0 && inputTime.length() == 0) {
+            dateString = inputDate + " 12:00:00";
+        } else {
+            dateString = "1900-01-01 00:00:00";
         }
+        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
 
-        Task t = new Task(taskName, taskDescription, tag, locationName, locationAddress, longitude, latitude, radius, dueDate);
+        Task t = new Task(taskName, taskDescription, tag, locationName, locationAddress, latitude, longitude, radius, dueDate);
         db.addTask(t);
 
         ((CustomListView)TaskListFragment.mAdapter).update();
