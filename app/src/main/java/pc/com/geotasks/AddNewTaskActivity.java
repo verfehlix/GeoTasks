@@ -45,6 +45,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -215,7 +216,13 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         textViewLngLtd.setText(taskLatitude + ", " + taskLongitude);
         radiusSeekBar.setProgress(taskRadius);
         meterEditText.setText(taskRadius+"");
-        datePickerEditText.setText(taskDueDate.toString());
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String dateString = dateFormat.format(taskDueDate);
+        String timeString = timeFormat.format(taskDueDate);
+        datePickerEditText.setText(dateString);
+        timePickerEditText.setText(timeString);
 
     }
 
@@ -487,8 +494,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         String locationName = this.currentPlace != null? this.currentPlace.getName().toString(): "";
         String locationAddress = this.currentPlace != null? this.currentPlace.getAddress().toString(): "";
         String tag = categoryEditText.getText().toString();
-        double longitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLongitude() : this.currentPlace.getLatLng().longitude;
-        double latitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLatitude() : this.currentPlace.getLatLng().latitude;
+        double longitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLongitude() : this.currentPlace != null ? this.currentPlace.getLatLng().longitude : 0;
+        double latitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLatitude() : this.currentPlace != null ? this.currentPlace.getLatLng().latitude : 0;
         int radius = radiusSeekBar.getProgress();
 
         //date logic
@@ -550,7 +557,12 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
     private void exitPrompt() {
         AlertDialog exitDialog = new AlertDialog.Builder(AddNewTaskActivity.this).create();
-        exitDialog.setMessage("Do you really want to exit and discard this task?");
+        if(currentMode == MODE_NEW){
+            exitDialog.setMessage("Do you really want to exit and discard this task?");
+        } else if (currentMode == MODE_EDIT){
+            exitDialog.setMessage("Do you really want to exit and discard the changes?");
+        }
+
         exitDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Exit",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
