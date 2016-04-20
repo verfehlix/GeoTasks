@@ -84,7 +84,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             int radius = tasks.get(i).getRadius();
 
             LatLng tmp = new LatLng(lat, lng);
-            Marker tmpMarker = mMap.addMarker(new MarkerOptions().position(tmp).title(title).snippet(desc + "\n" + loc + ", " + addr));
+            MarkerOptions mOptions = new MarkerOptions().position(tmp).title(title).snippet(desc + "\n" + loc + ", " + addr);
+            Marker tmpMarker = mMap.addMarker(mOptions);
             markers.add(tmpMarker);
 
             // Instantiates a new CircleOptions object and defines the center and radius
@@ -121,7 +122,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             }
         }
 
-
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String title = marker.getTitle();
+                double lat = marker.getPosition().latitude;
+                double lng = marker.getPosition().longitude;
+                String desc = marker.getSnippet();
+                //TODO do something with the marker
+            }
+        });
 //        mMap.animateCamera(cu);
 
 
