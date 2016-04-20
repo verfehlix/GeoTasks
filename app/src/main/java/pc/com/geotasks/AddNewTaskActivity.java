@@ -95,9 +95,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     private int currentMode;
 
 
-    private String taskId;
+    private int taskId;
     private String taskName;
-    private String taskTimestamp;
     private String taskDescription;
     private String taskTag;
     private String taskLocationName;
@@ -116,9 +115,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         this.currentMode = extras.getInt("mode");
 
         if(this.currentMode == MODE_VIEW){
-            this.taskId = extras.getString("taskId");
+            this.taskId = extras.getInt("taskId");
             this.taskName = extras.getString("taskName");
-            this.taskTimestamp = extras.getString("taskTimestamp");
             this.taskDescription = extras.getString("taskDescription");
             this.taskTag = extras.getString("taskTag");
             this.taskLocationName = extras.getString("taskLocationName");
@@ -232,7 +230,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AddNewTaskActivity.this, "Editing started!", Toast.LENGTH_SHORT).show();
+//              Toast.makeText(AddNewTaskActivity.this, "Editing started!", Toast.LENGTH_SHORT).show();
                 currentMode = MODE_EDIT;
                 enableControls();
                 setEditSaveButton();
@@ -245,12 +243,55 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AddNewTaskActivity.this, "Editing finished!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNewTaskActivity.this, "Task saved!", Toast.LENGTH_SHORT).show();
+
+                try {
+                    updateTask();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 currentMode = MODE_VIEW;
                 disableControls();
                 setEditButton();
             }
         });
+    }
+
+    private void updateTask() throws ParseException {
+        /*
+        *       String taskId, String taskName, String taskTimestamp, String taskDescription, String taskTag,
+        *       String taskLocationName, String taskLocationAddress, double taskLatitude, double taskLongitude, int taskRadius, Date taskDueDate
+        * */
+
+        Calendar calendar   = Calendar.getInstance();
+        Date taskTimestamp  = calendar.getTime();
+
+        String taskName = editTextTaskName.getText().toString();
+        String taskDescription = editTextTaskDescription.getText().toString();
+        String tag = categoryEditText.getText().toString();
+
+        String locationName = this.currentPlace != null? this.currentPlace.getName().toString(): "";
+        String locationAddress = this.currentPlace != null? this.currentPlace.getAddress().toString(): "";
+
+        double longitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation != null ? lastKnownLocation.getLongitude() : 0 : this.currentPlace != null ? this.currentPlace.getLatLng().longitude : 0;
+        double latitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation != null ? lastKnownLocation.getLatitude() : 0 : this.currentPlace != null ? this.currentPlace.getLatLng().latitude : 0;
+        int radius = radiusSeekBar.getProgress();
+
+        String inputDate = datePickerEditText.getText().toString();
+        String inputTime = timePickerEditText.getText().toString();
+        String dateString;
+        if(inputDate.length() != 0 && inputTime.length() != 0){
+            dateString = inputDate + " " + inputTime + ":00";
+        } else if (inputDate.length() != 0 && inputTime.length() == 0) {
+            dateString = inputDate + " 12:00:00";
+        } else {
+            dateString = "1900-01-01 00:00:00";
+        }
+        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
+
+        db.updateTask(  taskId, taskName, taskTimestamp,  taskDescription, tag, locationName, locationAddress, latitude, longitude, radius, dueDate);
+
     }
 
     private void disableControls() {
@@ -300,7 +341,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         radiusSeekBar.setEnabled(true);
 
-        //add onchange listener to autocomplete edit text
+        // onchange listener to autocomplete edit text
         editTextLocationAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -481,9 +522,11 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             } else {
                 //no data was entered, just exit this activity
                 finish();
+                ((CustomListView)TaskListFragment.mAdapter).update();
             }
         }  else {
             finish();
+            ((CustomListView)TaskListFragment.mAdapter).update();
         }
 
     }

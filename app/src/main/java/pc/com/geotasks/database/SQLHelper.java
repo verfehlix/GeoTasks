@@ -215,4 +215,34 @@ public class SQLHelper extends SQLiteOpenHelper {
 
         return inRadius;
     }
+
+    public void updateTask(int taskId, String taskName, Date taskTimestamp, String taskDescription, String taskTag,
+                           String taskLocationName, String taskLocationAddress, double taskLatitude, double taskLongitude, int taskRadius, Date taskDueDate){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selection = TaskContainer.Task.COLUMN_NAME_ID + " = ? ";
+        String[] selectionArgs = new String[]{taskId+""};
+
+        ContentValues values = new ContentValues();
+
+        values.put(TaskContainer.Task.COLUMN_NAME_NAME              , taskName);
+        values.put(TaskContainer.Task.COLUMN_NAME_DESCRIPTION       , taskDescription);
+        values.put(TaskContainer.Task.COLUMN_NAME_TAG               , taskTag);
+        values.put(TaskContainer.Task.COLUMN_NAME_LOCATION_NAME     , taskLocationName);
+        values.put(TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS  , taskLocationAddress);
+        values.put(TaskContainer.Task.COLUMN_NAME_LONGITUDE         , taskLongitude);
+        values.put(TaskContainer.Task.COLUMN_NAME_LATITUDE          , taskLatitude);
+        values.put(TaskContainer.Task.COLUMN_NAME_RADIUS            , taskRadius);
+        values.put(TaskContainer.Task.COLUMN_NAME_DUE_DATE          , (new java.sql.Timestamp(taskDueDate.getTime()).toString()));
+        values.put(TaskContainer.Task.COLUMN_NAME_TIMESTAMP         , (new java.sql.Timestamp(taskTimestamp.getTime()).toString()));
+
+
+        db.update(
+                TaskContainer.Task.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs
+        );
+    }
 }
