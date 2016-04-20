@@ -89,6 +89,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
     public static final int MODE_NEW = 1;
     public static final int MODE_VIEW = 2;
+    public static final int MODE_EDIT = 3;
 
     private int currentMode;
 
@@ -166,6 +167,14 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         //get radius seekbar
         radiusSeekBar = (SeekBar) findViewById(R.id.radiusSeekBar);
 
+        editTextTaskName.setTag(editTextTaskName.getKeyListener());
+        editTextTaskDescription.setTag(editTextTaskDescription.getKeyListener());
+        categoryEditText.setTag(categoryEditText.getKeyListener());
+        editTextLocationAutocomplete.setTag(editTextLocationAutocomplete.getKeyListener());
+        datePickerEditText.setTag(datePickerEditText.getKeyListener());
+        meterEditText.setTag(meterEditText.getKeyListener());
+        timePickerEditText.setTag(timePickerEditText.getKeyListener());
+
         if(currentMode == MODE_NEW){
             enableControls();
         }
@@ -193,7 +202,16 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         editTextTaskName.setText(taskName);
         editTextTaskDescription.setText(taskDescription);
         categoryEditText.setText(taskTag);
-        editTextLocationAutocomplete.setText(taskLocationName + ", " + taskLocationAddress);
+        if(taskLocationAddress.length() == 0 || taskLocationAddress.length() == 0){
+            useCurrentLocationSwitch.setChecked(true);
+            editTextLocationAutocomplete.setVisibility(View.GONE);
+            orTextView.setVisibility(View.GONE);
+        } else {
+            useCurrentLocationSwitch.setChecked(false);
+            editTextLocationAutocomplete.setVisibility(View.VISIBLE);
+            orTextView.setVisibility(View.VISIBLE);
+            editTextLocationAutocomplete.setText(taskLocationName + ", " + taskLocationAddress);
+        }
         textViewLngLtd.setText(taskLatitude + ", " + taskLongitude);
         radiusSeekBar.setProgress(taskRadius);
         meterEditText.setText(taskRadius+"");
@@ -208,6 +226,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             @Override
             public void onClick(View v) {
                 Toast.makeText(AddNewTaskActivity.this, "Editing started!", Toast.LENGTH_SHORT).show();
+                currentMode = MODE_EDIT;
                 enableControls();
                 setEditSaveButton();
             }
@@ -220,6 +239,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             @Override
             public void onClick(View v) {
                 Toast.makeText(AddNewTaskActivity.this, "Editing finished!", Toast.LENGTH_SHORT).show();
+                currentMode = MODE_VIEW;
                 disableControls();
                 setEditButton();
             }
@@ -227,35 +247,28 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     private void disableControls() {
-        editTextTaskName.setTag(editTextTaskName.getKeyListener());
         editTextTaskName.setKeyListener(null);
 
-        editTextTaskDescription.setTag(editTextTaskDescription.getKeyListener());
         editTextTaskDescription.setKeyListener(null);
 
-        categoryEditText.setTag(categoryEditText.getKeyListener());
         categoryEditText.setKeyListener(null);
 
 
         useCurrentLocationSwitch.setEnabled(false);
 
-        editTextLocationAutocomplete.setTag(editTextLocationAutocomplete.getKeyListener());
         editTextLocationAutocomplete.setKeyListener(null);
         editTextLocationAutocomplete.setOnClickListener(null);
         editTextLocationAutocomplete.setOnFocusChangeListener(null);
 
         radiusSeekBar.setEnabled(false);
 
-        datePickerEditText.setTag(datePickerEditText.getKeyListener());
         datePickerEditText.setKeyListener(null);
         datePickerEditText.setOnClickListener(null);
         datePickerEditText.setOnFocusChangeListener(null);
 
 
-        meterEditText.setTag(meterEditText.getKeyListener());
         meterEditText.setKeyListener(null);
 
-        timePickerEditText.setTag(timePickerEditText.getKeyListener());
         timePickerEditText.setKeyListener(null);
         timePickerEditText.setOnClickListener(null);
         timePickerEditText.setOnFocusChangeListener(null);
@@ -317,6 +330,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
                 } else {
                     editTextLocationAutocomplete.setVisibility(View.VISIBLE);
+                    editTextLocationAutocomplete.setText("");
+                    textViewLngLtd.setText("");
                     orTextView.setVisibility(View.VISIBLE);
                 }
             }
@@ -451,14 +466,19 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     public void exitButtonPressed(View view){
-        //check if any data was entered
-        if(anyDataEntered()){
-            //prompt user if he really wants to exit
-            exitPrompt();
-        } else {
-            //no data was entered, just exit this activity
+        if(currentMode == MODE_NEW || currentMode == MODE_EDIT){
+            //check if any data was entered
+            if(anyDataEntered()){
+                //prompt user if he really wants to exit
+                exitPrompt();
+            } else {
+                //no data was entered, just exit this activity
+                finish();
+            }
+        }  else {
             finish();
         }
+
     }
 
     public void saveButtonPressed(View view) throws ParseException {
@@ -613,7 +633,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 String placeText = place.getName() + ", " + place.getAddress();
 
                 editTextLocationAutocomplete.setText(placeText);
-                textViewLngLtd.setText(place.getLatLng().longitude + ", " + place.getLatLng().latitude);
+                textViewLngLtd.setText(place.getLatLng().latitude+ ", " + place.getLatLng().longitude);
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
