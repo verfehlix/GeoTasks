@@ -526,7 +526,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             }
         }  else {
             finish();
-            ((CustomListView)TaskListFragment.mAdapter).update();
+            if(TaskListFragment.mAdapter != null){
+                ((CustomListView)TaskListFragment.mAdapter).update();
+            }
         }
 
     }

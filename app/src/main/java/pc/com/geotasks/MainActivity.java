@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ft.replace(R.id.mainFrame, fragment);
         ft.commit();
 
-        sendNotification("VIRUS", "Ihr Gerät wurde durch einem Virus infiziert. Bitte leiten Sie umgehend alle Schritte zur sofortigen Zerstörung ein.", 0);
+        //sendNotification("VIRUS", "Ihr Gerät wurde durch einem Virus infiziert. Bitte leiten Sie umgehend alle Schritte zur sofortigen Zerstörung ein.", 0);
         setUpGPSService();
     }
 
@@ -176,9 +176,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.ic_perm_group_location_white)
                             .setContentTitle(title)
-                            .setContentText(notification);
+                            .setContentText(notification)
+                            .setAutoCancel(true);
             // Creates an explicit intent for an Activity in your app
-            Intent resultIntent = new Intent(this, MainActivity.class);
+
+            Task task = db.getTaskById(taskID);
+            Intent resultIntent;
+
+            if(task != null){
+                resultIntent = new Intent(this, AddNewTaskActivity.class);
+                resultIntent.putExtra("mode",2);
+                resultIntent.putExtra("taskId",taskID);
+                resultIntent.putExtra("taskName",task.getName());
+                resultIntent.putExtra("taskTimestamp",task.getTimestamp());
+                resultIntent.putExtra("taskDescription",task.getDescription());
+                resultIntent.putExtra("taskTag",task.getTag());
+                resultIntent.putExtra("taskLocationName",task.getLocationName());
+                resultIntent.putExtra("taskLocationAddress",task.getLocationAddress());
+                resultIntent.putExtra("taskLatitude",task.getLatitude());
+                resultIntent.putExtra("taskLongitude",task.getLongitude());
+                resultIntent.putExtra("taskRadius",task.getRadius());
+                resultIntent.putExtra("taskDueDate",task.getDueDate().getTime());
+            } else {
+                resultIntent = new Intent(this, MainActivity.class);
+                Toast.makeText(getBaseContext(), "Could not find task from notification in DB!", Toast.LENGTH_LONG).show();
+            }
 
             // The stack builder object will contain an artificial back stack for the
             // started Activity.
