@@ -11,12 +11,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="pc.com.geotasks.SettingsActivity"
-    tools:showIn="@layout/activity_settings"
     android:weightSum="1">
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="558dp"
         android:weightSum="1">
 
@@ -29,7 +28,7 @@
             android:layout_weight="0.05" />
 
         <!--Seperator-->
-        <View android:layout_width="fill_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp"
+        <View android:layout_width="wrap_content" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp" />
 
         <TextView
@@ -48,7 +47,7 @@
 
             <SeekBar
                 android:id="@+id/seekBar2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:max="5000"
