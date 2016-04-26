@@ -31,6 +31,8 @@ import android.widget.Toast;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import pc.com.geotasks.database.SQLHelper;
 import pc.com.geotasks.model.Task;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment fragment;
     private FloatingActionButton fab;
     public static final String TAG = MainActivity.class.getSimpleName();
+    private ArrayList<Integer> tasksInRangeIDs = new ArrayList<>();
+    private HashMap<Integer, Boolean> notifiedMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +82,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Task t2 = null;
         try {
             t1 = new Task("Universität Mannheim", "des 1", "blub", "ln 1", "la 1",  49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
-//            t2 = new Task("Irgendwas", "des 1", "blub", "ln 1", "la 1",  49.482393, 8.470220, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+            t2 = new Task("Irgendwas", "des 1", "blub", "ln 1", "la 1",  49.482393, 8.470220, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
             db.addTask(t1);
-//            db.addTask(t2);
+            db.addTask(t2);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -130,13 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ft.commit();
 //            Intent mapsIntent = new Intent(this, MapsActivity.class);
 //            startActivity(mapsIntent);
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        }  else if (id == R.id.nav_manage) {
 
         }
 
@@ -172,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param title title
      */
     public void sendNotification(String title, String notification, int taskID) {
+
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.ic_perm_group_location_white)
@@ -286,11 +285,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ArrayList<Task> tasksInRange = MainActivity.db.getAllTasksInRange(location);
 
+        for (Map.Entry<Integer, Boolean> entry : notifiedMap.entrySet()) {
+            int key = entry.getKey();
+            boolean value = entry.getValue();
+
+            boolean inList = false;
+
+            for(int i=0; i<tasksInRange.size();i++){
+                if(key == tasksInRange.get(i).getID()){
+                    inList = true;
+                }
+            }
+
+            if(!inList){
+                notifiedMap.put(key, false);
+            }
+        }
 
         Log.d("MainActivity", "Tasks in Range: " + tasksInRange.size());
         for(int i=0; i<tasksInRange.size(); i++){
             Log.d("MainActivity", "Task in Range: " + tasksInRange.get(i).getName());
-            sendNotification(tasksInRange.get(i).getName() +" reminder", "You are next to the location of the task \"" + tasksInRange.get(i).getName() + "\"", tasksInRange.get(i).getID());
+            if(notifiedMap.get(tasksInRange.get(i).getID()) == null){
+                sendNotification(tasksInRange.get(i).getName() + " reminder", "You are next to the location of the task \"" + tasksInRange.get(i).getName() + "\"", tasksInRange.get(i).getID());
+                notifiedMap.put(tasksInRange.get(i).getID(), true);
+            }else {
+                if (!notifiedMap.get(tasksInRange.get(i).getID())) {
+                    sendNotification(tasksInRange.get(i).getName() + " reminder", "You are next to the location of the task \"" + tasksInRange.get(i).getName() + "\"", tasksInRange.get(i).getID());
+                    notifiedMap.put(tasksInRange.get(i).getID(), true);
+                }
+            }
         }
     }
 }
