@@ -88,16 +88,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="
-            GeoTask Germany GmbH
-            Musterstrasse 00, 99.Stock
-            68161 Mannheim
-
-            Handelsregister:
-            Amtsgericht Mannheim
-            Registernummer: HRB XXXXX A
-
-            Inhaltliche Verantwortliche:
+            android:text="/n
+            GeoTask Germany GmbH /n
+            Musterstrasse 00, 99.Stock /n
+            68162 Mannheim /n
+            /n
+            Handelsregister: /n
+            Amtsgericht Mannheim /n
+            Registernummer: HRB XXXXX A /n
+            /n
+            Inhaltliche Verantwortliche: /n
             Team XY"
             android:id="@+id/textView9"
             android:layout_weight="0.05" />
