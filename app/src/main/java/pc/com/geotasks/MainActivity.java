@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String TAG = MainActivity.class.getSimpleName();
     private ArrayList<Integer> tasksInRangeIDs = new ArrayList<>();
     private HashMap<Integer, Boolean> notifiedMap = new HashMap<>();
+    public static Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Task t2 = null;
         try {
             t1 = new Task("Universität Mannheim", "des 1", "blub", "ln 1", "la 1",  49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
-            t2 = new Task("Irgendwas", "des 1", "blub", "ln 1", "la 1",  49.482393, 8.470220, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+            t2 = new Task("Irgendwas", "des 1", "blub", "ln 1", "la 1",  50, 10, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
             db.addTask(t1);
             db.addTask(t2);
         } catch (ParseException e) {
@@ -235,10 +236,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        //use last known location
+//        use last known location
         String locationProvider = LocationManager.GPS_PROVIDER;
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-
+        location = lastKnownLocation;
         if(lastKnownLocation != null) {
             handleLocation(lastKnownLocation);
         }
@@ -248,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onLocationChanged(Location location) {
                 Log.d(TAG, "Location changed");
                 handleLocation(location);
+                MainActivity.location = location;
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {

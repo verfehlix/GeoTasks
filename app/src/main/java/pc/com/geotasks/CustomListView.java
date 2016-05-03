@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -25,6 +26,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 import pc.com.geotasks.model.Task;
 
@@ -61,11 +64,37 @@ public class CustomListView extends ArrayAdapter<Task>{
         //set title text to the String in the ArrayList at position "position"
         txtTitle.setText(files.get(position).getName());
 
+        String dist = "unknown";
+
+        if(MainActivity.location != null) {
+            Location loc = new Location("");
+            loc.setLatitude(files.get(position).getLatitude());
+            loc.setLongitude(files.get(position).getLongitude());
+            int tmp = (int)loc.distanceTo(MainActivity.location);
+            int km = tmp/1000;
+            int m = tmp%1000;
+            if(km != 0) {
+                dist = km + " km " + m + " m";
+            }else{
+                dist = m + " m";
+            }
+
+        }
+
         //if we have locationName and locationAddress, set the subtext to that. if we dont, set it to lng + lat
         if(files.get(position).getLocationName().length() != 0 || files.get(position).getLocationAddress().length() != 0){
-            txtSubTitle.setText(files.get(position).getLocationName() + " - " + files.get(position).getLocationAddress());
+
+            if(!dist.equals("unknown")) {
+                txtSubTitle.setText(files.get(position).getLocationName() + " - " + files.get(position).getLocationAddress() + " (" + dist + ")");
+            }else{
+                txtSubTitle.setText(files.get(position).getLocationName() + " - " + files.get(position).getLocationAddress());
+            }
         } else {
-            txtSubTitle.setText(files.get(position).getLatitude() + " - " + files.get(position).getLongitude());
+            if(dist.equals("unknown")) {
+                txtSubTitle.setText(files.get(position).getLatitude() + " - " + files.get(position).getLongitude());
+            }else{
+                txtSubTitle.setText(files.get(position).getLatitude() + " - " + files.get(position).getLongitude() + " (" + dist + ")");
+            }
         }
 
 
@@ -187,10 +216,33 @@ public class CustomListView extends ArrayAdapter<Task>{
         TaskListFragment.taskList.clear();
         ArrayList<Task> list = MainActivity.db.getTasks(TaskListFragment.searchText);
 
-        for(int i=0; i<list.size(); i++){
+        if(MainActivity.location != null) {
+            Collections.sort(list, new CustomComparator());
+        }
+
+        for (int i = 0; i < list.size(); i++) {
             TaskListFragment.taskList.add(list.get(i));
         }
         Log.d(TAG, "list size search result: " + TaskListFragment.taskList.size());
         notifyDataSetChanged();
+    }
+
+    public static class CustomComparator implements Comparator<Task> {
+        @Override
+        public int compare(Task o1, Task o2) {
+
+            Location location1 = new Location("");
+            location1.setLatitude(o1.getLatitude());
+            location1.setLongitude(o1.getLongitude());
+            float dist1 = MainActivity.location.distanceTo(location1);
+
+
+            Location location2 = new Location("");
+            location2.setLatitude(o2.getLatitude());
+            location2.setLongitude(o2.getLongitude());
+            float dist2 = MainActivity.location.distanceTo(location2);
+
+            return (int)(dist1-dist2);
+        }
     }
 }
