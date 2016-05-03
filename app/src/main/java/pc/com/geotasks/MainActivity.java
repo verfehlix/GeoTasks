@@ -256,11 +256,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             public void onProviderEnabled(String provider) {
-                Toast.makeText(getBaseContext(), "Gps turned on", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getBaseContext(), "Gps turned on", Toast.LENGTH_LONG).show();
             }
 
             public void onProviderDisabled(String provider) {
-                Toast.makeText(getBaseContext(), "Gps turned off", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getBaseContext(), "Gps turned off", Toast.LENGTH_LONG).show();
             }
         };
 
@@ -288,8 +288,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param location
      */
     public void handleLocation(Location location){
-        Toast toast = Toast.makeText(MainActivity.this, "lat: " + location.getLatitude() + "\nlong" + location.getLongitude(), Toast.LENGTH_LONG);
-        toast.show();
+//        Toast toast = Toast.makeText(MainActivity.this, "lat: " + location.getLatitude() + "\nlong" + location.getLongitude(), Toast.LENGTH_LONG);
+//        toast.show();
 
         ArrayList<Task> tasksInRange = MainActivity.db.getAllTasksInRange(location);
 
