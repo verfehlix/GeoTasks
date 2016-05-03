@@ -135,7 +135,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            Intent mapsIntent = new Intent(this, MapsActivity.class);
 //            startActivity(mapsIntent);
         }  else if (id == R.id.nav_manage) {
+            SettingsActivity fragment = new SettingsActivity();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.mainFrame, fragment);
+            ft.commit();
 
+            //Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            //startActivity(intent);
         }
 
         //sets visibility of FloatingActionButton
