@@ -73,7 +73,25 @@
                 android:id="@+id/textView8" />
         </LinearLayout>
 
-        <!--Seperator-->
+        <TextView
+            android:id="@+id/textViewLngLtd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="15dp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="67dp"
+            android:layout_height="37dp"
+            android:background="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:text="Save"
+            android:onClick="saveButtonPressed"
+            android:layout_gravity="right" />
+
         <View android:layout_width="fill_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp" />
 
@@ -92,11 +110,9 @@
             GeoTask Germany GmbH \n
             Musterstrasse 00, 99.Stock \n
             68162 Mannheim \n
-            \n
             Handelsregister: \n
             Amtsgericht Mannheim \n
             Registernummer: HRB XXXXX A \n
-            \n
             Inhaltliche Verantwortliche: \n
             Team XY"
             android:id="@+id/textView9"
