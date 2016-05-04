@@ -539,6 +539,34 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             }
         });
 
+        Button okButton = (Button) dialog.findViewById(R.id.buttonOk);
+        // if button is clicked, close the custom dialog
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView locAddrName = (TextView) findViewById(R.id.location1AddrName);
+                TextView locLongLat = (TextView) findViewById(R.id.location1LongLat);
+
+                if(locAddrName.getText().length() == 0) {
+                    locAddrName.setText(editTextLocationAutocomplete.getText());
+                    locLongLat.setText(textViewLngLtd.getText());
+                } else {
+                    LinearLayout locationHolderLayout = (LinearLayout) findViewById(R.id.locationHolderLayout);
+
+                    TextView tv1 = new TextView(locationHolderLayout.getContext());
+                    tv1.setText(editTextLocationAutocomplete.getText());
+
+                    TextView tv2 = new TextView(locationHolderLayout.getContext());
+                    tv2.setText(textViewLngLtd.getText());
+
+                    locationHolderLayout.addView(tv1);
+                    locationHolderLayout.addView(tv2);
+                }
+
+                dialog.dismiss();
+            }
+        });
+
         dialog.show();
     }
 
