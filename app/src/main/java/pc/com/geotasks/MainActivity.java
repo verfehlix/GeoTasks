@@ -81,14 +81,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.db = new SQLHelper(this.getApplicationContext());
         Task t1 = null;
         Task t2 = null;
-        try {
-            t1 = new Task("Universität Mannheim", "des 1", "blub", "ln 1", "la 1",  49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
-            t2 = new Task("Irgendwas", "des 1", "blub", "ln 1", "la 1",  50, 10, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
-            db.addTask(t1);
-            db.addTask(t2);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            t1 = new Task("Universität Mannheim", "des 1", "blub", "ln 1", "la 1",  49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+////            t2 = new Task("Irgendwas", "des 1", "blub", "ln 1", "la 1",  50, 10, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+////            db.addTask(t1);
+////            db.addTask(t2);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
 
         fragment = new TaskListFragment();

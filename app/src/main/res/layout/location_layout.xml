@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Place-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="325dp"
+    android:layout_height="400dp"
+    android:layout_marginLeft="15dp"
+    android:id="@+id/locationLayout">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_location_on_black_24dp"
+            android:layout_marginRight="15dp" />
+
+        <!-- Use current location -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_weight="1"
+            android:text="Use current location"
+            android:id="@+id/textView2" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="6" />
+
+        <Switch
+            android:id="@+id/useCurrentLocationSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:checked="false" />
+
+    </LinearLayout>
+
+    <!-- OR text -->
+    <TextView
+        android:id="@+id/orTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="or"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="15dp" />
+
+    <!-- Location Search -->
+    <EditText
+        android:id="@+id/editTextLocationAutocomplete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select from map / Search"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="15dp" />
+
+    <TextView
+        android:id="@+id/textViewLngLtd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="15dp" />
+
+    <!-- Radius -->
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="or"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="15dp" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Select from favorites"
+        android:id="@+id/button3"
+        android:layout_marginRight="15dp"
+        android:onClick="selectFromFavoritesButtonPressed"
+        android:layout_marginLeft="55dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Radius"
+            android:id="@+id/textView4"
+            android:layout_marginLeft="40dp" />
+
+        <SeekBar
+            android:id="@+id/radiusSeekBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:max="5000"
+            android:layout_weight="1"
+            android:progress="150" />
+
+        <EditText
+            android:id="@+id/meterEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:background="@android:color/transparent"
+            android:hint="150"
+            android:layout_weight="0.1"
+            android:maxLines="1"
+            android:maxLength="4"
+            android:inputType="number"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="m"
+            android:id="@+id/textView6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCEL"
+            android:id="@+id/buttonCancel" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="4"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:id="@+id/buttonOk" />
+    </LinearLayout>
+
+</LinearLayout>

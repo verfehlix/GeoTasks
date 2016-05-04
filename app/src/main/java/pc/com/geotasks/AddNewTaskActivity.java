@@ -2,6 +2,7 @@ package pc.com.geotasks;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,11 +23,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -44,6 +49,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -58,6 +64,8 @@ import pc.com.geotasks.model.Task;
 public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     SQLHelper db;
+
+    Dialog dialog;
 
     Toolbar toolbar;
     Button exitButton;
@@ -142,6 +150,12 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         //hide the title
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        //get dialog
+        dialog = new Dialog(this);
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View dialogView = factory.inflate(R.layout.location_layout, null);
+        dialog.setContentView(R.layout.location_layout);
+
         //get buttons
         exitButton = (Button) findViewById(R.id.exitButton);
         saveButton = (Button) findViewById(R.id.saveButton);
@@ -149,22 +163,21 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         //get inputs
         editTextTaskName = (EditText) findViewById(R.id.editTextTaskName);
         editTextTaskDescription = (EditText) findViewById(R.id.editTextTaskDescription);
-        editTextLocationAutocomplete = (EditText) findViewById(R.id.editTextLocationAutocomplete);
+        categoryEditText = (EditText) findViewById(R.id.categoryEditText);
+        editTextLocationAutocomplete = (EditText) dialog.findViewById(R.id.editTextLocationAutocomplete);
+        meterEditText = (EditText) dialog.findViewById(R.id.meterEditText);
         datePickerEditText = (EditText) findViewById(R.id.datePickerEditText);
         timePickerEditText = (EditText) findViewById(R.id.timePickerEditText);
-        meterEditText = (EditText) findViewById(R.id.meterEditText);
-        categoryEditText = (EditText) findViewById(R.id.categoryEditText);
 
         //get text views
-        textViewLngLtd = (TextView) findViewById(R.id.textViewLngLtd);
-        orTextView = (TextView) findViewById(R.id.orTextView);
-        meterEditText = (EditText) findViewById(R.id.meterEditText);
+        textViewLngLtd = (TextView) dialog.findViewById(R.id.textViewLngLtd);
+        orTextView = (TextView) dialog.findViewById(R.id.orTextView);
 
         //get switch
-        useCurrentLocationSwitch = (Switch) findViewById(R.id.useCurrentLocationSwitch);
+        useCurrentLocationSwitch = (Switch) dialog.findViewById(R.id.useCurrentLocationSwitch);
 
         //get radius seekbar
-        radiusSeekBar = (SeekBar) findViewById(R.id.radiusSeekBar);
+        radiusSeekBar = (SeekBar) dialog.findViewById(R.id.radiusSeekBar);
 
         editTextTaskName.setTag(editTextTaskName.getKeyListener());
         editTextTaskDescription.setTag(editTextTaskDescription.getKeyListener());
@@ -341,23 +354,23 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         radiusSeekBar.setEnabled(true);
 
-        // onchange listener to autocomplete edit text
+//         onchange listener to autocomplete edit text
         editTextLocationAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    findPlace(findViewById(android.R.id.content));
+                    selectFromMapButtonPressed(findViewById(android.R.id.content));
                 }
             }
         });
         editTextLocationAutocomplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                findPlace(findViewById(android.R.id.content));
+                selectFromMapButtonPressed(findViewById(android.R.id.content));
             }
         });
 
-        //add onchange listener to switch for use current location
+//        add onchange listener to switch for use current location
         useCurrentLocationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -513,6 +526,22 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         exitButtonPressed(findViewById(android.R.id.content));
     }
 
+    public void openPopup(View view){
+        dialog.setTitle("Select Place:");
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.buttonCancel);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     public void exitButtonPressed(View view){
         if(currentMode == MODE_NEW || currentMode == MODE_EDIT){
             //check if any data was entered
@@ -562,6 +591,31 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         ((CustomListView)TaskListFragment.mAdapter).update();
 
         finish();
+    }
+
+    public void selectFromMapButtonPressed(View view){
+        // Construct an intent for the place picker
+        try {
+            PlacePicker.IntentBuilder intentBuilder =
+                    new PlacePicker.IntentBuilder();
+            Intent intent = intentBuilder.build(this);
+            // Start the intent by requesting a result,
+            // identified by a request code.
+            startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
+
+        }  catch (GooglePlayServicesRepairableException e) {
+            GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),0 /* requestCode */).show();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            String message = "Google Play Services is not available: " + GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
+
+            Log.e(TAG, message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void selectFromFavoritesButtonPressed(View view){
+        Toast.makeText(this, "Favorite List Missing!", Toast.LENGTH_SHORT).show();
     }
 
     private void datePicker() {
@@ -656,22 +710,6 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
     private boolean textEditFilled(EditText editText){
         return editText.getText().toString().trim().length() > 0 ? true : false;
-    }
-
-    public void findPlace(View view) {
-        try {
-
-            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).build(this);
-            startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
-
-        } catch (GooglePlayServicesRepairableException e) {
-            GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),0 /* requestCode */).show();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            String message = "Google Play Services is not available: " + GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
-
-            Log.e(TAG, message);
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        }
     }
 
     // A place has been received; use requestCode to track the request.
