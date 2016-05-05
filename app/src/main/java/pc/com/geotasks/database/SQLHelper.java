@@ -256,7 +256,7 @@ public class SQLHelper extends SQLiteOpenHelper {
         Cursor c;
 
         // How you want the results sorted in the resulting Cursor
-        String sortOrder = FavouriteContainer.Favourite.COLUMN_NAME_NAME + " ASC";
+        String sortOrder = FavouriteContainer.Favourite.COLUMN_NAME_ID + " ASC";
 
         String selection = FavouriteContainer.Favourite.COLUMN_NAME_NAME + " LIKE ? OR "
                 + FavouriteContainer.Favourite.COLUMN_NAME_LOCATION_NAME + " LIKE ? OR "

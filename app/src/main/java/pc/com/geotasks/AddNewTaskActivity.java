@@ -611,6 +611,16 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                     locationHolderLayout.addView(tv2);
                 }
 
+                if(checkBoxFavourite.isChecked()){
+                    Favourite newFav = new Favourite(editTextFavourite.getText().toString(),
+                            editTextLocationAutocomplete.getText().toString().split(",")[0].trim(),
+                            editTextLocationAutocomplete.getText().toString().split(",")[1].trim(),
+                            Double.parseDouble(textViewLngLtd.getText().toString().split(",")[0].trim()),
+                            Double.parseDouble(textViewLngLtd.getText().toString().split(",")[1].trim()));
+
+                    db.addFavourite(newFav);
+                }
+
                 dialog.dismiss();
 
                 editTextLocationAutocomplete.setText("");
