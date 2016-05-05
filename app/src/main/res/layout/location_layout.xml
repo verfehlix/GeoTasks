@@ -5,7 +5,9 @@
     android:layout_width="325dp"
     android:layout_height="400dp"
     android:layout_marginLeft="15dp"
-    android:id="@+id/locationLayout">
+    android:id="@+id/locationLayout"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true" >
 
     <LinearLayout
         android:orientation="horizontal"
@@ -89,14 +91,12 @@
         android:layout_gravity="center"
         android:layout_marginLeft="15dp" />
 
-    <Button
+    <Spinner
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Select from favorites"
-        android:id="@+id/button3"
-        android:layout_marginRight="15dp"
-        android:onClick="selectFromFavoritesButtonPressed"
-        android:layout_marginLeft="55dp" />
+        android:id="@+id/spinnerFavourites"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="15dp" />
 
     <LinearLayout
         android:orientation="horizontal"

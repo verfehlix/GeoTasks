@@ -26,6 +26,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -33,6 +35,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -57,8 +60,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import pc.com.geotasks.database.SQLHelper;
+import pc.com.geotasks.model.Favourite;
 import pc.com.geotasks.model.Task;
 
 public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
@@ -564,6 +569,35 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 }
 
                 dialog.dismiss();
+            }
+        });
+
+        ArrayList<Favourite> favs = db.getFavourites("");
+
+        List<String> spinnerArray =  new ArrayList<String>();
+
+        spinnerArray.add("Select from favourites:");
+
+        for (Favourite fav:favs) {
+            spinnerArray.add(fav.getID() + " - " + fav.getName());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner sItems = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
+        sItems.setAdapter(adapter);
+
+        sItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedItemName = adapterView.getItemAtPosition(i).toString();
+                Toast.makeText(AddNewTaskActivity.this, selectedItemName, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
