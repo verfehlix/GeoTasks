@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -53,6 +54,8 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlacePicker;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -84,6 +87,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     EditText categoryEditText;
     TextView textViewLngLtd;
     TextView orTextView;
+    TextView or2TextView;
+    Spinner favouriteSpinner;
     Switch useCurrentLocationSwitch;
     SeekBar radiusSeekBar;
 
@@ -157,9 +162,12 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         //get dialog
         dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_LEFT_ICON);
         LayoutInflater factory = LayoutInflater.from(this);
         final View dialogView = factory.inflate(R.layout.location_layout, null);
         dialog.setContentView(R.layout.location_layout);
+        dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_location_on_black_24dp);
+
 
         //get buttons
         exitButton = (Button) findViewById(R.id.exitButton);
@@ -177,6 +185,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         //get text views
         textViewLngLtd = (TextView) dialog.findViewById(R.id.textViewLngLtd);
         orTextView = (TextView) dialog.findViewById(R.id.orTextView);
+        or2TextView = (TextView) dialog.findViewById(R.id.or2TextView);
+
+        favouriteSpinner = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
 
         //get switch
         useCurrentLocationSwitch = (Switch) dialog.findViewById(R.id.useCurrentLocationSwitch);
@@ -382,6 +393,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 if (isChecked) {
                     editTextLocationAutocomplete.setVisibility(View.GONE);
                     orTextView.setVisibility(View.GONE);
+                    favouriteSpinner.setVisibility(View.GONE);
+                    or2TextView.setVisibility(View.GONE);
 
                     //also set place for writing to the db to current position (use last known location)
                     if(lastKnownLocation != null){
@@ -399,6 +412,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                     editTextLocationAutocomplete.setText("");
                     textViewLngLtd.setText("");
                     orTextView.setVisibility(View.VISIBLE);
+                    favouriteSpinner.setSelection(0);
+                    favouriteSpinner.setVisibility(View.VISIBLE);
+                    or2TextView.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -541,6 +557,13 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                editTextLocationAutocomplete.setText("");
+                textViewLngLtd.setText("");
+                useCurrentLocationSwitch.setChecked(false);
+                radiusSeekBar.setProgress(150);
+                Spinner sItems = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
+                sItems.setSelection(0);
+
             }
         });
 
@@ -569,6 +592,14 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 }
 
                 dialog.dismiss();
+
+                editTextLocationAutocomplete.setText("");
+                textViewLngLtd.setText("");
+                useCurrentLocationSwitch.setChecked(false);
+                radiusSeekBar.setProgress(150);
+                Spinner sItems = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
+                sItems.setSelection(0);
+
             }
         });
 
@@ -592,7 +623,16 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selectedItemName = adapterView.getItemAtPosition(i).toString();
-                Toast.makeText(AddNewTaskActivity.this, selectedItemName, Toast.LENGTH_SHORT).show();
+                if(selectedItemName != "Select from favourites:"){
+                    ArrayList<Favourite> favs = db.getFavourites("");
+                    for (Favourite fav : favs) {
+                        int idFromDropdown = Integer.parseInt(selectedItemName.split("-")[0].trim());
+                        if(fav.getID() == idFromDropdown){
+                            editTextLocationAutocomplete.setText(fav.getLocationName() + ", " + fav.getLocationAddress());
+                            textViewLngLtd.setText(fav.getLatitude() + ", " + fav.getLongitude());
+                        }
+                    }
+                }
             }
 
             @Override

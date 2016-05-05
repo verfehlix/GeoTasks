@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="pc.com.geotasks.AddNewTaskActivity">
+    tools:context="pc.com.geotasks.AddNewTaskActivity"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <!--Toolbar-->
     <android.support.v7.widget.Toolbar
