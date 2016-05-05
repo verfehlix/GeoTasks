@@ -1,6 +1,7 @@
 package pc.com.geotasks.model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,6 +20,8 @@ public class Task {
     private int         radius;
     private Timestamp   dueDate;
     private Timestamp   timestamp;
+
+    private ArrayList<Location> locations = new ArrayList<>();
 
     public Task(){
 
@@ -70,7 +73,7 @@ public class Task {
     }
 
     public void setTag(String tag) {
-        this.name = tag;
+        this.tag = tag;
     }
 
     public String getLocationName() { return locationName; }
@@ -123,5 +126,13 @@ public class Task {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = new java.sql.Timestamp(dueDate.getTime());
+    }
+
+    public ArrayList<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(ArrayList<Location> locations) {
+        this.locations = locations;
     }
 }

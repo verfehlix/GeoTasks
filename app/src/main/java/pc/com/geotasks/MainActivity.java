@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pc.com.geotasks.database.SQLHelper;
+import pc.com.geotasks.model.Favourite;
 import pc.com.geotasks.model.Task;
 
 
@@ -89,7 +90,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-
+        //Favourite f = new Favourite("Universität Mannheim", "ln 1", "la 1",  49.487521, 8.458106);
+        //db.addFavourite(f);
 
         fragment = new TaskListFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
