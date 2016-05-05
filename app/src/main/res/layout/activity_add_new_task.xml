@@ -187,7 +187,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:id="@+id/location1LongLat"
-                        android:hint="Lng.: - , Lat.: -" />
+                        android:hint="(Radius) Lng.: - , Lat.: -" />
 
                 </LinearLayout>
 

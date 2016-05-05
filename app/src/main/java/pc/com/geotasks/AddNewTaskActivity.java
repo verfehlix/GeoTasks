@@ -597,7 +597,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
                 if(locAddrName.getText().length() == 0) {
                     locAddrName.setText(editTextLocationAutocomplete.getText());
-                    locLongLat.setText(textViewLngLtd.getText());
+                    locLongLat.setText("(" + radiusSeekBar.getProgress() + "m) " + textViewLngLtd.getText());
                 } else {
                     LinearLayout locationHolderLayout = (LinearLayout) findViewById(R.id.locationHolderLayout);
 
@@ -605,7 +605,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                     tv1.setText(editTextLocationAutocomplete.getText());
 
                     TextView tv2 = new TextView(locationHolderLayout.getContext());
-                    tv2.setText(textViewLngLtd.getText());
+                    tv2.setText("(" + radiusSeekBar.getProgress() + "m) " + textViewLngLtd.getText());
 
                     locationHolderLayout.addView(tv1);
                     locationHolderLayout.addView(tv2);
@@ -613,10 +613,10 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
                 if(checkBoxFavourite.isChecked()){
                     Favourite newFav = new Favourite(editTextFavourite.getText().toString(),
-                            editTextLocationAutocomplete.getText().toString().split(",")[0].trim(),
-                            editTextLocationAutocomplete.getText().toString().split(",")[1].trim(),
-                            Double.parseDouble(textViewLngLtd.getText().toString().split(",")[0].trim()),
-                            Double.parseDouble(textViewLngLtd.getText().toString().split(",")[1].trim()));
+                            editTextLocationAutocomplete.getText().toString().split(",", 2)[0].trim(),
+                            editTextLocationAutocomplete.getText().toString().split(",", 2)[1].trim(),
+                            Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[0].trim()),
+                            Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[1].trim()));
 
                     db.addFavourite(newFav);
                 }
