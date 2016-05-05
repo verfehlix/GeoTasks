@@ -602,13 +602,19 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                     LinearLayout locationHolderLayout = (LinearLayout) findViewById(R.id.locationHolderLayout);
 
                     TextView tv1 = new TextView(locationHolderLayout.getContext());
+                    locationHolderLayout.addView(tv1);
+                    tv1.setTextAppearance(AddNewTaskActivity.this, android.R.style.TextAppearance_DeviceDefault_Medium);
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tv1.getLayoutParams();
+                    params.setMargins(0, 25, 0, 0);
+                    tv1.setLayoutParams(params);
                     tv1.setText(editTextLocationAutocomplete.getText());
 
                     TextView tv2 = new TextView(locationHolderLayout.getContext());
+                    locationHolderLayout.addView(tv2);
                     tv2.setText("(" + radiusSeekBar.getProgress() + "m) " + textViewLngLtd.getText());
 
-                    locationHolderLayout.addView(tv1);
-                    locationHolderLayout.addView(tv2);
+
+
                 }
 
                 if(checkBoxFavourite.isChecked()){
