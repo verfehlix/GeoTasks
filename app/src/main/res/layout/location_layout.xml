@@ -138,7 +138,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Location to Favourites"
-        android:id="@+id/checkBox"
+        android:id="@+id/checkBoxFavourite"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:checked="false" />
@@ -146,9 +146,11 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/editTextFavourite"
         android:layout_marginLeft="15dp"
-        android:hint="Enter name of favourite" />
+        android:hint="Enter name of favourite"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="15dp" />
 
     <LinearLayout
         android:orientation="horizontal"

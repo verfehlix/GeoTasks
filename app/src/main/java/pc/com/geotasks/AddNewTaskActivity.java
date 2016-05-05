@@ -30,6 +30,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -85,6 +86,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     EditText meterEditText;
     EditText timePickerEditText;
     EditText categoryEditText;
+    EditText editTextFavourite;
+    CheckBox checkBoxFavourite;
     TextView textViewLngLtd;
     TextView orTextView;
     TextView or2TextView;
@@ -188,6 +191,21 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         or2TextView = (TextView) dialog.findViewById(R.id.or2TextView);
 
         favouriteSpinner = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
+
+        editTextFavourite = (EditText) dialog.findViewById(R.id.editTextFavourite);
+        editTextFavourite.setVisibility(View.GONE);
+        checkBoxFavourite = (CheckBox) dialog.findViewById(R.id.checkBoxFavourite);
+
+        checkBoxFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    editTextFavourite.setVisibility(View.VISIBLE);
+                } else {
+                    editTextFavourite.setVisibility(View.GONE);
+                }
+            }
+        });
 
         //get switch
         useCurrentLocationSwitch = (Switch) dialog.findViewById(R.id.useCurrentLocationSwitch);
@@ -559,6 +577,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 dialog.dismiss();
                 editTextLocationAutocomplete.setText("");
                 textViewLngLtd.setText("");
+                editTextFavourite.setText("");
+                checkBoxFavourite.setChecked(false);
                 useCurrentLocationSwitch.setChecked(false);
                 radiusSeekBar.setProgress(150);
                 Spinner sItems = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
@@ -595,6 +615,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
                 editTextLocationAutocomplete.setText("");
                 textViewLngLtd.setText("");
+                editTextFavourite.setText("");
+                checkBoxFavourite.setChecked(false);
                 useCurrentLocationSwitch.setChecked(false);
                 radiusSeekBar.setProgress(150);
                 Spinner sItems = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
