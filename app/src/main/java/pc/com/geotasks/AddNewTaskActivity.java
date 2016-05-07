@@ -275,24 +275,38 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         timePickerEditText.setText(timeString);
 
         //location data
+        TextView locAddrName = (TextView) findViewById(R.id.location1AddrName);
+        TextView locLongLat = (TextView) findViewById(R.id.location1LongLat);
 
+        int count = 0;
+        for (pc.com.geotasks.model.Location loc : selectedLocations) {
+            if(count == 0){
+                locAddrName.setText(loc.getLocationName());
+                locLongLat.setText("(" + loc.getRadius() + "m) " +loc.getLocationAddress());
+            } else {
+                LinearLayout locationHolderLayout = (LinearLayout) findViewById(R.id.locationHolderLayout);
 
-        if(taskLocationAddress.length() == 0 || taskLocationAddress.length() == 0){
-            useCurrentLocationSwitch.setChecked(true);
-            editTextLocationAutocomplete.setVisibility(View.GONE);
-            orTextView.setVisibility(View.GONE);
-        } else {
-            useCurrentLocationSwitch.setChecked(false);
-            editTextLocationAutocomplete.setVisibility(View.VISIBLE);
-            orTextView.setVisibility(View.VISIBLE);
-            editTextLocationAutocomplete.setText(taskLocationName + ", " + taskLocationAddress);
+                TextView tv1 = new TextView(locationHolderLayout.getContext());
+                locationHolderLayout.addView(tv1);
+                tv1.setTextAppearance(AddNewTaskActivity.this, android.R.style.TextAppearance_DeviceDefault_Medium);
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tv1.getLayoutParams();
+                params.setMargins(0, 25, 0, 0);
+                tv1.setLayoutParams(params);
+                tv1.setText(loc.getLocationName());
+
+                TextView tv2 = new TextView(locationHolderLayout.getContext());
+                locationHolderLayout.addView(tv2);
+                tv2.setText("(" + loc.getRadius() + "m) " +loc.getLocationAddress());
+            }
+
+//            String locName = editTextLocationAutocomplete.getText().toString().split(",", 2)[0].trim();
+//            String locAddress = editTextLocationAutocomplete.getText().toString().split(",", 2)[1].trim();
+//            double locLong = Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[0].trim());
+//            double locLat  = Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[1].trim());
+//            int locRadius = radiusSeekBar.getProgress();
+
+            count++;
         }
-        textViewLngLtd.setText(taskLatitude + ", " + taskLongitude);
-        radiusSeekBar.setProgress(taskRadius);
-        meterEditText.setText(taskRadius+"");
-
-
-
     }
 
     private void setEditButton() {
