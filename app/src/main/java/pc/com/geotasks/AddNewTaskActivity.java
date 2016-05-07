@@ -96,6 +96,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     Switch useCurrentLocationSwitch;
     SeekBar radiusSeekBar;
 
+    Button buttonAddLocation;
+
     Calendar cal = Calendar.getInstance();
     int day = cal.get(Calendar.DAY_OF_MONTH);
     int month = cal.get(Calendar.MONTH);
@@ -128,7 +130,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     private int taskRadius;
     private Date taskDueDate;
 
-    private ArrayList<pc.com.geotasks.model.Location> selectedLocations = new ArrayList<>();
+    private ArrayList<pc.com.geotasks.model.Location> selectedLocations = new ArrayList<pc.com.geotasks.model.Location>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +151,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             this.taskLongitude = extras.getDouble("taskLongitude");
             this.taskDueDate = new Date (); this.taskDueDate.setTime(extras.getLong("taskDueDate"));
             this.taskRadius = extras.getInt("taskRadius");
+
+            this.selectedLocations = extras.getParcelableArrayList("locations");
         }
 
         //setup connection to database
@@ -178,6 +182,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         //get buttons
         exitButton = (Button) findViewById(R.id.exitButton);
         saveButton = (Button) findViewById(R.id.saveButton);
+
+        buttonAddLocation = (Button) findViewById(R.id.buttonAddLocation);
 
         //get inputs
         editTextTaskName = (EditText) findViewById(R.id.editTextTaskName);
@@ -231,6 +237,14 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             disableControls();
             setEditButton();
             fillTextEditsWithTaskData();
+
+//            for (pc.com.geotasks.model.Location loc: selectedLocations) {
+//                Log.d("testing",loc.getLocationAddress());
+//                Log.d("testing",loc.getLocationName());
+//                Log.d("testing",loc.getLongitude()+"");
+//                Log.d("testing",loc.getLatitude()+"");
+//                Log.d("testing","------------------------------");
+//            }
         }
 
         //init google maps api component
@@ -248,9 +262,21 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
     private void fillTextEditsWithTaskData() {
 
+        //task data
         editTextTaskName.setText(taskName);
         editTextTaskDescription.setText(taskDescription);
         categoryEditText.setText(taskTag);
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String dateString = dateFormat.format(taskDueDate);
+        String timeString = timeFormat.format(taskDueDate);
+        datePickerEditText.setText(dateString);
+        timePickerEditText.setText(timeString);
+
+        //location data
+
+
         if(taskLocationAddress.length() == 0 || taskLocationAddress.length() == 0){
             useCurrentLocationSwitch.setChecked(true);
             editTextLocationAutocomplete.setVisibility(View.GONE);
@@ -265,12 +291,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         radiusSeekBar.setProgress(taskRadius);
         meterEditText.setText(taskRadius+"");
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String dateString = dateFormat.format(taskDueDate);
-        String timeString = timeFormat.format(taskDueDate);
-        datePickerEditText.setText(dateString);
-        timePickerEditText.setText(timeString);
+
 
     }
 
@@ -370,9 +391,14 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         timePickerEditText.setKeyListener(null);
         timePickerEditText.setOnClickListener(null);
         timePickerEditText.setOnFocusChangeListener(null);
+
+        buttonAddLocation.setVisibility(View.GONE);
     }
 
     private void enableControls() {
+
+        buttonAddLocation.setVisibility(View.VISIBLE);
+
         editTextTaskName.setKeyListener((KeyListener) editTextTaskName.getTag());
 
         editTextTaskDescription.setKeyListener((KeyListener) editTextTaskDescription.getTag());
@@ -388,6 +414,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         timePickerEditText.setKeyListener((KeyListener) timePickerEditText.getTag());
 
         useCurrentLocationSwitch.setEnabled(true);
+        useCurrentLocationSwitch.setChecked(false);
 
         radiusSeekBar.setEnabled(true);
 

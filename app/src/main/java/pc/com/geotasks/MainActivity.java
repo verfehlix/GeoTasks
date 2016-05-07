@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -217,6 +218,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 resultIntent.putExtra("taskLongitude",task.getLongitude());
                 resultIntent.putExtra("taskRadius",task.getRadius());
                 resultIntent.putExtra("taskDueDate",task.getDueDate().getTime());
+
+                resultIntent.putParcelableArrayListExtra("locations",  task.getLocations());
+
             } else {
                 resultIntent = new Intent(this, MainActivity.class);
                 Toast.makeText(getBaseContext(), "Could not find task from notification in DB!", Toast.LENGTH_LONG).show();

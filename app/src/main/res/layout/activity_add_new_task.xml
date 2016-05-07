@@ -170,7 +170,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="Add Location"
-                        android:id="@+id/button2"
+                        android:id="@+id/buttonAddLocation"
                         android:layout_marginLeft="0dp"
                         android:layout_marginRight="50dp"
                         android:onClick="openPopup" />

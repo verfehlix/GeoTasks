@@ -163,6 +163,9 @@ public class CustomListView extends ArrayAdapter<Task>{
                 intent.putExtra("taskLongitude",files.get(position).getLongitude());
                 intent.putExtra("taskRadius",files.get(position).getRadius());
                 intent.putExtra("taskDueDate",files.get(position).getDueDate().getTime());
+
+                intent.putParcelableArrayListExtra("locations",  files.get(position).getLocations());
+
                 context.startActivity(intent);
             }
         });
