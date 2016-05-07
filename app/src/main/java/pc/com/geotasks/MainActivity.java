@@ -37,6 +37,7 @@ import java.util.Map;
 import pc.com.geotasks.database.SQLHelper;
 import pc.com.geotasks.model.Favourite;
 import pc.com.geotasks.model.Task;
+import pc.com.geotasks.utils.Utils;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -81,17 +82,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //establish db and add new test task
         this.db = new SQLHelper(this.getApplicationContext());
         Task t1 = null;
-        Task t2 = null;
-//        try {
-//            t1 = new Task("Universität Mannheim", "des 1", "blub", "ln 1", "la 1",  49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
-////            t2 = new Task("Irgendwas", "des 1", "blub", "ln 1", "la 1",  50, 10, 200, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
-////            db.addTask(t1);
-////            db.addTask(t2);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        Favourite f = new Favourite("Universität Mannheim", "ln 1", "la 1",  49.487521, 8.458106);
-//        db.addFavourite(f);
+        try {
+            t1 = new Task("Universität Mannheim", "des 1", "blub", "ln 1", "la 1",  49.487521, 8.458106, 500, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-27 13:37:00"));
+
+            ArrayList<pc.com.geotasks.model.Location> locs = new ArrayList<>();
+
+            pc.com.geotasks.model.Location l1 = new pc.com.geotasks.model.Location("Murgstraße 5", "Murgstraße 5, 68753 Waghäusel", 48.88972689, 8.65453449);
+            pc.com.geotasks.model.Location l2 = new pc.com.geotasks.model.Location("Rheinstraße 15", "Rheinstraße 15, 68753 Waghäusel", 48.88972700, 8.65453500);
+            pc.com.geotasks.model.Location l3 = new pc.com.geotasks.model.Location("Jürgenstraße 5", "Jürgenstraße 5, 68753 Wiesental", 13.37, 4.2);
+
+            locs.add(l1);
+            locs.add(l2);
+            locs.add(l3);
+
+            t1.setLocations(locs);
+
+            db.addTask(t1);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Favourite f = new Favourite("Universität Mannheim", "ln 1", "la 1",  49.487521, 8.458106);
+        db.addFavourite(f);
 
         fragment = new TaskListFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

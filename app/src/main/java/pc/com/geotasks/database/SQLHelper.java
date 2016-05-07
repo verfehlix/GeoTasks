@@ -105,6 +105,7 @@ public class SQLHelper extends SQLiteOpenHelper {
         values.put(TaskContainer.Task.COLUMN_NAME_LONGITUDE         , task.getLongitude());
         values.put(TaskContainer.Task.COLUMN_NAME_LATITUDE          , task.getLatitude());
         //values.put(TaskContainer.Task.COLUMN_NAME_LOCATIONS         , Base64.encode(Utils.convertToBytes(task.getLocations())));
+        values.put(TaskContainer.Task.COLUMN_NAME_LOCATIONS         , Utils.serializeLocations(task.getLocations()));
         values.put(TaskContainer.Task.COLUMN_NAME_RADIUS            , task.getRadius());
         values.put(TaskContainer.Task.COLUMN_NAME_DUE_DATE          , task.getDueDate().toString());
         values.put(TaskContainer.Task.COLUMN_NAME_TIMESTAMP         , task.getTimestamp().toString());
@@ -182,6 +183,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 TaskContainer.Task.COLUMN_NAME_LONGITUDE,
                 TaskContainer.Task.COLUMN_NAME_LATITUDE,
                 TaskContainer.Task.COLUMN_NAME_RADIUS,
+                TaskContainer.Task.COLUMN_NAME_LOCATIONS,
                 TaskContainer.Task.COLUMN_NAME_DUE_DATE,
                 TaskContainer.Task.COLUMN_NAME_TIMESTAMP,
         };
@@ -224,7 +226,8 @@ public class SQLHelper extends SQLiteOpenHelper {
                     Task task = new Task(name, description, tag, locationName, locationAddress, latitude, longitude, radius, dueDate);
                     task.setID(ID);
                     task.setTimestamp(timestamp);
-                    //task.setLocations(Utils.convertFromBytes(Base64.decode(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATIONS)))));
+
+                    task.setLocations(Utils.deserializeLocations(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATIONS))));
                     tasks.add(task);
 
                 } catch (ParseException e) {

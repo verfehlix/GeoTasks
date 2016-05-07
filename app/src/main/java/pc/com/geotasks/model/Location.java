@@ -1,16 +1,21 @@
 package pc.com.geotasks.model;
 
 /**
- * Created by Ich on 05.05.2016.
+ * Created by totto on 05.05.2016.
  */
 public class Location {
-    private String      naxme;
     private String      locationName;
     private String      locationAddress;
     private double      longitude;
     private double      latitude;
 
-    public Location() {
+    public Location(String locationName, String locationAddress, double longitude, double latitude) {
+        this.locationName = locationName;
+        this.locationAddress = locationAddress;
+
+        this.longitude = longitude;
+        this.latitude = latitude;
+
     }
 
     public String getLocationName() {
@@ -19,14 +24,6 @@ public class Location {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
-    }
-
-    public String getNaxme() {
-        return naxme;
-    }
-
-    public void setNaxme(String naxme) {
-        this.naxme = naxme;
     }
 
     public double getLongitude() {

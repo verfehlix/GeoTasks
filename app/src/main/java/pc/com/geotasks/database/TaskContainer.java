@@ -20,6 +20,7 @@ public class TaskContainer {
         public static final String COLUMN_NAME_DESCRIPTION       = "description";
         public static final String COLUMN_NAME_TAG               = "tag";
 
+        //old
         public static final String COLUMN_NAME_LOCATION_NAME     = "locationName";
         public static final String COLUMN_NAME_LOCATION_ADDRESS  = "locationAddress";
         public static final String COLUMN_NAME_LONGITUDE         = "longitude";
