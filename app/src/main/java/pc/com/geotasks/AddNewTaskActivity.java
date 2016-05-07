@@ -381,7 +381,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         double longitude = selectedLocations.get(0).getLongitude();
         double latitude = selectedLocations.get(0).getLatitude();
         int radius = selectedLocations.get(0).getRadius();
-        
+
         db.updateTask(  taskId, taskName, taskTimestamp,  taskDescription, tag, locationName, locationAddress, latitude, longitude, radius, dueDate, selectedLocations);
 
     }
