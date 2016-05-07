@@ -9,12 +9,16 @@ public class Location {
     private double      longitude;
     private double      latitude;
 
-    public Location(String locationName, String locationAddress, double longitude, double latitude) {
+    private int         radius;
+
+    public Location(String locationName, String locationAddress, double longitude, double latitude, int radius) {
         this.locationName = locationName;
         this.locationAddress = locationAddress;
 
         this.longitude = longitude;
         this.latitude = latitude;
+
+        this.radius = radius;
 
     }
 
@@ -49,4 +53,13 @@ public class Location {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
 }

@@ -58,6 +58,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -126,6 +127,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     private double taskLongitude;
     private int taskRadius;
     private Date taskDueDate;
+
+    private ArrayList<pc.com.geotasks.model.Location> selectedLocations = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -613,9 +616,16 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                     locationHolderLayout.addView(tv2);
                     tv2.setText("(" + radiusSeekBar.getProgress() + "m) " + textViewLngLtd.getText());
 
-
-
                 }
+
+                String locName = editTextLocationAutocomplete.getText().toString().split(",", 2)[0].trim();
+                String locAddress = editTextLocationAutocomplete.getText().toString().split(",", 2)[1].trim();
+                double locLong = Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[0].trim());
+                double locLat  = Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[1].trim());
+                int locRadius = radiusSeekBar.getProgress();
+
+                pc.com.geotasks.model.Location loc = new pc.com.geotasks.model.Location(locName, locAddress, locLong, locLat, locRadius);
+                selectedLocations.add(loc);
 
                 if(checkBoxFavourite.isChecked()){
                     Favourite newFav = new Favourite(editTextFavourite.getText().toString(),
@@ -703,14 +713,24 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     public void saveButtonPressed(View view) throws ParseException {
+
         String taskName = editTextTaskName.getText().toString();
         String taskDescription = editTextTaskDescription.getText().toString();
-        String locationName = this.currentPlace != null? this.currentPlace.getName().toString(): "";
-        String locationAddress = this.currentPlace != null? this.currentPlace.getAddress().toString(): "";
         String tag = categoryEditText.getText().toString();
-        double longitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLongitude() : this.currentPlace != null ? this.currentPlace.getLatLng().longitude : 0;
-        double latitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLatitude() : this.currentPlace != null ? this.currentPlace.getLatLng().latitude : 0;
-        int radius = radiusSeekBar.getProgress();
+
+//        OLD LOGIC
+//        String locationName = this.currentPlace != null? this.currentPlace.getName().toString(): "";
+//        String locationAddress = this.currentPlace != null? this.currentPlace.getAddress().toString(): "";
+//        double longitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLongitude() : this.currentPlace != null ? this.currentPlace.getLatLng().longitude : 0;
+//        double latitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation.getLatitude() : this.currentPlace != null ? this.currentPlace.getLatLng().latitude : 0;
+//        int radius = radiusSeekBar.getProgress();
+
+//      NEW LOGIC
+        String locationName = selectedLocations.get(0).getLocationName();
+        String locationAddress = selectedLocations.get(0).getLocationName();
+        double longitude = selectedLocations.get(0).getLongitude();
+        double latitude = selectedLocations.get(0).getLatitude();
+        int radius = selectedLocations.get(0).getRadius();
 
         //date logic
         String inputDate = datePickerEditText.getText().toString();
@@ -726,6 +746,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
 
         Task t = new Task(taskName, taskDescription, tag, locationName, locationAddress, latitude, longitude, radius, dueDate);
+
+        t.setLocations(selectedLocations);
+
         db.addTask(t);
 
         ((CustomListView)TaskListFragment.mAdapter).update();

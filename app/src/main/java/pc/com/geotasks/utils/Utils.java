@@ -36,6 +36,7 @@ public class Utils {
                 jGroup.put("locationAddress", locations.get(i).getLocationAddress());
                 jGroup.put("longitude", locations.get(i).getLongitude());
                 jGroup.put("latitude", locations.get(i).getLatitude());
+                jGroup.put("radius", locations.get(i).getRadius());
 
                 jArray.put(jGroup);
 
@@ -59,17 +60,17 @@ public class Utils {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonLoc = new JSONObject(jsonArray.getString(i));
-                Location loc = new Location(jsonLoc.getString("locationName"), jsonLoc.getString("locationAddress"), jsonLoc.getDouble("longitude"), jsonLoc.getDouble("latitude"));
+                Location loc = new Location(jsonLoc.getString("locationName"), jsonLoc.getString("locationAddress"), jsonLoc.getDouble("longitude"), jsonLoc.getDouble("latitude"), jsonLoc.getInt("radius"));
                 locs.add(loc);
             }
 
-            for (Location locTest: locs) {
-                Log.d("JSONSTUFF",locTest.getLocationAddress());
-                Log.d("JSONSTUFF",locTest.getLocationName());
-                Log.d("JSONSTUFF",locTest.getLongitude()+"");
-                Log.d("JSONSTUFF",locTest.getLatitude()+"");
-                Log.d("JSONSTUFF","------------------------------");
-            }
+//            for (Location locTest: locs) {
+//                Log.d("JSONSTUFF",locTest.getLocationAddress());
+//                Log.d("JSONSTUFF",locTest.getLocationName());
+//                Log.d("JSONSTUFF",locTest.getLongitude()+"");
+//                Log.d("JSONSTUFF",locTest.getLatitude()+"");
+//                Log.d("JSONSTUFF","------------------------------");
+//            }
 
             return locs;
         
