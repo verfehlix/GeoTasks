@@ -344,24 +344,13 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     private void updateTask() throws ParseException {
-        /*
-        *       String taskId, String taskName, String taskTimestamp, String taskDescription, String taskTag,
-        *       String taskLocationName, String taskLocationAddress, double taskLatitude, double taskLongitude, int taskRadius, Date taskDueDate
-        * */
-
+        //task data
         Calendar calendar   = Calendar.getInstance();
         Date taskTimestamp  = calendar.getTime();
 
         String taskName = editTextTaskName.getText().toString();
         String taskDescription = editTextTaskDescription.getText().toString();
         String tag = categoryEditText.getText().toString();
-
-        String locationName = this.currentPlace != null? this.currentPlace.getName().toString(): "";
-        String locationAddress = this.currentPlace != null? this.currentPlace.getAddress().toString(): "";
-
-        double longitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation != null ? lastKnownLocation.getLongitude() : 0 : this.currentPlace != null ? this.currentPlace.getLatLng().longitude : 0;
-        double latitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation != null ? lastKnownLocation.getLatitude() : 0 : this.currentPlace != null ? this.currentPlace.getLatLng().latitude : 0;
-        int radius = radiusSeekBar.getProgress();
 
         String inputDate = datePickerEditText.getText().toString();
         String inputTime = timePickerEditText.getText().toString();
@@ -375,7 +364,25 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         }
         Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
 
-        db.updateTask(  taskId, taskName, taskTimestamp,  taskDescription, tag, locationName, locationAddress, latitude, longitude, radius, dueDate);
+        //location data
+        ArrayList<pc.com.geotasks.model.Location> locations = new ArrayList<>();
+
+
+//        String locationName = this.currentPlace != null? this.currentPlace.getName().toString(): "";
+//        String locationAddress = this.currentPlace != null? this.currentPlace.getAddress().toString(): "";
+//
+//        double longitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation != null ? lastKnownLocation.getLongitude() : 0 : this.currentPlace != null ? this.currentPlace.getLatLng().longitude : 0;
+//        double latitude = useCurrentLocationSwitch.isChecked() ? lastKnownLocation != null ? lastKnownLocation.getLatitude() : 0 : this.currentPlace != null ? this.currentPlace.getLatLng().latitude : 0;
+//        int radius = radiusSeekBar.getProgress();
+
+        String locationName = selectedLocations.get(0).getLocationName();
+        String locationAddress = selectedLocations.get(0).getLocationAddress();
+
+        double longitude = selectedLocations.get(0).getLongitude();
+        double latitude = selectedLocations.get(0).getLatitude();
+        int radius = selectedLocations.get(0).getRadius();
+        
+        db.updateTask(  taskId, taskName, taskTimestamp,  taskDescription, tag, locationName, locationAddress, latitude, longitude, radius, dueDate, selectedLocations);
 
     }
 

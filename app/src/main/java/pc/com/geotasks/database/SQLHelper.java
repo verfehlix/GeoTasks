@@ -329,7 +329,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     }
 
     public void updateTask(int taskId, String taskName, Date taskTimestamp, String taskDescription, String taskTag,
-                           String taskLocationName, String taskLocationAddress, double taskLatitude, double taskLongitude, int taskRadius, Date taskDueDate){
+                           String taskLocationName, String taskLocationAddress, double taskLatitude, double taskLongitude, int taskRadius, Date taskDueDate, ArrayList<pc.com.geotasks.model.Location> locations){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -345,6 +345,7 @@ public class SQLHelper extends SQLiteOpenHelper {
         values.put(TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS  , taskLocationAddress);
         values.put(TaskContainer.Task.COLUMN_NAME_LONGITUDE         , taskLongitude);
         values.put(TaskContainer.Task.COLUMN_NAME_LATITUDE          , taskLatitude);
+        values.put(TaskContainer.Task.COLUMN_NAME_LOCATIONS         , Utils.serializeLocations(locations));
         values.put(TaskContainer.Task.COLUMN_NAME_RADIUS            , taskRadius);
         values.put(TaskContainer.Task.COLUMN_NAME_DUE_DATE          , (new java.sql.Timestamp(taskDueDate.getTime()).toString()));
         values.put(TaskContainer.Task.COLUMN_NAME_TIMESTAMP         , (new java.sql.Timestamp(taskTimestamp.getTime()).toString()));
