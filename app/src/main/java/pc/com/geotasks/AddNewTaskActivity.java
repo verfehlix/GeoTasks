@@ -23,6 +23,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -652,16 +653,51 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 } else {
                     LinearLayout locationHolderLayout = (LinearLayout) findViewById(R.id.locationHolderLayout);
 
+                    LinearLayout containerVertical = new LinearLayout(locationHolderLayout.getContext());
+                    locationHolderLayout.addView(containerVertical);
+                    containerVertical.setOrientation(LinearLayout.VERTICAL);
+                    LinearLayout.LayoutParams containerVParams = (LinearLayout.LayoutParams) containerVertical.getLayoutParams();
+                    containerVParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                    containerVParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    containerVertical.setLayoutParams(containerVParams);
+
+
+                    LinearLayout containerHorizontal = new LinearLayout(locationHolderLayout.getContext());
+                    containerVertical.addView(containerHorizontal);
+                    containerHorizontal.setOrientation(LinearLayout.HORIZONTAL);
+                    LinearLayout.LayoutParams containerHParams = (LinearLayout.LayoutParams) containerHorizontal.getLayoutParams();
+                    containerHParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                    containerHParams.height = LinearLayout.LayoutParams.MATCH_PARENT;
+                    containerHorizontal.setLayoutParams(containerHParams);
+
                     TextView tv1 = new TextView(locationHolderLayout.getContext());
-                    locationHolderLayout.addView(tv1);
+                    containerHorizontal.addView(tv1);
+                    tv1.setText(editTextLocationAutocomplete.getText());
                     tv1.setTextAppearance(AddNewTaskActivity.this, android.R.style.TextAppearance_DeviceDefault_Medium);
                     LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tv1.getLayoutParams();
-                    params.setMargins(0, 25, 0, 0);
+                    params.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                    params.height = LinearLayout.LayoutParams.MATCH_PARENT;
+                    params.weight = 8;
                     tv1.setLayoutParams(params);
-                    tv1.setText(editTextLocationAutocomplete.getText());
+
+
+                    Button delButton = new Button(locationHolderLayout.getContext());
+                    containerHorizontal.addView(delButton);
+                    LinearLayout.LayoutParams buttonParams = (LinearLayout.LayoutParams) delButton.getLayoutParams();
+                    float pixelsWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics());
+                    float pixelsHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
+                    buttonParams.width = (int) pixelsWidth;
+                    buttonParams.height = (int) pixelsHeight;
+                    buttonParams.weight = 2;
+                    delButton.setText("DEL");
+                    containerHorizontal.setLayoutParams(buttonParams);
 
                     TextView tv2 = new TextView(locationHolderLayout.getContext());
-                    locationHolderLayout.addView(tv2);
+                    containerVertical.addView(tv2);
+                    LinearLayout.LayoutParams paramstv2 = (LinearLayout.LayoutParams) tv1.getLayoutParams();
+                    paramstv2.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    paramstv2.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    tv2.setLayoutParams(paramstv2);
                     tv2.setText("(" + radiusSeekBar.getProgress() + "m) " + textViewLngLtd.getText());
 
                 }
