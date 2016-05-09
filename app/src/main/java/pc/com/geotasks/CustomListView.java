@@ -21,7 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class CustomListView extends ArrayAdapter<Task>{
         rowView= inflater.inflate(R.layout.task_list_item, null, true);
         TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
         TextView txtSubTitle = (TextView) rowView.findViewById(R.id.subtxt);
-        final GridLayout taskListItem = (GridLayout)rowView.findViewById(R.id.task_list_itm);
+        final LinearLayout taskListItem = (LinearLayout)rowView.findViewById(R.id.task_list_itm);
 
         //set title text to the String in the ArrayList at position "position"
         txtTitle.setText(files.get(position).getName());
