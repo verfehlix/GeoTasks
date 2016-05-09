@@ -315,12 +315,15 @@ public class SQLHelper extends SQLiteOpenHelper {
 //                if(distance[0] > tasks.get(i).getRadius())
 //                    tasks.remove(i);
 
-                Location tmpLocation = new Location("");
-                tmpLocation.setLatitude(tasks.get(i).getLatitude());
-                tmpLocation.setLongitude(tasks.get(i).getLongitude());
+                for(int loc = 0; loc < tasks.get(i).getLocations().size(); loc++) {
+                    Location tmpLocation = new Location("");
+                    tmpLocation.setLatitude(tasks.get(i).getLocations().get(loc).getLatitude());
+                    tmpLocation.setLongitude(tasks.get(i).getLocations().get(loc).getLongitude());
 
-                if(location.distanceTo(tmpLocation)<= tasks.get(i).getRadius()){
-                    inRadius.add(tasks.get(i));
+                    if(location.distanceTo(tmpLocation)<= tasks.get(i).getRadius()){
+                        inRadius.add(tasks.get(i));
+                        break;
+                    }
                 }
             }
         }
