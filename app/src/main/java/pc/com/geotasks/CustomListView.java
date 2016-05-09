@@ -248,16 +248,42 @@ public class CustomListView extends ArrayAdapter<Task>{
         @Override
         public int compare(Task o1, Task o2) {
 
-            Location location1 = new Location("");
-            location1.setLatitude(o1.getLatitude());
-            location1.setLongitude(o1.getLongitude());
-            float dist1 = MainActivity.location.distanceTo(location1);
+            Location lo1 = null;
+            Location lo2 = null;
+            int nearestO1 = Integer.MAX_VALUE;
+            int nearestO2 = Integer.MAX_VALUE;
+
+            for(int i=0; i<o1.getLocations().size(); i++){
+                Location loc1 = o1.getLocations().get(i).getLocation();
+                int tmp = (int)loc1.distanceTo(MainActivity.location);
+                if(tmp < nearestO1){
+                    nearestO1 = tmp;
+                    lo1 = loc1;
+                }
+
+            }
+
+            for(int i=0; i<o2.getLocations().size(); i++){
+                Location loc2 = o2.getLocations().get(i).getLocation();
+                int tmp = (int)loc2.distanceTo(MainActivity.location);
+                if(tmp < nearestO2){
+                    nearestO2 = tmp;
+                    lo2 = loc2;
+                }
+
+            }
 
 
-            Location location2 = new Location("");
-            location2.setLatitude(o2.getLatitude());
-            location2.setLongitude(o2.getLongitude());
-            float dist2 = MainActivity.location.distanceTo(location2);
+//            Location location1 = new Location("");
+//            location1.setLatitude(o1.getLatitude());
+//            location1.setLongitude(o1.getLongitude());
+            float dist1 = MainActivity.location.distanceTo(lo1);
+
+
+//            Location location2 = new Location("");
+//            location2.setLatitude(o2.getLatitude());
+//            location2.setLongitude(o2.getLongitude());
+            float dist2 = MainActivity.location.distanceTo(lo2);
 
             return (int)(dist1-dist2);
         }

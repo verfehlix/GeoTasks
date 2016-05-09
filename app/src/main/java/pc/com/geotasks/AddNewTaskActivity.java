@@ -24,7 +24,6 @@ import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -36,7 +35,6 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -51,15 +49,11 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -708,7 +702,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 double locLat  = Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[1].trim());
                 int locRadius = radiusSeekBar.getProgress();
 
-                pc.com.geotasks.model.Location loc = new pc.com.geotasks.model.Location(locName, locAddress, locLong, locLat, locRadius);
+                pc.com.geotasks.model.Location loc = new pc.com.geotasks.model.Location(locName, locAddress, locLat, locLong, locRadius);
                 selectedLocations.add(loc);
 
                 if(checkBoxFavourite.isChecked()){
@@ -978,9 +972,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 textViewLngLtd.setText(place.getLatLng().latitude+ ", " + place.getLatLng().longitude);
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
-                Log.i(TAG, status.getStatusMessage());
+//                Status status = PlaceAutocomplete.getStatus(this, data);
+//                // TODO: Handle the error.
+//                Log.i(TAG, status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.

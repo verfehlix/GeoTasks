@@ -14,7 +14,7 @@ public class Location implements Parcelable {
 
     private int         radius;
 
-    public Location(String locationName, String locationAddress, double longitude, double latitude, int radius) {
+    public Location(String locationName, String locationAddress, double latitude, double longitude, int radius) {
         this.locationName = locationName;
         this.locationAddress = locationAddress;
 
