@@ -82,31 +82,35 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         ArrayList<Task> tasks = MainActivity.db.getTasks("");
 
         for(int i=0; i<tasks.size(); i++){
-            double lat = tasks.get(i).getLatitude();
-            double lng = tasks.get(i).getLongitude();
-            int taskId = tasks.get(i).getID();
-            String title = tasks.get(i).getName();
-            String desc = tasks.get(i).getDescription();
-            String addr = tasks.get(i).getLocationAddress();
-            String loc = tasks.get(i).getLocationName();
-            int radius = tasks.get(i).getRadius();
+            Task t = tasks.get(i);
+            for(int j=0; j<t.getLocations().size(); j++){
+                pc.com.geotasks.model.Location loc = tasks.get(i).getLocations().get(j);
+                double lat = loc.getLatitude();
+                double lng = loc.getLongitude();
+                int taskId = t.getID();
+                String title = t.getName();
+                String desc = t.getDescription();
+                String addr = loc.getLocationAddress();
+                String locName = loc.getLocationName();
+                int radius = loc.getRadius();
 
-            LatLng tmp = new LatLng(lat, lng);
+                LatLng tmp = new LatLng(lat, lng);
 
-            MarkerOptions mOptions = new MarkerOptions().position(tmp).title(taskId + " - " + title).snippet(desc + ", Location: " + loc + ", " + addr);
-            Marker tmpMarker = mMap.addMarker(mOptions);
-            markers.add(tmpMarker);
+                MarkerOptions mOptions = new MarkerOptions().position(tmp).title(taskId + " - " + title).snippet(desc + ", Location: " + locName + ", " + addr);
+                Marker tmpMarker = mMap.addMarker(mOptions);
+                markers.add(tmpMarker);
 
-            // Instantiates a new CircleOptions object and defines the center and radius
-            CircleOptions circleOptions = new CircleOptions()
-                    .center(tmp)
-                    .radius(radius)// In meters
-                    .strokeColor(colorBorder)
-                    .fillColor(color)
-                    .strokeWidth(5f);
+                // Instantiates a new CircleOptions object and defines the center and radius
+                CircleOptions circleOptions = new CircleOptions()
+                        .center(tmp)
+                        .radius(radius)// In meters
+                        .strokeColor(colorBorder)
+                        .fillColor(color)
+                        .strokeWidth(5f);
 
-            // Get back the mutable Circle
-            Circle circle = mMap.addCircle(circleOptions);
+                // Get back the mutable Circle
+                Circle circle = mMap.addCircle(circleOptions);
+            }
         }
 
         if(tasks.size()>0) {
@@ -158,7 +162,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 intent.putExtra("taskDueDate",task.getDueDate().getTime());
                 getContext().startActivity(intent);
 
-
             }
         });
 //        mMap.animateCamera(cu);
@@ -187,17 +190,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         for(int i=0; i<tasks.size(); i++){
             for(int j=0; j<tasks.size(); j++){
                 if(i != j){
-                    Location loc1 = new Location("");
-                    loc1.setLatitude(tasks.get(i).getLatitude());
-                    loc1.setLongitude(tasks.get(i).getLongitude());
+                    for(int k=0; k<tasks.get(i).getLocations().size(); k++) {
+                        for(int l=0; l<tasks.get(j).getLocations().size(); l++) {
+                            pc.com.geotasks.model.Location l1 = tasks.get(i).getLocations().get(k);
+                            pc.com.geotasks.model.Location l2 = tasks.get(j).getLocations().get(l);
 
-                    Location loc2 = new Location("");
-                    loc2.setLatitude(tasks.get(j).getLatitude());
-                    loc2.setLongitude(tasks.get(j).getLongitude());
+                            Location loc1 = new Location("");
+                            loc1.setLatitude(l1.getLatitude());
+                            loc1.setLongitude(l1.getLongitude());
 
-                    float tmpDistance = loc1.distanceTo(loc2);
-                    if(tmpDistance > maxDistance){
-                        maxDistance = tmpDistance;
+                            Location loc2 = new Location("");
+                            loc2.setLatitude(l2.getLatitude());
+                            loc2.setLongitude(l2.getLongitude());
+
+                            float tmpDistance = loc1.distanceTo(loc2);
+                            if (tmpDistance > maxDistance) {
+                                maxDistance = tmpDistance;
+                            }
+                        }
                     }
                 }
             }

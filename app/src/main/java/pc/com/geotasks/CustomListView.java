@@ -65,38 +65,52 @@ public class CustomListView extends ArrayAdapter<Task>{
         txtTitle.setText(files.get(position).getName());
 
         String dist = "unknown";
+        pc.com.geotasks.model.Location nearest = null;
 
         if(MainActivity.location != null) {
-            Location loc = new Location("");
-            loc.setLatitude(files.get(position).getLatitude());
-            loc.setLongitude(files.get(position).getLongitude());
-            int tmp = (int)loc.distanceTo(MainActivity.location);
-            int km = tmp/1000;
-            int m = tmp%1000;
+            int minDist = Integer.MAX_VALUE;
+            for(int i=0; i<files.get(position).getLocations().size(); i++) {
+                pc.com.geotasks.model.Location loc = files.get(position).getLocations().get(i);
+
+                int tmp = (int) loc.getLocation().distanceTo(MainActivity.location);
+                if(tmp < minDist){
+                    minDist = tmp;
+                    nearest = loc;
+                }
+            }
+            int km = minDist/1000;
+            int m = minDist%1000;
             if(km != 0) {
                 dist = km + " km " + m + " m";
             }else{
                 dist = m + " m";
             }
-
         }
 
-        //if we have locationName and locationAddress, set the subtext to that. if we dont, set it to lng + lat
-        if(files.get(position).getLocationName().length() != 0 || files.get(position).getLocationAddress().length() != 0){
 
-            if(!dist.equals("unknown")) {
-                txtSubTitle.setText(files.get(position).getLocationName() + " - " + files.get(position).getLocationAddress() + " (" + dist + ")");
-            }else{
-                txtSubTitle.setText(files.get(position).getLocationName() + " - " + files.get(position).getLocationAddress());
+
+
+        if (nearest == null) {
+            if (files.get(position).getLocations().size() > 1) {
+                txtSubTitle.setText("various locations");
+            } else {
+                pc.com.geotasks.model.Location loc = files.get(position).getLocations().get(0);
+
+                //if we have locationName and locationAddress, set the subtext to that. if we dont, set it to lng + lat
+                if (loc.getLocationName().length() != 0 || loc.getLocationAddress().length() != 0) {
+                    txtSubTitle.setText(loc.getLocationName() + " - " + loc.getLocationAddress());
+                } else {
+                    txtSubTitle.setText(loc.getLatitude() + " - " + loc.getLongitude());
+                }
             }
         } else {
-            if(dist.equals("unknown")) {
-                txtSubTitle.setText(files.get(position).getLatitude() + " - " + files.get(position).getLongitude());
-            }else{
-                txtSubTitle.setText(files.get(position).getLatitude() + " - " + files.get(position).getLongitude() + " (" + dist + ")");
+            //if we have locationName and locationAddress, set the subtext to that. if we dont, set it to lng + lat
+            if(nearest.getLocationName().length() != 0 || nearest.getLocationAddress().length() !=0){
+                txtSubTitle.setText(nearest.getLocationName() + " - " + nearest.getLocationAddress() + " (" + dist + ")");
+            }else {
+                txtSubTitle.setText(nearest.getLatitude() + " - " + nearest.getLongitude() + " (" + dist + ")");
             }
         }
-
 
         taskListItem.setOnTouchListener(new View.OnTouchListener() {
             @Override

@@ -65,6 +65,13 @@ public class Location implements Parcelable {
         this.radius = radius;
     }
 
+    public android.location.Location getLocation(){
+        android.location.Location loc = new android.location.Location("");
+        loc.setLatitude(getLatitude());
+        loc.setLongitude(getLongitude());
+        return loc;
+    }
+
     protected Location(Parcel in) {
         locationName = in.readString();
         locationAddress = in.readString();

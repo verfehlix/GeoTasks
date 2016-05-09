@@ -25,10 +25,10 @@ package="pc.com.geotasks">
 
     <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
     <!--Stefan key-->
-    <!--<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyC6cd7FG-6BtLdNSmcnz3l91dqWGPDpzQg"/>-->
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyC6cd7FG-6BtLdNSmcnz3l91dqWGPDpzQg"/>
 
     <!--Felix key-->
-    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBAV5v_VH3nysBRO2LVscVqKQCtR_1VAJo" />
+    <!--<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBAV5v_VH3nysBRO2LVscVqKQCtR_1VAJo" />-->
 
     <activity android:name=".MainActivity" android:label="@string/app_name" android:theme="@style/AppTheme.NoActionBar"
         android:screenOrientation="portrait" >
