@@ -1,13 +1,27 @@
 package pc.com.geotasks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
 public class SettingsActivity extends android.support.v4.app.Fragment {
+
+
+    SeekBar seekBar2;
+    EditText editText;
+    Button saveButton;
 
     public SettingsActivity() {
         // Required empty public constructor
@@ -25,7 +39,92 @@ public class SettingsActivity extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_settings, container, false);
         // Inflate the layout for this fragment
+
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        seekBar2 = (SeekBar) getView().findViewById(R.id.seekBar2);
+        editText = (EditText) getView().findViewById(R.id.editText);
+
+        seekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                editText.setText("" + progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        //add change listener to meter input
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    return;
+                }
+
+                int inputValue = Integer.parseInt(s.toString());
+
+                if (inputValue > 5000) {
+                    editText.setText("" + 5000);
+                    seekBar2.setProgress(5000);
+                } else {
+                    seekBar2.setProgress(inputValue);
+                }
+
+                editText.setSelection(editText.getText().length());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        SharedPreferences sharedPref = this.getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
+        int defaultValue = 150;
+        long defaultRadius = sharedPref.getInt("radiusDefault", defaultValue);
+
+        seekBar2.setProgress((int) defaultRadius);
+        editText.setText(defaultRadius+"");
+
+        saveButton = (Button) this.getView().findViewById(R.id.button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSettingsButtonPressed();
+            }
+        });
+    }
+
+
+    public void onSettingsButtonPressed(){
+        Context context = getActivity();
+        SharedPreferences sharedPref = this.getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("radiusDefault", seekBar2.getProgress());
+        editor.commit();
+
+        int defaultValue = 150;
+        long defaultRadius = sharedPref.getInt("radiusDefault", defaultValue);
+
+        Toast.makeText(context, "Default Radius saved! \n Value: " + defaultRadius, Toast.LENGTH_SHORT).show();
     }
 
     /**

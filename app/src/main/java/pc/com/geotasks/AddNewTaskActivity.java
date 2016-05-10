@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -214,6 +215,12 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         //get radius seekbar
         radiusSeekBar = (SeekBar) dialog.findViewById(R.id.radiusSeekBar);
+
+        SharedPreferences sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        int defaultValue = 150;
+        long defaultRadius = sharedPref.getInt("radiusDefault", defaultValue);
+        radiusSeekBar.setProgress((int)defaultRadius);
+        meterEditText.setText(defaultRadius+"");
 
         editTextTaskName.setTag(editTextTaskName.getKeyListener());
         editTextTaskDescription.setTag(editTextTaskDescription.getKeyListener());
@@ -627,7 +634,12 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 editTextFavourite.setText("");
                 checkBoxFavourite.setChecked(false);
 ////                useCurrentLocationSwitch.setChecked(false);
-                radiusSeekBar.setProgress(150);
+
+                SharedPreferences sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE);
+                int defaultValue = 150;
+                long defaultRadius = sharedPref.getInt("radiusDefault", defaultValue);
+                radiusSeekBar.setProgress((int) defaultRadius);
+                meterEditText.setText(defaultRadius+"");
                 Spinner sItems = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
                 sItems.setSelection(0);
 
@@ -731,7 +743,11 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 editTextFavourite.setText("");
                 checkBoxFavourite.setChecked(false);
 //                useCurrentLocationSwitch.setChecked(false);
-                radiusSeekBar.setProgress(150);
+                SharedPreferences sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE);
+                int defaultValue = 150;
+                long defaultRadius = sharedPref.getInt("radiusDefault", defaultValue);
+                radiusSeekBar.setProgress((int)defaultRadius);
+                meterEditText.setText(defaultRadius+"");
                 Spinner sItems = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
                 sItems.setSelection(0);
 
