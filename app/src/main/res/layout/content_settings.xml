@@ -74,14 +74,6 @@
                 android:id="@+id/textView8" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textViewLngLtd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="15dp" />
-
         <Button
             android:id="@+id/button"
             android:layout_width="67dp"
@@ -89,6 +81,17 @@
             android:text="Save"
             android:layout_gravity="right"
             android:textColor="@color/colorPrimaryDark" />
+
+        <!--Seperator-->
+        <View android:layout_width="fill_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete All Favourites"
+            android:id="@+id/button2"
+            android:layout_gravity="center" />
 
         <View android:layout_width="fill_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp" />
@@ -105,21 +108,20 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="\n
-            GeoTask Germany GmbH \n
-            Musterstrasse 00, 99.Stock \n
-            68162 Mannheim \n
-            Handelsregister: \n
-            Amtsgericht Mannheim \n
-            Registernummer: HRB XXXXX A \n
-            Inhaltliche Verantwortliche: \n
-            Team XY"
+            GeoTask was developed by: \n
+            Tobias, Stefan, Fabian, Felix \n
+            for the Pervasive Computing Project \n
+            FSS 2016 \n
+            Universität Mannheim"
             android:id="@+id/textView9"
-            android:layout_weight="0.05" />
+            android:layout_weight="0.05"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|center_horizontal" />
 
-        <!--Seperator-->
-        <View android:layout_width="fill_parent" android:layout_height="1dp" android:background="@android:color/darker_gray" android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp" />
+
 
     </LinearLayout>
+
+
 
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 import android.util.Base64;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -427,5 +428,13 @@ public class SQLHelper extends SQLiteOpenHelper {
         }
 
         return null;
+    }
+
+    public void deleteAllFavourites(){
+        ArrayList<Favourite> favs = getFavourites("");
+
+        for (Favourite fav: favs) {
+            deleteFavourite(fav);
+        }
     }
 }

@@ -16,12 +16,16 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import pc.com.geotasks.database.SQLHelper;
+
 public class SettingsActivity extends android.support.v4.app.Fragment {
 
+    SQLHelper db;
 
     SeekBar seekBar2;
     EditText editText;
     Button saveButton;
+    Button deleteFavsButton;
 
     public SettingsActivity() {
         // Required empty public constructor
@@ -46,6 +50,8 @@ public class SettingsActivity extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        this.db = new SQLHelper(this.getActivity());
 
         seekBar2 = (SeekBar) getView().findViewById(R.id.seekBar2);
         editText = (EditText) getView().findViewById(R.id.editText);
@@ -111,11 +117,18 @@ public class SettingsActivity extends android.support.v4.app.Fragment {
                 onSettingsButtonPressed();
             }
         });
+
+        deleteFavsButton = (Button) this.getView().findViewById(R.id.button2);
+        deleteFavsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDeleteFavsButtonPressed();
+            }
+        });
     }
 
 
     public void onSettingsButtonPressed(){
-        Context context = getActivity();
         SharedPreferences sharedPref = this.getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("radiusDefault", seekBar2.getProgress());
@@ -124,7 +137,12 @@ public class SettingsActivity extends android.support.v4.app.Fragment {
         int defaultValue = 150;
         long defaultRadius = sharedPref.getInt("radiusDefault", defaultValue);
 
-        Toast.makeText(context, "Default Radius saved! \n Value: " + defaultRadius, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Default Radius saved! \n Value: " + defaultRadius, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onDeleteFavsButtonPressed(){
+        db.deleteAllFavourites();
+        Toast.makeText(getActivity(), "Favourites successfully deleted!", Toast.LENGTH_SHORT).show();
     }
 
     /**
