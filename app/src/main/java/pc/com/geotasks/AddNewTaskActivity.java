@@ -642,6 +642,11 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 TextView locAddrName = (TextView) findViewById(R.id.location1AddrName);
                 TextView locLongLat = (TextView) findViewById(R.id.location1LongLat);
 
+                if(editTextLocationAutocomplete.getText().length() == 0 && textViewLngLtd.getText().length() == 0){
+                    Toast.makeText(AddNewTaskActivity.this, "Please select a location first!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if(locAddrName.getText().length() == 0) {
                     locAddrName.setText(editTextLocationAutocomplete.getText());
                     locLongLat.setText("(" + radiusSeekBar.getProgress() + "m) " + textViewLngLtd.getText());
