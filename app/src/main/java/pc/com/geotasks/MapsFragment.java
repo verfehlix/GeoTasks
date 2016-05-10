@@ -116,23 +116,26 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         if(tasks.size()>0) {
             //calc bounds of all markers
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for (Marker marker : markers) {
-                builder.include(marker.getPosition());
+            if(builder != null && markers != null && markers.size() != 0){
+                for (Marker marker : markers) {
+                    builder.include(marker.getPosition());
+                }
+                LatLngBounds bounds = builder.build();
+
+                if (tasks.size() != 1) {
+                    //obtain a movement description objec
+                    int padding = convertDpToPixel(100); // offset from edges of the map in pixels
+                    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                    mMap.moveCamera(cu);
+
+
+                } else {
+                    LatLng latLng = new LatLng(tasks.get(0).getLatitude(), tasks.get(0).getLongitude());
+                    CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(latLng, 13);
+                    mMap.moveCamera(cu);
+                }
             }
-            LatLngBounds bounds = builder.build();
 
-            if (tasks.size() != 1) {
-                //obtain a movement description objec
-                int padding = convertDpToPixel(100); // offset from edges of the map in pixels
-                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-                mMap.moveCamera(cu);
-
-
-            } else {
-                LatLng latLng = new LatLng(tasks.get(0).getLatitude(), tasks.get(0).getLongitude());
-                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(latLng, 13);
-                mMap.moveCamera(cu);
-            }
         }
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -160,6 +163,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 intent.putExtra("taskLongitude",task.getLongitude());
                 intent.putExtra("taskRadius",task.getRadius());
                 intent.putExtra("taskDueDate",task.getDueDate().getTime());
+
+                intent.putParcelableArrayListExtra("locations",  task.getLocations());
+
                 getContext().startActivity(intent);
 
             }

@@ -2,54 +2,52 @@
 <!--Place-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="325dp"
-    android:layout_height="500dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="15dp"
     android:id="@+id/locationLayout"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true" >
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp">
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="15dp">-->
 
-        <!-- Use current location -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_weight="1"
-            android:text="Use current location"
-            android:id="@+id/textView2" />
+        <!--&lt;!&ndash; Use current location &ndash;&gt;-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Use current location"-->
+            <!--android:id="@+id/textView2" />-->
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="6" />
+        <!--<Space-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="6" />-->
 
-        <Switch
-            android:id="@+id/useCurrentLocationSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:checked="false" />
+        <!--<Switch-->
+            <!--android:id="@+id/useCurrentLocationSwitch"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="2"-->
+            <!--android:checked="false" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
-    <!-- OR text -->
-    <TextView
-        android:id="@+id/orTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="or"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="center" />
+    <!--&lt;!&ndash; OR text &ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:id="@+id/orTextView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+        <!--android:text="or"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:layout_gravity="center" />-->
 
     <!-- Location Search -->
     <EditText
@@ -59,16 +57,14 @@
         android:hint="Select from map / Search"
         android:background="@android:color/transparent"
         android:clickable="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" />
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp" />
 
     <TextView
         android:id="@+id/textViewLngLtd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:hint="Lng.: - , Ltd.: -" />
 
     <!-- Radius -->
@@ -84,19 +80,17 @@
         android:layout_gravity="center" />
 
     <Spinner
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinnerFavourites"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" />
+        android:layout_marginRight="20dp" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp">
+        android:layout_marginRight="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -139,27 +133,26 @@
         android:layout_height="wrap_content"
         android:text="Add Location to Favourites"
         android:id="@+id/checkBoxFavourite"
-        android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:checked="false" />
+        android:checked="false"
+        android:layout_marginRight="20dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editTextFavourite"
-        android:layout_marginLeft="15dp"
         android:hint="Enter name of favourite"
         android:background="@android:color/transparent"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="15dp">
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
 
         <Button
             android:layout_width="wrap_content"

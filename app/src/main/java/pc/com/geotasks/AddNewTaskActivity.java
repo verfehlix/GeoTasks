@@ -132,6 +132,13 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_task);
 
+        //get dialog
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_LEFT_ICON);
+        dialog.setContentView(R.layout.location_layout);
+        dialog.setTitle("Select Location");
+        dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_location_on_black_24dp);
+
         Bundle extras = getIntent().getExtras();
         this.currentMode = extras.getInt("mode");
 
@@ -165,15 +172,6 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         //hide the title
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        //get dialog
-        dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_LEFT_ICON);
-        LayoutInflater factory = LayoutInflater.from(this);
-        final View dialogView = factory.inflate(R.layout.location_layout, null);
-        dialog.setContentView(R.layout.location_layout);
-        dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_location_on_black_24dp);
-
-
         //get buttons
         exitButton = (Button) findViewById(R.id.exitButton);
         saveButton = (Button) findViewById(R.id.saveButton);
@@ -186,12 +184,12 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         categoryEditText = (EditText) findViewById(R.id.categoryEditText);
         editTextLocationAutocomplete = (EditText) dialog.findViewById(R.id.editTextLocationAutocomplete);
         meterEditText = (EditText) dialog.findViewById(R.id.meterEditText);
-        datePickerEditText = (EditText) findViewById(R.id.datePickerEditText);
-        timePickerEditText = (EditText) findViewById(R.id.timePickerEditText);
+////////////////////        datePickerEditText = (EditText) findViewById(R.id.datePickerEditText);
+//        timePickerEditText = (EditText) findViewById(R.id.timePickerEditText);
 
         //get text views
         textViewLngLtd = (TextView) dialog.findViewById(R.id.textViewLngLtd);
-        orTextView = (TextView) dialog.findViewById(R.id.orTextView);
+//        orTextView = (TextView) dialog.findViewById(R.id.orTextView);
         or2TextView = (TextView) dialog.findViewById(R.id.or2TextView);
 
         favouriteSpinner = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
@@ -212,7 +210,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         });
 
         //get switch
-        useCurrentLocationSwitch = (Switch) dialog.findViewById(R.id.useCurrentLocationSwitch);
+//        useCurrentLocationSwitch = (Switch) dialog.findViewById(R.id.useCurrentLocationSwitch);
 
         //get radius seekbar
         radiusSeekBar = (SeekBar) dialog.findViewById(R.id.radiusSeekBar);
@@ -221,9 +219,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         editTextTaskDescription.setTag(editTextTaskDescription.getKeyListener());
         categoryEditText.setTag(categoryEditText.getKeyListener());
         editTextLocationAutocomplete.setTag(editTextLocationAutocomplete.getKeyListener());
-        datePickerEditText.setTag(datePickerEditText.getKeyListener());
+//////////////////        datePickerEditText.setTag(datePickerEditText.getKeyListener());
         meterEditText.setTag(meterEditText.getKeyListener());
-        timePickerEditText.setTag(timePickerEditText.getKeyListener());
+//        timePickerEditText.setTag(timePickerEditText.getKeyListener());
 
         if(currentMode == MODE_NEW){
             enableControls();
@@ -266,8 +264,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         DateFormat timeFormat = new SimpleDateFormat("HH:mm");
         String dateString = dateFormat.format(taskDueDate);
         String timeString = timeFormat.format(taskDueDate);
-        datePickerEditText.setText(dateString);
-        timePickerEditText.setText(timeString);
+////////////////        datePickerEditText.setText(dateString);
+//        timePickerEditText.setText(timeString);
 
         //location data
         TextView locAddrName = (TextView) findViewById(R.id.location1AddrName);
@@ -347,22 +345,18 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         String taskDescription = editTextTaskDescription.getText().toString();
         String tag = categoryEditText.getText().toString();
 
-        String inputDate = datePickerEditText.getText().toString();
-        String inputTime = timePickerEditText.getText().toString();
-        String dateString;
-        if(inputDate.length() != 0 && inputTime.length() != 0){
-            dateString = inputDate + " " + inputTime + ":00";
-        } else if (inputDate.length() != 0 && inputTime.length() == 0) {
-            dateString = inputDate + " 12:00:00";
-        } else {
-            dateString = "1900-01-01 00:00:00";
-        }
-        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
-
-        //location data
-        ArrayList<pc.com.geotasks.model.Location> locations = new ArrayList<>();
-
-
+//////////////        String inputDate = datePickerEditText.getText().toString();
+//        String inputTime = timePickerEditText.getText().toString();
+//        String dateString;
+//        if(inputDate.length() != 0 && inputTime.length() != 0){
+//            dateString = inputDate + " " + inputTime + ":00";
+//        } else if (inputDate.length() != 0 && inputTime.length() == 0) {
+//            dateString = inputDate + " 12:00:00";
+//        } else {
+//            dateString = "1900-01-01 00:00:00";
+//        }
+//        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
+          Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("1900-01-01 00:00:00");
 //        String locationName = this.currentPlace != null? this.currentPlace.getName().toString(): "";
 //        String locationAddress = this.currentPlace != null? this.currentPlace.getAddress().toString(): "";
 //
@@ -377,6 +371,13 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         double latitude = selectedLocations.get(0).getLatitude();
         int radius = selectedLocations.get(0).getRadius();
 
+//        String locationName = "";
+//        String locationAddress = "";
+//
+//        double longitude = 0;
+//        double latitude = 0;
+//        int radius = 0;
+
         db.updateTask(  taskId, taskName, taskTimestamp,  taskDescription, tag, locationName, locationAddress, latitude, longitude, radius, dueDate, selectedLocations);
 
     }
@@ -389,7 +390,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         categoryEditText.setKeyListener(null);
 
 
-        useCurrentLocationSwitch.setEnabled(false);
+//        useCurrentLocationSwitch.setEnabled(false);
 
         editTextLocationAutocomplete.setKeyListener(null);
         editTextLocationAutocomplete.setOnClickListener(null);
@@ -397,16 +398,16 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         radiusSeekBar.setEnabled(false);
 
-        datePickerEditText.setKeyListener(null);
-        datePickerEditText.setOnClickListener(null);
-        datePickerEditText.setOnFocusChangeListener(null);
+////////////        datePickerEditText.setKeyListener(null);
+//////////        datePickerEditText.setOnClickListener(null);
+////////        datePickerEditText.setOnFocusChangeListener(null);
 
 
         meterEditText.setKeyListener(null);
 
-        timePickerEditText.setKeyListener(null);
-        timePickerEditText.setOnClickListener(null);
-        timePickerEditText.setOnFocusChangeListener(null);
+//        timePickerEditText.setKeyListener(null);
+//        timePickerEditText.setOnClickListener(null);
+//        timePickerEditText.setOnFocusChangeListener(null);
 
         buttonAddLocation.setVisibility(View.GONE);
     }
@@ -423,14 +424,14 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         editTextLocationAutocomplete.setKeyListener((KeyListener) editTextLocationAutocomplete.getTag());
 
-        datePickerEditText.setKeyListener((KeyListener) datePickerEditText.getTag());
+//////        datePickerEditText.setKeyListener((KeyListener) datePickerEditText.getTag());
 
         meterEditText.setKeyListener((KeyListener) meterEditText.getTag());
 
-        timePickerEditText.setKeyListener((KeyListener) timePickerEditText.getTag());
+//        timePickerEditText.setKeyListener((KeyListener) timePickerEditText.getTag());
 
-        useCurrentLocationSwitch.setEnabled(true);
-        useCurrentLocationSwitch.setChecked(false);
+//        useCurrentLocationSwitch.setEnabled(true);
+//        useCurrentLocationSwitch.setChecked(false);
 
         radiusSeekBar.setEnabled(true);
 
@@ -451,37 +452,37 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         });
 
 //        add onchange listener to switch for use current location
-        useCurrentLocationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    editTextLocationAutocomplete.setVisibility(View.GONE);
-                    orTextView.setVisibility(View.GONE);
-                    favouriteSpinner.setVisibility(View.GONE);
-                    or2TextView.setVisibility(View.GONE);
-
-                    //also set place for writing to the db to current position (use last known location)
-                    if(lastKnownLocation != null){
-                        double longtitude = lastKnownLocation.getLongitude();
-                        double latitiude = lastKnownLocation.getLatitude();
-
-                        textViewLngLtd.setText(latitiude + ", " + longtitude);
-                    } else {
-                        Toast.makeText(AddNewTaskActivity.this, "Currnent location could not be recieved!", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                } else {
-                    editTextLocationAutocomplete.setVisibility(View.VISIBLE);
-                    editTextLocationAutocomplete.setText("");
-                    textViewLngLtd.setText("");
-                    orTextView.setVisibility(View.VISIBLE);
-                    favouriteSpinner.setSelection(0);
-                    favouriteSpinner.setVisibility(View.VISIBLE);
-                    or2TextView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+//        useCurrentLocationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    editTextLocationAutocomplete.setVisibility(View.GONE);
+//                    orTextView.setVisibility(View.GONE);
+//                    favouriteSpinner.setVisibility(View.GONE);
+//                    or2TextView.setVisibility(View.GONE);
+//
+//                    //also set place for writing to the db to current position (use last known location)
+//                    if(lastKnownLocation != null){
+//                        double longtitude = lastKnownLocation.getLongitude();
+//                        double latitiude = lastKnownLocation.getLatitude();
+//
+//                        textViewLngLtd.setText(latitiude + ", " + longtitude);
+//                    } else {
+//                        Toast.makeText(AddNewTaskActivity.this, "Currnent location could not be recieved!", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//
+//                } else {
+//                    editTextLocationAutocomplete.setVisibility(View.VISIBLE);
+//                    editTextLocationAutocomplete.setText("");
+//                    textViewLngLtd.setText("");
+//                    orTextView.setVisibility(View.VISIBLE);
+//                    favouriteSpinner.setSelection(0);
+//                    favouriteSpinner.setVisibility(View.VISIBLE);
+//                    or2TextView.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
 
         //add change listener to radius slider
         radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -531,37 +532,37 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             }
         });
 
-        //add date / time picker click listeners
-        datePickerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    datePicker();
-                }
-            }
-        });
-        datePickerEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                datePicker();
-            }
-        });
-
-        //add date / time picker click listeners
-        timePickerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    timePicker();
-                }
-            }
-        });
-        timePickerEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePicker();
-            }
-        });
+//        //add date / time picker click listeners
+//////        datePickerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+////            @Override
+////            public void onFocusChange(View v, boolean hasFocus) {
+//                if(hasFocus){
+//                    datePicker();
+//                }
+//            }
+//        });
+////        datePickerEditText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                datePicker();
+//            }
+//        });
+//
+//        //add date / time picker click listeners
+//        timePickerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if(hasFocus){
+//                    timePicker();
+//                }
+//            }
+//        });
+//        timePickerEditText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                timePicker();
+//            }
+//        });
     }
 
     @Override
@@ -625,7 +626,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 textViewLngLtd.setText("");
                 editTextFavourite.setText("");
                 checkBoxFavourite.setChecked(false);
-                useCurrentLocationSwitch.setChecked(false);
+////                useCurrentLocationSwitch.setChecked(false);
                 radiusSeekBar.setProgress(150);
                 Spinner sItems = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
                 sItems.setSelection(0);
@@ -647,59 +648,62 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 } else {
                     LinearLayout locationHolderLayout = (LinearLayout) findViewById(R.id.locationHolderLayout);
 
-                    LinearLayout containerVertical = new LinearLayout(locationHolderLayout.getContext());
-                    locationHolderLayout.addView(containerVertical);
-                    containerVertical.setOrientation(LinearLayout.VERTICAL);
-                    LinearLayout.LayoutParams containerVParams = (LinearLayout.LayoutParams) containerVertical.getLayoutParams();
-                    containerVParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                    containerVParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    containerVertical.setLayoutParams(containerVParams);
-
-
-                    LinearLayout containerHorizontal = new LinearLayout(locationHolderLayout.getContext());
-                    containerVertical.addView(containerHorizontal);
-                    containerHorizontal.setOrientation(LinearLayout.HORIZONTAL);
-                    LinearLayout.LayoutParams containerHParams = (LinearLayout.LayoutParams) containerHorizontal.getLayoutParams();
-                    containerHParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                    containerHParams.height = LinearLayout.LayoutParams.MATCH_PARENT;
-                    containerHorizontal.setLayoutParams(containerHParams);
+//                    LinearLayout containerVertical = new LinearLayout(locationHolderLayout.getContext());
+//                    locationHolderLayout.addView(containerVertical);
+//                    containerVertical.setOrientation(LinearLayout.VERTICAL);
+//                    LinearLayout.LayoutParams containerVParams = (LinearLayout.LayoutParams) containerVertical.getLayoutParams();
+//                    containerVParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+//                    containerVParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+//                    containerVertical.setLayoutParams(containerVParams);
+//
+//
+//                    LinearLayout containerHorizontal = new LinearLayout(locationHolderLayout.getContext());
+//                    containerVertical.addView(containerHorizontal);
+//                    containerHorizontal.setOrientation(LinearLayout.HORIZONTAL);
+//                    LinearLayout.LayoutParams containerHParams = (LinearLayout.LayoutParams) containerHorizontal.getLayoutParams();
+//                    containerHParams.width = LinearLayout.LayoutParams.MATCH_PARENT;
+//                    containerHParams.height = LinearLayout.LayoutParams.MATCH_PARENT;
+//                    containerHorizontal.setLayoutParams(containerHParams);
 
                     TextView tv1 = new TextView(locationHolderLayout.getContext());
-                    containerHorizontal.addView(tv1);
+//                    containerHorizontal.addView(tv1);
+                    locationHolderLayout.addView(tv1);
                     tv1.setText(editTextLocationAutocomplete.getText());
                     tv1.setTextAppearance(AddNewTaskActivity.this, android.R.style.TextAppearance_DeviceDefault_Medium);
                     LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tv1.getLayoutParams();
-                    params.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                    params.height = LinearLayout.LayoutParams.MATCH_PARENT;
-                    params.weight = 8;
+                    params.setMargins(0, 25, 0, 0);
+//                    params.width = LinearLayout.LayoutParams.MATCH_PARENT;
+//                    params.height = LinearLayout.LayoutParams.MATCH_PARENT;
+//                    params.weight = 8;
                     tv1.setLayoutParams(params);
 
 
-                    Button delButton = new Button(locationHolderLayout.getContext());
-                    containerHorizontal.addView(delButton);
-                    LinearLayout.LayoutParams buttonParams = (LinearLayout.LayoutParams) delButton.getLayoutParams();
-                    float pixelsWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics());
-                    float pixelsHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
-                    buttonParams.width = (int) pixelsWidth;
-                    buttonParams.height = (int) pixelsHeight;
-                    buttonParams.weight = 2;
-                    delButton.setText("DEL");
-                    containerHorizontal.setLayoutParams(buttonParams);
+//                    Button delButton = new Button(locationHolderLayout.getContext());
+//                    containerHorizontal.addView(delButton);
+//                    LinearLayout.LayoutParams buttonParams = (LinearLayout.LayoutParams) delButton.getLayoutParams();
+//                    float pixelsWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics());
+//                    float pixelsHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
+//                    buttonParams.width = (int) pixelsWidth;
+//                    buttonParams.height = (int) pixelsHeight;
+//                    buttonParams.weight = 2;
+//                    delButton.setText("DEL");
+//                    containerHorizontal.setLayoutParams(buttonParams);
 
                     TextView tv2 = new TextView(locationHolderLayout.getContext());
-                    containerVertical.addView(tv2);
-                    LinearLayout.LayoutParams paramstv2 = (LinearLayout.LayoutParams) tv1.getLayoutParams();
-                    paramstv2.width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    paramstv2.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    tv2.setLayoutParams(paramstv2);
+//                    containerVertical.addView(tv2);
+                    locationHolderLayout.addView(tv2);
+//                    LinearLayout.LayoutParams paramstv2 = (LinearLayout.LayoutParams) tv1.getLayoutParams();
+//                    paramstv2.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+//                    paramstv2.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+//                    tv2.setLayoutParams(paramstv2);
                     tv2.setText("(" + radiusSeekBar.getProgress() + "m) " + textViewLngLtd.getText());
 
                 }
 
                 String locName = editTextLocationAutocomplete.getText().toString().split(",", 2)[0].trim();
                 String locAddress = editTextLocationAutocomplete.getText().toString().split(",", 2)[1].trim();
-                double locLong = Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[0].trim());
-                double locLat  = Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[1].trim());
+                double locLat  = Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[0].trim());
+                double locLong = Double.parseDouble(textViewLngLtd.getText().toString().split(",", 2)[1].trim());
                 int locRadius = radiusSeekBar.getProgress();
 
                 pc.com.geotasks.model.Location loc = new pc.com.geotasks.model.Location(locName, locAddress, locLat, locLong, locRadius);
@@ -721,7 +725,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 textViewLngLtd.setText("");
                 editTextFavourite.setText("");
                 checkBoxFavourite.setChecked(false);
-                useCurrentLocationSwitch.setChecked(false);
+//                useCurrentLocationSwitch.setChecked(false);
                 radiusSeekBar.setProgress(150);
                 Spinner sItems = (Spinner) dialog.findViewById(R.id.spinnerFavourites);
                 sItems.setSelection(0);
@@ -804,28 +808,39 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 //        int radius = radiusSeekBar.getProgress();
 
 //      NEW LOGIC
-        String locationName = selectedLocations.get(0).getLocationName();
-        String locationAddress = selectedLocations.get(0).getLocationName();
-        double longitude = selectedLocations.get(0).getLongitude();
-        double latitude = selectedLocations.get(0).getLatitude();
-        int radius = selectedLocations.get(0).getRadius();
+        String locationName = "";
+        String locationAddress = "";
+        double longitude = 0;
+        double latitude = 0;
+        int radius = 0;
+
+        if(selectedLocations != null && selectedLocations.size() != 0){
+            locationName = selectedLocations.get(0).getLocationName();
+            locationAddress = selectedLocations.get(0).getLocationName();
+            longitude = selectedLocations.get(0).getLongitude();
+            latitude = selectedLocations.get(0).getLatitude();
+            radius = selectedLocations.get(0).getRadius();
+        }
+
 
         //date logic
-        String inputDate = datePickerEditText.getText().toString();
-        String inputTime = timePickerEditText.getText().toString();
-        String dateString;
-        if(inputDate.length() != 0 && inputTime.length() != 0){
-            dateString = inputDate + " " + inputTime + ":00";
-        } else if (inputDate.length() != 0 && inputTime.length() == 0) {
-            dateString = inputDate + " 12:00:00";
-        } else {
-            dateString = "1900-01-01 00:00:00";
-        }
-        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
-
+//        String inputDate = datePickerEditText.getText().toString();
+//        String inputTime = timePickerEditText.getText().toString();
+//        String dateString;
+//        if(inputDate.length() != 0 && inputTime.length() != 0){
+//            dateString = inputDate + " " + inputTime + ":00";
+//        } else if (inputDate.length() != 0 && inputTime.length() == 0) {
+//            dateString = inputDate + " 12:00:00";
+//        } else {
+//            dateString = "1900-01-01 00:00:00";
+//        }
+//        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);"1900-01-01 00:00:00"
+        Date dueDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("1900-01-01 00:00:00");
         Task t = new Task(taskName, taskDescription, tag, locationName, locationAddress, latitude, longitude, radius, dueDate);
 
-        t.setLocations(selectedLocations);
+        if(selectedLocations != null && selectedLocations.size() != 0) {
+            t.setLocations(selectedLocations);
+        }
 
         db.addTask(t);
 
@@ -934,13 +949,13 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             anyDataEnterd = true;
         }
 
-        if(textEditFilled(datePickerEditText)) {
-            anyDataEnterd = true;
-        }
-
-        if(textEditFilled(timePickerEditText)) {
-            anyDataEnterd = true;
-        }
+//        if(textEditFilled(datePickerEditText)) {
+//            anyDataEnterd = true;
+//        }
+//
+//        if(textEditFilled(timePickerEditText)) {
+//            anyDataEnterd = true;
+//        }
 
         if (textEditFilled(categoryEditText)) {
             anyDataEnterd = true;

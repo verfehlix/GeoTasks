@@ -52,17 +52,18 @@ public class Utils {
     }
 
     public static ArrayList<Location> deserializeLocations(String jsonString) {
-        try {
-            JSONObject json = new JSONObject(jsonString);
-            JSONArray  jsonArray = json.optJSONArray("locations");
-            
-            ArrayList<Location> locs = new ArrayList<>();
+        if(jsonString.length() != 0 && ! jsonString.equals("{}") ){
+            try {
+                JSONObject json = new JSONObject(jsonString);
+                JSONArray  jsonArray = json.optJSONArray("locations");
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonLoc = new JSONObject(jsonArray.getString(i));
-                Location loc = new Location(jsonLoc.getString("locationName"), jsonLoc.getString("locationAddress"), jsonLoc.getDouble("longitude"), jsonLoc.getDouble("latitude"), jsonLoc.getInt("radius"));
-                locs.add(loc);
-            }
+                ArrayList<Location> locs = new ArrayList<>();
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonLoc = new JSONObject(jsonArray.getString(i));
+                    Location loc = new Location(jsonLoc.getString("locationName"), jsonLoc.getString("locationAddress"), jsonLoc.getDouble("latitude"), jsonLoc.getDouble("longitude"), jsonLoc.getInt("radius"));
+                    locs.add(loc);
+                }
 
 //            for (Location locTest: locs) {
 //                Log.d("JSONSTUFF",locTest.getLocationAddress());
@@ -72,13 +73,13 @@ public class Utils {
 //                Log.d("JSONSTUFF","------------------------------");
 //            }
 
-            return locs;
-        
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                return locs;
 
-        return null;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return new ArrayList<Location>();
     }
 
     public static byte[] convertToBytes(Object object) {

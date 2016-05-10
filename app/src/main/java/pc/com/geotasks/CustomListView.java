@@ -94,13 +94,17 @@ public class CustomListView extends ArrayAdapter<Task>{
             if (files.get(position).getLocations().size() > 1) {
                 txtSubTitle.setText("various locations");
             } else {
-                pc.com.geotasks.model.Location loc = files.get(position).getLocations().get(0);
+                if(files.get(position).getLocations().size() > 0){
+                    pc.com.geotasks.model.Location loc = files.get(position).getLocations().get(0);
 
-                //if we have locationName and locationAddress, set the subtext to that. if we dont, set it to lng + lat
-                if (loc.getLocationName().length() != 0 || loc.getLocationAddress().length() != 0) {
-                    txtSubTitle.setText(loc.getLocationName() + " - " + loc.getLocationAddress());
+                    //if we have locationName and locationAddress, set the subtext to that. if we dont, set it to lng + lat
+                    if (loc.getLocationName().length() != 0 || loc.getLocationAddress().length() != 0) {
+                        txtSubTitle.setText(loc.getLocationName() + " - " + loc.getLocationAddress());
+                    } else {
+                        txtSubTitle.setText(loc.getLatitude() + " - " + loc.getLongitude());
+                    }
                 } else {
-                    txtSubTitle.setText(loc.getLatitude() + " - " + loc.getLongitude());
+                    txtSubTitle.setText("No Locations!");
                 }
             }
         } else {

@@ -377,6 +377,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                 TaskContainer.Task.COLUMN_NAME_LOCATION_ADDRESS,
                 TaskContainer.Task.COLUMN_NAME_LONGITUDE,
                 TaskContainer.Task.COLUMN_NAME_LATITUDE,
+                TaskContainer.Task.COLUMN_NAME_LOCATIONS,
                 TaskContainer.Task.COLUMN_NAME_RADIUS,
                 TaskContainer.Task.COLUMN_NAME_DUE_DATE,
                 TaskContainer.Task.COLUMN_NAME_TIMESTAMP,
@@ -413,6 +414,9 @@ public class SQLHelper extends SQLiteOpenHelper {
                     Date      timestamp        = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_TIMESTAMP)));
 
                     Task task = new Task(name, description, tag, locationName, locationAddress, latitude, longitude, radius, dueDate);
+
+                    task.setLocations(Utils.deserializeLocations(c.getString(c.getColumnIndexOrThrow(TaskContainer.Task.COLUMN_NAME_LOCATIONS))));
+
                     return task;
 
                 } catch (ParseException e) {
