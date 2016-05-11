@@ -1056,11 +1056,11 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
             }
 
             public void onProviderEnabled(String provider) {
-                Toast.makeText(getBaseContext(), "addnewtaskactivity - Gps turned on", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getBaseContext(), "addnewtaskactivity - Gps turned on", Toast.LENGTH_LONG).show();
             }
 
             public void onProviderDisabled(String provider) {
-                Toast.makeText(getBaseContext(), "addnewtaskactivity - Gps turned off", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getBaseContext(), "addnewtaskactivity - Gps turned off", Toast.LENGTH_LONG).show();
             }
         };
 
@@ -1087,8 +1087,8 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
      * @param location
      */
     public void handleLocation(Location location){
-        Toast toast = Toast.makeText(AddNewTaskActivity.this, "lat: " + location.getLatitude() + "\nlong" + location.getLongitude(), Toast.LENGTH_LONG);
-        toast.show();
+        //Toast toast = Toast.makeText(AddNewTaskActivity.this, "lat: " + location.getLatitude() + "\nlong" + location.getLongitude(), Toast.LENGTH_LONG);
+        //toast.show();
 
         lastKnownLocation = location;
     }
