@@ -19,10 +19,14 @@ import java.util.ArrayList;
 import pc.com.geotasks.model.Location;
 
 /**
- * Created by Ich on 05.05.2016.
+ * Created by fmagnus, totto on 05.05.2016.
  */
 public class Utils {
 
+    /*
+    * turns an array list of locations into a json array so we can save it into the database
+    * author: fmagnus
+    * */
    public static String serializeLocations(ArrayList<Location> locations) {
 
         JSONObject jResult = new JSONObject();// main object
@@ -51,6 +55,10 @@ public class Utils {
        return jResult.toString();
     }
 
+    /*
+    * turns a json array into an array list of locations so we can use the location data from the database
+    * author: fmagnus
+    * */
     public static ArrayList<Location> deserializeLocations(String jsonString) {
         if(jsonString.length() != 0 && ! jsonString.equals("{}") ){
             try {

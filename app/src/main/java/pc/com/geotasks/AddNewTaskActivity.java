@@ -67,8 +67,13 @@ import pc.com.geotasks.database.SQLHelper;
 import pc.com.geotasks.model.Favourite;
 import pc.com.geotasks.model.Task;
 
+/*
+*   Add New Task Activity - used to add new tasks into the database
+*   author: fmagnus
+* */
 public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
+    //variables
     SQLHelper db;
 
     Dialog dialog;
@@ -140,6 +145,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         dialog.setTitle("Select Location");
         dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_location_on_black_24dp);
 
+        //handle extras
         Bundle extras = getIntent().getExtras();
         this.currentMode = extras.getInt("mode");
 
@@ -185,7 +191,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         categoryEditText = (EditText) findViewById(R.id.categoryEditText);
         editTextLocationAutocomplete = (EditText) dialog.findViewById(R.id.editTextLocationAutocomplete);
         meterEditText = (EditText) dialog.findViewById(R.id.meterEditText);
-////////////////////        datePickerEditText = (EditText) findViewById(R.id.datePickerEditText);
+//        datePickerEditText = (EditText) findViewById(R.id.datePickerEditText);
 //        timePickerEditText = (EditText) findViewById(R.id.timePickerEditText);
 
         //get text views
@@ -226,7 +232,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         editTextTaskDescription.setTag(editTextTaskDescription.getKeyListener());
         categoryEditText.setTag(categoryEditText.getKeyListener());
         editTextLocationAutocomplete.setTag(editTextLocationAutocomplete.getKeyListener());
-//////////////////        datePickerEditText.setTag(datePickerEditText.getKeyListener());
+//        datePickerEditText.setTag(datePickerEditText.getKeyListener());
         meterEditText.setTag(meterEditText.getKeyListener());
 //        timePickerEditText.setTag(timePickerEditText.getKeyListener());
 
@@ -260,6 +266,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
     }
 
+    //method that fills controls with data when a task is recieved in the extras
     private void fillTextEditsWithTaskData() {
 
         //task data
@@ -271,7 +278,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         DateFormat timeFormat = new SimpleDateFormat("HH:mm");
         String dateString = dateFormat.format(taskDueDate);
         String timeString = timeFormat.format(taskDueDate);
-////////////////        datePickerEditText.setText(dateString);
+//        datePickerEditText.setText(dateString);
 //        timePickerEditText.setText(timeString);
 
         //location data
@@ -309,6 +316,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         }
     }
 
+    //handling of the edit/save button #1
     private void setEditButton() {
         //change save button to edit button
         saveButton.setText("Edit");
@@ -323,6 +331,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         });
     }
 
+    //handling of the edit/save button #2
     private void setEditSaveButton() {
         saveButton.setText("Save");
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -343,6 +352,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         });
     }
 
+    //updates a task in the db when the save button is pressed
     private void updateTask() throws ParseException {
         //task data
         Calendar calendar   = Calendar.getInstance();
@@ -352,7 +362,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         String taskDescription = editTextTaskDescription.getText().toString();
         String tag = categoryEditText.getText().toString();
 
-//////////////        String inputDate = datePickerEditText.getText().toString();
+//        String inputDate = datePickerEditText.getText().toString();
 //        String inputTime = timePickerEditText.getText().toString();
 //        String dateString;
 //        if(inputDate.length() != 0 && inputTime.length() != 0){
@@ -389,6 +399,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
     }
 
+    //disables all controls when in view mode
     private void disableControls() {
         editTextTaskName.setKeyListener(null);
 
@@ -405,9 +416,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         radiusSeekBar.setEnabled(false);
 
-////////////        datePickerEditText.setKeyListener(null);
-//////////        datePickerEditText.setOnClickListener(null);
-////////        datePickerEditText.setOnFocusChangeListener(null);
+//        datePickerEditText.setKeyListener(null);
+//        datePickerEditText.setOnClickListener(null);
+//        datePickerEditText.setOnFocusChangeListener(null);
 
 
         meterEditText.setKeyListener(null);
@@ -419,6 +430,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         buttonAddLocation.setVisibility(View.GONE);
     }
 
+    //enables all controls when in edit (or add new) mode
     private void enableControls() {
 
         buttonAddLocation.setVisibility(View.VISIBLE);
@@ -431,7 +443,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
         editTextLocationAutocomplete.setKeyListener((KeyListener) editTextLocationAutocomplete.getTag());
 
-//////        datePickerEditText.setKeyListener((KeyListener) datePickerEditText.getTag());
+//        datePickerEditText.setKeyListener((KeyListener) datePickerEditText.getTag());
 
         meterEditText.setKeyListener((KeyListener) meterEditText.getTag());
 
@@ -540,15 +552,15 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         });
 
 //        //add date / time picker click listeners
-//////        datePickerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-////            @Override
-////            public void onFocusChange(View v, boolean hasFocus) {
+//        datePickerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
 //                if(hasFocus){
 //                    datePicker();
 //                }
 //            }
 //        });
-////        datePickerEditText.setOnClickListener(new View.OnClickListener() {
+//        datePickerEditText.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                datePicker();
@@ -619,6 +631,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         exitButtonPressed(findViewById(android.R.id.content));
     }
 
+    //opens the pick location popup
     public void openPopup(View view){
         dialog.setTitle("Select Place:");
 
@@ -633,7 +646,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
                 textViewLngLtd.setText("");
                 editTextFavourite.setText("");
                 checkBoxFavourite.setChecked(false);
-////                useCurrentLocationSwitch.setChecked(false);
+//                useCurrentLocationSwitch.setChecked(false);
 
                 SharedPreferences sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE);
                 int defaultValue = 150;
@@ -795,6 +808,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         dialog.show();
     }
 
+    //handles the press of the button top left ("really?" dialog etc.)
     public void exitButtonPressed(View view){
         if(currentMode == MODE_NEW || currentMode == MODE_EDIT){
             //check if any data was entered
@@ -815,6 +829,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
     }
 
+    //saves a new task into the db
     public void saveButtonPressed(View view) throws ParseException {
 
         String taskName = editTextTaskName.getText().toString();
@@ -870,6 +885,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         finish();
     }
 
+    //opens the google map picker fragment
     public void selectFromMapButtonPressed(View view){
         // Construct an intent for the place picker
         try {
@@ -931,6 +947,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         tpDialog.show();
     }
 
+    //"Really?" exit prompt
     private void exitPrompt() {
         AlertDialog exitDialog = new AlertDialog.Builder(AddNewTaskActivity.this).create();
         if(currentMode == MODE_NEW){
@@ -955,6 +972,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
         exitDialog.show();
     }
 
+    //checks if any controls have entered data
     private boolean anyDataEntered() {
         boolean anyDataEnterd = false;
 
@@ -1033,6 +1051,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements GoogleApiCl
 
     }
 
+    //sets up the gps service
     public void setUpGPSService() {
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);

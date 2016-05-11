@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by totto on 05.05.2016.
+ * Created by totto, fmagnus on 05.05.2016.
  */
 public class Location implements Parcelable {
     private String      locationName;

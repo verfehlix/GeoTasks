@@ -19,6 +19,10 @@ import android.widget.Toast;
 
 import pc.com.geotasks.database.SQLHelper;
 
+/*
+*  Settings activity that handles default radius settings, about info and deletion of favourites
+* autor: faseitz
+* */
 public class SettingsActivity extends android.support.v4.app.Fragment {
 
     SQLHelper db;
@@ -50,6 +54,7 @@ public class SettingsActivity extends android.support.v4.app.Fragment {
         return view;
     }
 
+    //set up controls and their functions
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -130,7 +135,7 @@ public class SettingsActivity extends android.support.v4.app.Fragment {
         });
     }
 
-
+    //write default radius to shared preferences
     public void onSettingsButtonPressed(){
         SharedPreferences sharedPref = this.getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -143,6 +148,7 @@ public class SettingsActivity extends android.support.v4.app.Fragment {
         Toast.makeText(getActivity(), "Default Radius saved! \n Value: " + defaultRadius, Toast.LENGTH_SHORT).show();
     }
 
+    //delete all favourites from db
     public void onDeleteFavsButtonPressed(){
         db.deleteAllFavourites();
         Toast.makeText(getActivity(), "Favourites successfully deleted!", Toast.LENGTH_SHORT).show();

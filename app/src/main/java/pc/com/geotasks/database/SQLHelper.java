@@ -31,6 +31,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     private static final String DOUBLE_TYPE = " double";
     private static final String COMMA_SEP = ",";
 
+    //String to create task table entries
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TaskContainer.Task.TABLE_NAME + " (" +
                     TaskContainer.Task.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
@@ -46,7 +47,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                     TaskContainer.Task.COLUMN_NAME_DUE_DATE + DATE_TYPE + COMMA_SEP +
                     TaskContainer.Task.COLUMN_NAME_TIMESTAMP + " TIMESTAMP DEFAULT 'now'" +
                     " )";
-
+    //String to create favourite table entries
     private static final String SQL_CREATE_FAVOURITES =
             "CREATE TABLE " + FavouriteContainer.Favourite.TABLE_NAME + " (" +
                     FavouriteContainer.Favourite.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
@@ -57,6 +58,7 @@ public class SQLHelper extends SQLiteOpenHelper {
                     FavouriteContainer.Favourite.COLUMN_NAME_LATITUDE + DOUBLE_TYPE +
                     " )";
 
+    //Strings to delete stuff
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskContainer.Task.TABLE_NAME;
 
@@ -92,6 +94,9 @@ public class SQLHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    /* adds a task to the database
+    * author: totto
+    * */
     public void addTask(Task task){
         // Gets the data repository in write mode
         SQLiteDatabase db = this.getWritableDatabase();
@@ -121,6 +126,9 @@ public class SQLHelper extends SQLiteOpenHelper {
         task.setID((int) newRowId);
     }
 
+    /* adds a favourite to the database
+    * author: totto
+    * */
     public void addFavourite(Favourite favourite){
         // Gets the data repository in write mode
         SQLiteDatabase db = this.getWritableDatabase();
@@ -143,6 +151,9 @@ public class SQLHelper extends SQLiteOpenHelper {
         favourite.setID((int) newRowId);
     }
 
+    /* deletes a task from the database
+    * author: totto
+    * */
     public void deleteTask(Task task){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -155,6 +166,9 @@ public class SQLHelper extends SQLiteOpenHelper {
                 selectionArgs);
     }
 
+    /* deletes a task from the database
+    * author: totto
+    * */
     public void deleteFavourite(Favourite favourite){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -167,6 +181,9 @@ public class SQLHelper extends SQLiteOpenHelper {
                 selectionArgs);
     }
 
+    /* retrieves all tasks from the database, parameter is search criteria
+    * author: totto
+    * */
     public ArrayList<Task> getTasks(String filter){
         ArrayList<Task> tasks = new ArrayList<>();
 
@@ -241,6 +258,9 @@ public class SQLHelper extends SQLiteOpenHelper {
         return tasks;
     }
 
+    /* retrieves all favourites from the database
+    * author: totto
+    * */
     public ArrayList<Favourite> getFavourites(String filter){
         ArrayList<Favourite> favourites = new ArrayList<>();
 
@@ -332,6 +352,9 @@ public class SQLHelper extends SQLiteOpenHelper {
         return inRadius;
     }
 
+    /* updates a task with new data
+    * author: totto
+    * */
     public void updateTask(int taskId, String taskName, Date taskTimestamp, String taskDescription, String taskTag,
                            String taskLocationName, String taskLocationAddress, double taskLatitude, double taskLongitude, int taskRadius, Date taskDueDate, ArrayList<pc.com.geotasks.model.Location> locations){
 
@@ -363,6 +386,9 @@ public class SQLHelper extends SQLiteOpenHelper {
         );
     }
 
+    /* retrieves single task via ID
+    * author: totto
+    * */
     public Task getTaskById(int taskId){
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -430,6 +456,9 @@ public class SQLHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    /* deletes all favourites
+    * author: fmagnus
+    * */
     public void deleteAllFavourites(){
         ArrayList<Favourite> favs = getFavourites("");
 

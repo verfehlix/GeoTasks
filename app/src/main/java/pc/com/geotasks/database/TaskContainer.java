@@ -3,7 +3,7 @@ package pc.com.geotasks.database;
 import android.provider.BaseColumns;
 
 /**
- * Created by Ich on 07.04.2016.
+ * Created by totto on 07.04.2016.
  */
 public class TaskContainer {
     // To prevent someone from accidentally instantiating the contract class,
